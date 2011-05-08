@@ -23,6 +23,7 @@ public class ResourceDiscoverer {
         // instantiate discoverer implementations
         KnowledgeDiscoverer knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
         knowledgeResourceDiscoverer.setJvmId(jvmId);
+        System.out.println(jvmId);
         knowledgeResourceDiscoverer.setConnector(connector);
         knowledgeResourceDiscoverer.discover();
 
@@ -39,6 +40,10 @@ public class ResourceDiscoverer {
 
     public void setJvmId(String jvmId) {
         this.jvmId = jvmId;
+    }
+
+    public String getJvmId() {
+        return this.jvmId;
     }
 
 }

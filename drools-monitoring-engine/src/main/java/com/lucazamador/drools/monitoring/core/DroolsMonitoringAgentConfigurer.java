@@ -20,15 +20,17 @@ public class DroolsMonitoringAgentConfigurer {
 
     public void start() throws DroolsMonitoringException {
         for (JVMConfiguration jvmConfiguration : configuration.getConnections()) {
-            DroolsMonitoringAgent mbeanAgent = new DroolsMonitoringAgent();
+            DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
             DroolsMBeanConnector connector = new DroolsMBeanConnector();
             connector.setAddress(jvmConfiguration.getAddress());
             connector.setPort(jvmConfiguration.getPort());
             connector.connect();
-            mbeanAgent.setJvmId(jvmConfiguration.getId());
-            mbeanAgent.setScanInterval(jvmConfiguration.getScanInterval());
-            mbeanAgent.start();
-            agents.add(mbeanAgent);
+            System.out.println(jvmConfiguration.getId());
+            monitoringAgent.setJvmId(jvmConfiguration.getId());
+            monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
+            monitoringAgent.setConnector(connector);
+            monitoringAgent.start();
+            agents.add(monitoringAgent);
         }
     }
 

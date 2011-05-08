@@ -21,7 +21,7 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();
-        resourceDiscoverer.setJvmId(getJvmId());
+        resourceDiscoverer.setJvmId(jvmId);
         resourceDiscoverer.setConnector(connector);
         resourceDiscoverer.discover();
 
@@ -50,12 +50,12 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         this.connector = connector;
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
-    }
-
     public String getJvmId() {
         return jvmId;
+    }
+
+    public void setJvmId(String jvmId) {
+        this.jvmId = jvmId;
     }
 
     public int getScanInterval() {

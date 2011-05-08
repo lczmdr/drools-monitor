@@ -14,9 +14,9 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
  * @author Lucas Amador
  * 
  */
-public class DroolsMonitoringPersistenceApp {
+public class DroolsMonitoringApp {
 
-    private static Logger logger = LoggerFactory.getLogger(DroolsMonitoringPersistenceApp.class);
+    private static Logger logger = LoggerFactory.getLogger(DroolsMonitoringApp.class);
 
     public static void main(String[] args) throws DroolsMonitoringException {
 
