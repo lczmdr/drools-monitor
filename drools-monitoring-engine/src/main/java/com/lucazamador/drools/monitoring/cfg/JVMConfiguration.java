@@ -20,7 +20,7 @@ public class JVMConfiguration {
     @XStreamAsAttribute
     private int scanInterval = 1000;
     @XStreamAsAttribute
-    private int persistenceInterval = 10000;
+    private int recoveryInterval = 10000;
 
     public String getId() {
         return id;
@@ -54,18 +54,18 @@ public class JVMConfiguration {
         this.scanInterval = scanInterval;
     }
 
-    public int getPersistenceInterval() {
-        return persistenceInterval;
+    public int getRecoveryInterval() {
+        return recoveryInterval;
     }
 
-    public void setPersistenceInterval(int persistenceInterval) {
-        this.persistenceInterval = persistenceInterval;
+    public void setRecoveryInterval(int recoveryInterval) {
+        this.recoveryInterval = recoveryInterval;
     }
 
     @Override
     public String toString() {
         return "id=" + id + " address=" + address + " port=" + port + " scanInterval=" + scanInterval
-                + " persistenceInterval=" + persistenceInterval;
+                + " recoveryInterval=" + recoveryInterval;
     }
 
 }

@@ -23,79 +23,70 @@ import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionMetric;
 
 /**
  * Scanner to update the metrics of the associated KnowledgeSession
+ * 
  * @author Lucas Amador
- *
+ * 
  */
 public class KnowledgeSessionScanner extends MetricScanner {
 
-	private static final Logger logger = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
-	private ProcessMetricParser processParser;
-	private ProcessInstanceMetricParser processInstanceParser;
+    private static final Logger logger = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
+    private ProcessMetricParser processParser;
+    private ProcessInstanceMetricParser processInstanceParser;
     private final String jvmId;
 
-	public KnowledgeSessionScanner(String jvmId, ObjectName resource, DroolsMBeanConnector connector) {
-		this.jvmId = jvmId;
+    public KnowledgeSessionScanner(String jvmId, ObjectName resource, DroolsMBeanConnector connector) {
+        this.jvmId = jvmId;
         this.resource = resource;
-		this.connector = connector;
-		this.processInstanceParser = ProcessInstanceMetricParser.getInstance();
-		this.processParser = ProcessMetricParser.getInstance();
-	}
+        this.connector = connector;
+        this.processInstanceParser = ProcessInstanceMetricParser.getInstance();
+        this.processParser = ProcessMetricParser.getInstance();
+    }
 
-	public AbstractMetric scan() throws IOException {
-		double averageFiringTime = (Double) getAttribute("AverageFiringTime");
-		String knowledgeBaseId = (String) getAttribute("KnowledgeBaseId");
-		Integer knowledgeSessionId = (Integer) getAttribute("KnowledgeSessionId");
+    public AbstractMetric scan() throws IOException {
+        double averageFiringTime = (Double) getAttribute("AverageFiringTime");
+        String knowledgeBaseId = (String) getAttribute("KnowledgeBaseId");
+        Integer knowledgeSessionId = (Integer) getAttribute("KnowledgeSessionId");
 
-		Date lastReset = (Date) getAttribute("LastReset");
+        Date lastReset = (Date) getAttribute("LastReset");
 
-		Long totalActivationsCancelled = (Long) getAttribute("TotalActivationsCancelled");
-		Long totalActivationsCreated = (Long) getAttribute("TotalActivationsCreated");
-		Long totalActivationsFired = (Long) getAttribute("TotalActivationsFired");
+        Long totalActivationsCancelled = (Long) getAttribute("TotalActivationsCancelled");
+        Long totalActivationsCreated = (Long) getAttribute("TotalActivationsCreated");
+        Long totalActivationsFired = (Long) getAttribute("TotalActivationsFired");
 
-		Long totalFactCount = (Long) getAttribute("TotalFactCount");
-		Long totalFiringTime = (Long) getAttribute("TotalFiringTime");
-		Long totalProcessInstancesCompleted = (Long) getAttribute("TotalProcessInstancesCompleted");
-		Long totalProcessInstancesStarted = (Long) getAttribute("TotalProcessInstancesStarted");
+        Long totalFactCount = (Long) getAttribute("TotalFactCount");
+        Long totalFiringTime = (Long) getAttribute("TotalFiringTime");
+        Long totalProcessInstancesCompleted = (Long) getAttribute("TotalProcessInstancesCompleted");
+        Long totalProcessInstancesStarted = (Long) getAttribute("TotalProcessInstancesStarted");
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> processStats = (HashMap<String, String>) getAttribute("StatsByProcess");
-		List<KnowledgeProcessMetric> processMetrics = new ArrayList<KnowledgeProcessMetric>();
-		for (String processName : processStats.keySet()) {
-			String status = processStats.get(processName);
-			processMetrics.add(new KnowledgeProcessMetric(processName, 
-														processParser.getProcessCompleted(status),
-														processParser.getProcessCompleted(status),
-														processParser.getProcessNodeTriggered(status)));
-		}
+        @SuppressWarnings("unchecked")
+        Map<String, String> processStats = (HashMap<String, String>) getAttribute("StatsByProcess");
+        List<KnowledgeProcessMetric> processMetrics = new ArrayList<KnowledgeProcessMetric>();
+        for (String processName : processStats.keySet()) {
+            String status = processStats.get(processName);
+            processMetrics.add(new KnowledgeProcessMetric(processName, processParser.getProcessCompleted(status),
+                    processParser.getProcessCompleted(status), processParser.getProcessNodeTriggered(status)));
+        }
 
-		@SuppressWarnings("unchecked")
-		Map<Long, String> processInstanceStats = (HashMap<Long, String>) getAttribute("StatsByProcessInstance");
-		List<KnowledgeProcessInstanceMetric> processInstanceMetrics = new ArrayList<KnowledgeProcessInstanceMetric>();
-		for (Long processInstanceId : processInstanceStats.keySet()) {
-			String status = processInstanceStats.get(processInstanceId);
-			processInstanceMetrics.add(new KnowledgeProcessInstanceMetric(processInstanceId,
-																		processInstanceParser.getProcessCompleted(status),
-																		processInstanceParser.getProcessCompleted(status),
-																		processInstanceParser.getProcessNodeTriggered(status)));
-		}
+        @SuppressWarnings("unchecked")
+        Map<Long, String> processInstanceStats = (HashMap<Long, String>) getAttribute("StatsByProcessInstance");
+        List<KnowledgeProcessInstanceMetric> processInstanceMetrics = new ArrayList<KnowledgeProcessInstanceMetric>();
+        for (Long processInstanceId : processInstanceStats.keySet()) {
+            String status = processInstanceStats.get(processInstanceId);
+            processInstanceMetrics.add(new KnowledgeProcessInstanceMetric(processInstanceId, processInstanceParser
+                    .getProcessCompleted(status), processInstanceParser.getProcessCompleted(status),
+                    processInstanceParser.getProcessNodeTriggered(status)));
+        }
 
-		KnowledgeSessionMetric metric = new KnowledgeSessionMetricBuilder(jvmId, knowledgeBaseId)
-																	.averageFiringTime(averageFiringTime)
-																	.knowledgeSessionId(knowledgeSessionId)
-																	.lastReset(lastReset)
-																	.totalActivationsCancelled(totalActivationsCancelled)
-																	.totalActivationsCreated(totalActivationsCreated)
-																	.totalActivationsFired(totalActivationsFired)
-																	.totalFactCount(totalFactCount)
-																	.totalFiringTime(totalFiringTime)
-																	.totalProcessInstancesCompleted(totalProcessInstancesCompleted)
-																	.totalProcessInstancesStarted(totalProcessInstancesStarted)
-																	.processStats(processMetrics)
-																	.processInstanceStats(processInstanceMetrics)
-																	.build();
+        KnowledgeSessionMetric metric = new KnowledgeSessionMetricBuilder(jvmId, knowledgeBaseId)
+                .averageFiringTime(averageFiringTime).knowledgeSessionId(knowledgeSessionId).lastReset(lastReset)
+                .totalActivationsCancelled(totalActivationsCancelled).totalActivationsCreated(totalActivationsCreated)
+                .totalActivationsFired(totalActivationsFired).totalFactCount(totalFactCount)
+                .totalFiringTime(totalFiringTime).totalProcessInstancesCompleted(totalProcessInstancesCompleted)
+                .totalProcessInstancesStarted(totalProcessInstancesStarted).processStats(processMetrics)
+                .processInstanceStats(processInstanceMetrics).build();
 
-		logger.info(jvmId + " metric: " + metric);
-		return metric;
-	}
+        logger.info(jvmId + " metric: " + metric);
+        return metric;
+    }
 
 }

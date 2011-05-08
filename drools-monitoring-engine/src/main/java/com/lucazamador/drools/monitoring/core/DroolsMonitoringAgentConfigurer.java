@@ -25,7 +25,6 @@ public class DroolsMonitoringAgentConfigurer {
             connector.setAddress(jvmConfiguration.getAddress());
             connector.setPort(jvmConfiguration.getPort());
             connector.connect();
-            System.out.println(jvmConfiguration.getId());
             monitoringAgent.setJvmId(jvmConfiguration.getId());
             monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
             monitoringAgent.setConnector(connector);

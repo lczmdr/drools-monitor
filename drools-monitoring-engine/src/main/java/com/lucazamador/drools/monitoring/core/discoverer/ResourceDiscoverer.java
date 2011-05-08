@@ -15,20 +15,25 @@ import com.lucazamador.drools.monitoring.scanner.MetricScanner;
  */
 public class ResourceDiscoverer {
 
+    private String jvmId;
     private DroolsMBeanConnector connector;
     private List<MetricScanner> resourceScanners = new ArrayList<MetricScanner>();
-    private String jvmId;
+    private KnowledgeDiscoverer knowledgeResourceDiscoverer;
 
     public void discover() throws DroolsMonitoringException {
         // instantiate discoverer implementations
-        KnowledgeDiscoverer knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
+        knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
         knowledgeResourceDiscoverer.setJvmId(jvmId);
-        System.out.println(jvmId);
         knowledgeResourceDiscoverer.setConnector(connector);
         knowledgeResourceDiscoverer.discover();
 
         resourceScanners.addAll(knowledgeResourceDiscoverer.getResourceScanners());
     }
+
+//    public void reconnect(DroolsMBeanConnector connector) {
+//        knowledgeResourceDiscoverer.setConnector(connector);
+//        knowledgeResourceDiscoverer.discover();
+//    }
 
     public void setConnector(DroolsMBeanConnector connector) {
         this.connector = connector;

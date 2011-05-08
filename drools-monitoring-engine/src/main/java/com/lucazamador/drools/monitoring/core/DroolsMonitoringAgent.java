@@ -12,12 +12,12 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
  */
 public class DroolsMonitoringAgent implements MonitoringAgent {
 
+    private String jvmId;
+    private int scanInterval;
     private DroolsMBeanConnector connector;
     private DroolsResourceScanner scanner;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsMonitoringScannerTask scannerTask;
-    private String jvmId;
-    private int scanInterval;
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();

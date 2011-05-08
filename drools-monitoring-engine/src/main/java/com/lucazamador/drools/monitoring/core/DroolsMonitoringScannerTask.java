@@ -1,7 +1,11 @@
 package com.lucazamador.drools.monitoring.core;
 
 import java.io.IOException;
+import java.rmi.ConnectException;
 import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitoring.core.discoverer.ResourceDiscoverer;
 import com.lucazamador.drools.monitoring.model.AbstractMetric;
@@ -13,6 +17,8 @@ import com.lucazamador.drools.monitoring.scanner.MetricScanner;
  * 
  */
 public class DroolsMonitoringScannerTask extends TimerTask {
+
+    private Logger logger = LoggerFactory.getLogger(DroolsMonitoringScannerTask.class);
 
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsResourceScanner scanner;
@@ -27,8 +33,11 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                         scanner.getMetrics().add(metric);
                     }
                 }
+            } catch (ConnectException e) {
+                logger.error("connection lost... trying again in a few seconds");
+                break;
             } catch (IOException e) {
-                throw new RuntimeException("JVM connection error", e);
+                logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
             }
         }
     }

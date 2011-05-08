@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <connections>
-    <jvm id="jvm1" address="localhost" port="9003" scanInterval="1000" />
+    <jvm id="jvm1" address="localhost" port="9003" scanInterval="1000" recoveryInterval="2000" />
   </connections>
 </configuration>
