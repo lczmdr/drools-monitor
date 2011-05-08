@@ -13,7 +13,7 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
  * @author Lucas Amador
  * 
  */
-public class DroolsMonitoringAgentConfigurer {
+public class DroolsMonitoring {
 
     private Configuration configuration;
     private List<DroolsMonitoringAgent> agents = new ArrayList<DroolsMonitoringAgent>();

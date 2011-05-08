@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitoring.cfg.Configuration;
 import com.lucazamador.drools.monitoring.cfg.ConfigurationReader;
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgentConfigurer;
+import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 /**
@@ -24,7 +24,7 @@ public class DroolsMonitoringApp {
         configurationReader.setConfigurationFile("/configuration.xml");
         Configuration configuration = configurationReader.read();
 
-        final DroolsMonitoringAgentConfigurer configurer = new DroolsMonitoringAgentConfigurer();
+        final DroolsMonitoring configurer = new DroolsMonitoring();
         configurer.setConfiguration(configuration);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {

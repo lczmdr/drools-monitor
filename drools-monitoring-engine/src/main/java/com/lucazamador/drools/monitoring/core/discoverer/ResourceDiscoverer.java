@@ -21,7 +21,6 @@ public class ResourceDiscoverer {
     private KnowledgeDiscoverer knowledgeResourceDiscoverer;
 
     public void discover() throws DroolsMonitoringException {
-        // instantiate discoverer implementations
         knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
         knowledgeResourceDiscoverer.setJvmId(jvmId);
         knowledgeResourceDiscoverer.setConnector(connector);
