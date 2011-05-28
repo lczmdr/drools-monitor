@@ -22,10 +22,10 @@ public class DroolsMonitoringApp {
     public static void main(String[] args) throws DroolsMonitoringException {
 
         MonitoringConfigurationReader configurationReader = DroolsMonitoringFactory
-                .createMonitoringConfigurationReader("/configuration.xml");
+                .newMonitoringConfigurationReader("/configuration.xml");
         MonitoringConfiguration configuration = configurationReader.read();
 
-        final DroolsMonitoring monitor = DroolsMonitoringFactory.createDroolsMonitoring(configuration);
+        final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

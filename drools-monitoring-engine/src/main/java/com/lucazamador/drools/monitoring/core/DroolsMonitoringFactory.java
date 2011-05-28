@@ -6,7 +6,7 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 public class DroolsMonitoringFactory {
 
-    public static DroolsMonitoring createDroolsMonitoring() {
+    public static DroolsMonitoring newDroolsMonitoring() {
         DroolsMonitoring droolsMonitoring = new DroolsMonitoring();
         WhitePages whitePages = new WhitePages();
         RecoveryAgent reconnectionAgent = new RecoveryAgent();
@@ -16,20 +16,15 @@ public class DroolsMonitoringFactory {
         return droolsMonitoring;
     }
 
-    public static DroolsMonitoring createDroolsMonitoring(MonitoringConfiguration configuration)
+    public static DroolsMonitoring newDroolsMonitoring(MonitoringConfiguration configuration)
             throws DroolsMonitoringException {
-        DroolsMonitoring droolsMonitoring = new DroolsMonitoring();
-        WhitePages whitePages = new WhitePages();
-        RecoveryAgent reconnectionAgent = new RecoveryAgent();
-        reconnectionAgent.setWhitePages(whitePages);
-        droolsMonitoring.setReconnectionAgent(reconnectionAgent);
-        droolsMonitoring.setWhitePages(whitePages);
+        DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
         droolsMonitoring.setConfiguration(configuration);
         droolsMonitoring.configure();
         return droolsMonitoring;
     }
 
-    public static MonitoringConfigurationReader createMonitoringConfigurationReader(String configurationFile) {
+    public static MonitoringConfigurationReader newMonitoringConfigurationReader(String configurationFile) {
         MonitoringConfigurationReader configurationReader = new MonitoringConfigurationReader();
         configurationReader.setConfigurationFile(configurationFile);
         return configurationReader;
