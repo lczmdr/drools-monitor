@@ -3,9 +3,10 @@ package com.lucazamador.drools.monitoring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lucazamador.drools.monitoring.cfg.Configuration;
-import com.lucazamador.drools.monitoring.cfg.ConfigurationReader;
+import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
+import com.lucazamador.drools.monitoring.cfg.MonitoringConfigurationReader;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
+import com.lucazamador.drools.monitoring.core.DroolsMonitoringFactory;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 /**
@@ -20,18 +21,17 @@ public class DroolsMonitoringApp {
 
     public static void main(String[] args) throws DroolsMonitoringException {
 
-        ConfigurationReader configurationReader = new ConfigurationReader();
-        configurationReader.setConfigurationFile("/configuration.xml");
-        Configuration configuration = configurationReader.read();
+        MonitoringConfigurationReader configurationReader = DroolsMonitoringFactory
+                .createMonitoringConfigurationReader("/configuration.xml");
+        MonitoringConfiguration configuration = configurationReader.read();
 
-        final DroolsMonitoring configurer = new DroolsMonitoring();
-        configurer.setConfiguration(configuration);
+        final DroolsMonitoring monitor = DroolsMonitoringFactory.createDroolsMonitoring(configuration);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 try {
-                    configurer.stop();
+                    monitor.stop();
                     logger.info("drools monitoring stopped");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -39,7 +39,7 @@ public class DroolsMonitoringApp {
             }
         });
 
-        configurer.start();
+        monitor.start();
         logger.info("drools monitoring started... (ctrl-c to stop it)");
 
     }

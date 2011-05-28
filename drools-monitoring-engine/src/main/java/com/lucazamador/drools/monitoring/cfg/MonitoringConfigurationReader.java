@@ -10,23 +10,23 @@ import com.thoughtworks.xstream.XStream;
  * @author Lucas Amador
  * 
  */
-public class ConfigurationReader {
+public class MonitoringConfigurationReader {
 
     private XStream xstream;
     private String configurationFile;
 
-    public ConfigurationReader() {
+    public MonitoringConfigurationReader() {
         xstream = new XStream();
-        xstream.processAnnotations(Configuration.class);
+        xstream.processAnnotations(MonitoringConfiguration.class);
         xstream.processAnnotations(JVMConfiguration.class);
     }
 
-    public Configuration read() throws DroolsMonitoringException {
-        if (configurationFile==null) {
+    public MonitoringConfiguration read() throws DroolsMonitoringException {
+        if (configurationFile == null) {
             throw new DroolsMonitoringException("configuration file not specified");
         }
-        InputStream inputStream = ConfigurationReader.class.getResourceAsStream(configurationFile);
-        return (Configuration) xstream.fromXML(inputStream);
+        InputStream inputStream = MonitoringConfigurationReader.class.getResourceAsStream(configurationFile);
+        return (MonitoringConfiguration) xstream.fromXML(inputStream);
     }
 
     public String getConfigurationFile() {

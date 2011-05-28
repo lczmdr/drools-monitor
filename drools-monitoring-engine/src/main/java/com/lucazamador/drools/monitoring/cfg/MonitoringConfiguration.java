@@ -11,7 +11,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias(value = "configuration")
-public class Configuration {
+public class MonitoringConfiguration {
 
     private List<JVMConfiguration> connections = new ArrayList<JVMConfiguration>();
 
