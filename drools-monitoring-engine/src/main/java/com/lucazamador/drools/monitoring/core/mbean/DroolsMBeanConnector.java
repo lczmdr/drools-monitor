@@ -74,8 +74,16 @@ public class DroolsMBeanConnector {
         }
     }
 
+    public String getAddress() {
+        return this.address;
+    }
+
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getPort() {
+        return this.port;
     }
 
     public void setPort(int port) {

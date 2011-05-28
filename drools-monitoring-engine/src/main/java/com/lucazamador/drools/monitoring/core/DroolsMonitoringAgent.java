@@ -14,10 +14,12 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
 
     private String jvmId;
     private int scanInterval;
+    private int recoveryInterval;
     private DroolsMBeanConnector connector;
     private DroolsResourceScanner scanner;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsMonitoringScannerTask scannerTask;
+    private RecoveryAgent reconnectionAgent;
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();
@@ -31,6 +33,7 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         scannerTask = new DroolsMonitoringScannerTask();
         scannerTask.setResourceDiscoverer(resourceDiscoverer);
         scannerTask.setScanner(scanner);
+        scannerTask.setReconnectionAgent(reconnectionAgent);
 
         scanner.setScannerTask(scannerTask);
         scanner.start();
@@ -64,6 +67,22 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
 
     public void setScanInterval(int scanInterval) {
         this.scanInterval = scanInterval;
+    }
+
+    public int getRecoveryInterval() {
+        return recoveryInterval;
+    }
+
+    public void setRecoveryInterval(int recoveryInterval) {
+        this.recoveryInterval = recoveryInterval;
+    }
+
+    public RecoveryAgent getReconnectionAgent() {
+        return reconnectionAgent;
+    }
+
+    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+        this.reconnectionAgent = reconnectionAgent;
     }
 
 }

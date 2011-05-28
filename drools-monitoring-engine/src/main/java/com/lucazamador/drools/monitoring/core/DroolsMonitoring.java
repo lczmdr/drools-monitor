@@ -1,10 +1,7 @@
 package com.lucazamador.drools.monitoring.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
 import com.lucazamador.drools.monitoring.cfg.JVMConfiguration;
+import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
@@ -15,8 +12,9 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
  */
 public class DroolsMonitoring {
 
+    private WhitePages whitePages;
     private MonitoringConfiguration configuration;
-    private List<DroolsMonitoringAgent> agents = new ArrayList<DroolsMonitoringAgent>();
+    private RecoveryAgent reconnectionAgent;
 
     public void configure() throws DroolsMonitoringException {
         for (JVMConfiguration jvmConfiguration : configuration.getConnections()) {
@@ -27,33 +25,64 @@ public class DroolsMonitoring {
             connector.connect();
             monitoringAgent.setJvmId(jvmConfiguration.getId());
             monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
+            monitoringAgent.setRecoveryInterval(jvmConfiguration.getRecoveryInterval());
             monitoringAgent.setConnector(connector);
-            agents.add(monitoringAgent);
+            monitoringAgent.setReconnectionAgent(reconnectionAgent);
+            registerMonitoringAgent(monitoringAgent);
         }
     }
 
     public void start() throws DroolsMonitoringException {
-        for (DroolsMonitoringAgent monitoringAgent : agents) {
+        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitorAgents()) {
             monitoringAgent.start();
         }
     }
 
-    public void add(DroolsMonitoringAgent agent) {
-        this.agents.add(agent);
-    }
-
     public void stop() {
-        for (DroolsMonitoringAgent monitoringAgent : agents) {
+        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitorAgents()) {
             monitoringAgent.stop();
         }
+    }
+
+    public void add(DroolsMonitoringAgent droolsMonitoringAgent) {
+        droolsMonitoringAgent.setReconnectionAgent(reconnectionAgent);
+        registerMonitoringAgent(droolsMonitoringAgent);
+    }
+
+    public void remove(DroolsMonitoringAgent droolsMonitoringAgent) {
+        unregisterMonitoringAgent(droolsMonitoringAgent);
+    }
+
+    private void registerMonitoringAgent(DroolsMonitoringAgent agent) {
+        whitePages.register(agent.getJvmId(), agent);
+    }
+
+    private void unregisterMonitoringAgent(DroolsMonitoringAgent agent) {
+        whitePages.unregister(agent.getJvmId());
+    }
+
+    public MonitoringConfiguration getConfiguration() {
+        return configuration;
     }
 
     public void setConfiguration(MonitoringConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    public MonitoringConfiguration getConfiguration() {
-        return configuration;
+    public WhitePages getWhitePages() {
+        return whitePages;
+    }
+
+    public void setWhitePages(WhitePages whitePages) {
+        this.whitePages = whitePages;
+    }
+
+    public RecoveryAgent getReconnectionAgent() {
+        return reconnectionAgent;
+    }
+
+    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+        this.reconnectionAgent = reconnectionAgent;
     }
 
 }

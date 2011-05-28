@@ -20,6 +20,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
 
     private Logger logger = LoggerFactory.getLogger(DroolsMonitoringScannerTask.class);
 
+    private RecoveryAgent reconnectionAgent;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsResourceScanner scanner;
 
@@ -35,11 +36,21 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                 }
             } catch (ConnectException e) {
                 logger.error("connection lost... trying again in a few seconds");
-                break;
+                reconnectionAgent.reconnect(resourceDiscoverer.getJvmId(), resourceDiscoverer.getConnector());
+                cancel();
+                return;
             } catch (IOException e) {
                 logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
             }
         }
+    }
+
+    public RecoveryAgent getReconnectionAgent() {
+        return reconnectionAgent;
+    }
+
+    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+        this.reconnectionAgent = reconnectionAgent;
     }
 
     public void setResourceDiscoverer(ResourceDiscoverer resourceDiscoverer) {

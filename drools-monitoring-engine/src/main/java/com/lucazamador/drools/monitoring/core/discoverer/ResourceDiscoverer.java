@@ -29,13 +29,12 @@ public class ResourceDiscoverer {
         resourceScanners.addAll(knowledgeResourceDiscoverer.getResourceScanners());
     }
 
-//    public void reconnect(DroolsMBeanConnector connector) {
-//        knowledgeResourceDiscoverer.setConnector(connector);
-//        knowledgeResourceDiscoverer.discover();
-//    }
-
     public void setConnector(DroolsMBeanConnector connector) {
         this.connector = connector;
+    }
+
+    public DroolsMBeanConnector getConnector() {
+        return this.connector;
     }
 
     public List<MetricScanner> getResourceScanners() {
