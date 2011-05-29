@@ -2,12 +2,14 @@ package com.lucazamador.drools.monitoring.core;
 
 import java.io.IOException;
 import java.rmi.ConnectException;
+import java.util.List;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitoring.core.discoverer.ResourceDiscoverer;
+import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitoring.model.AbstractMetric;
 import com.lucazamador.drools.monitoring.scanner.MetricScanner;
 
@@ -23,6 +25,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
     private MonitoringRecoveryAgent reconnectionAgent;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsResourceScanner scanner;
+    private List<DroolsMonitoringListener> listeners;
 
     @Override
     public void run() {
@@ -32,6 +35,11 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                 if (metric != null) {
                     synchronized (scanner.getMetrics()) {
                         scanner.getMetrics().add(metric);
+                    }
+                    if (listeners != null) {
+                        for (DroolsMonitoringListener listener : listeners) {
+                            listener.newMetric(metric);
+                        }
                     }
                 }
             } catch (ConnectException e) {
