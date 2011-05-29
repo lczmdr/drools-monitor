@@ -22,18 +22,22 @@ public class DroolsMonitoring {
 
     public void configure() throws DroolsMonitoringException {
         for (JVMConfiguration jvmConfiguration : configuration.getConnections()) {
-            DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
-            DroolsMBeanConnector connector = new DroolsMBeanConnector();
-            connector.setAddress(jvmConfiguration.getAddress());
-            connector.setPort(jvmConfiguration.getPort());
-            connector.connect();
-            monitoringAgent.setJvmId(jvmConfiguration.getId());
-            monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
-            monitoringAgent.setRecoveryInterval(jvmConfiguration.getRecoveryInterval());
-            monitoringAgent.setConnector(connector);
-            monitoringAgent.setReconnectionAgent(reconnectionAgent);
-            registerMonitoringAgent(monitoringAgent);
+            createMonitoringAgent(jvmConfiguration);
         }
+    }
+
+    private void createMonitoringAgent(JVMConfiguration jvmConfiguration) throws DroolsMonitoringException {
+        DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
+        DroolsMBeanConnector connector = new DroolsMBeanConnector();
+        connector.setAddress(jvmConfiguration.getAddress());
+        connector.setPort(jvmConfiguration.getPort());
+        connector.connect();
+        monitoringAgent.setJvmId(jvmConfiguration.getId());
+        monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
+        monitoringAgent.setRecoveryInterval(jvmConfiguration.getRecoveryInterval());
+        monitoringAgent.setConnector(connector);
+        monitoringAgent.setReconnectionAgent(reconnectionAgent);
+        registerMonitoringAgent(monitoringAgent);
     }
 
     public void start() throws DroolsMonitoringException {
@@ -48,7 +52,11 @@ public class DroolsMonitoring {
         }
     }
 
-    public void add(DroolsMonitoringAgent droolsMonitoringAgent) {
+    public void addMonitoringAgent(JVMConfiguration configuration) throws DroolsMonitoringException {
+        createMonitoringAgent(configuration);
+    }
+
+    public void addMonitoringAgent(DroolsMonitoringAgent droolsMonitoringAgent) {
         droolsMonitoringAgent.setReconnectionAgent(reconnectionAgent);
         registerMonitoringAgent(droolsMonitoringAgent);
     }
