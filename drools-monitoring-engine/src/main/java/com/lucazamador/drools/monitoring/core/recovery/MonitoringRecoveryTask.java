@@ -1,12 +1,16 @@
-package com.lucazamador.drools.monitoring.core;
+package com.lucazamador.drools.monitoring.core.recovery;
 
+import java.util.List;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
+import com.lucazamador.drools.monitoring.core.WhitePages;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
+import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
  * 
@@ -20,10 +24,11 @@ public class MonitoringRecoveryTask extends TimerTask {
     private String jvmId;
     private String address;
     private int port;
+    private int scanInterval;
+    private int recoveryInterval;
     private WhitePages whitePages;
     private MonitoringRecoveryAgent reconnectionAgent;
-
-    private int recoveryInterval;
+    private List<DroolsMonitoringListener> listeners;
 
     @Override
     public void run() {
@@ -40,9 +45,11 @@ public class MonitoringRecoveryTask extends TimerTask {
         logger.info("reconnected with " + jvmId);
         DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
         monitoringAgent.setJvmId(jvmId);
-        monitoringAgent.setScanInterval(1000);
+        monitoringAgent.setScanInterval(scanInterval);
+        monitoringAgent.setRecoveryInterval(recoveryInterval);
         monitoringAgent.setConnector(connector);
         monitoringAgent.setReconnectionAgent(reconnectionAgent);
+        monitoringAgent.setListeners(listeners);
         try {
             monitoringAgent.start();
         } catch (DroolsMonitoringException e) {
@@ -88,8 +95,16 @@ public class MonitoringRecoveryTask extends TimerTask {
         return reconnectionAgent;
     }
 
+    public void setScanInterval(int scanInterval) {
+        this.scanInterval = scanInterval;
+    }
+
     public void setRecoveryInterval(int recoveryInterval) {
         this.recoveryInterval = recoveryInterval;
+    }
+
+    public void setListeners(List<DroolsMonitoringListener> listeners) {
+        this.listeners = listeners;
     }
 
 }

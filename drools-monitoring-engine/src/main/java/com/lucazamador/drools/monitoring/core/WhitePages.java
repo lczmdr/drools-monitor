@@ -21,14 +21,14 @@ public class WhitePages {
         agents.remove(id);
     }
 
-    public int getRecoveryInterval(String id) {
+    public DroolsMonitoringAgent getMonitoringAgent(String id) {
         if (agents.get(id) != null) {
-            return agents.get(id).getRecoveryInterval();
+            return agents.get(id);
         }
-        return -1;
+        return null;
     }
 
-    public Collection<DroolsMonitoringAgent> getMonitorAgents() {
+    public Collection<DroolsMonitoringAgent> getMonitoringAgents() {
         return agents.values();
     }
 

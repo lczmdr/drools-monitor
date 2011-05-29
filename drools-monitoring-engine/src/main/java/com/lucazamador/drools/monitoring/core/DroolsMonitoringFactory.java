@@ -2,6 +2,7 @@ package com.lucazamador.drools.monitoring.core;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
 import com.lucazamador.drools.monitoring.cfg.MonitoringConfigurationReader;
+import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 public class DroolsMonitoringFactory {

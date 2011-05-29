@@ -1,9 +1,13 @@
 package com.lucazamador.drools.monitoring.core;
 
+import java.util.Collection;
+
 import com.lucazamador.drools.monitoring.cfg.JVMConfiguration;
 import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
+import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
+import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
  * 
@@ -33,13 +37,13 @@ public class DroolsMonitoring {
     }
 
     public void start() throws DroolsMonitoringException {
-        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitorAgents()) {
+        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitoringAgents()) {
             monitoringAgent.start();
         }
     }
 
     public void stop() {
-        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitorAgents()) {
+        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitoringAgents()) {
             monitoringAgent.stop();
         }
     }
@@ -83,6 +87,13 @@ public class DroolsMonitoring {
 
     public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
+    }
+
+    public void registerListener(DroolsMonitoringListener listener) {
+        Collection<DroolsMonitoringAgent> agents = whitePages.getMonitoringAgents();
+        for (DroolsMonitoringAgent agent : agents) {
+            agent.registerListener(listener);
+        }
     }
 
 }

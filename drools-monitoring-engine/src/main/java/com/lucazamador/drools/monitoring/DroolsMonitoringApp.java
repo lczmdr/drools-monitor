@@ -8,6 +8,7 @@ import com.lucazamador.drools.monitoring.cfg.MonitoringConfigurationReader;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoringFactory;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
+import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
  * 
@@ -26,6 +27,8 @@ public class DroolsMonitoringApp {
         MonitoringConfiguration configuration = configurationReader.read();
 
         final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration);
+        DroolsMonitoringListener listener = new MyDroolsMonitoringListener();
+        monitor.registerListener(listener);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -40,6 +43,10 @@ public class DroolsMonitoringApp {
         });
 
         monitor.start();
+
+        DroolsMonitoringListener listener2 = new MyDroolsMonitoringListener();
+        monitor.registerListener(listener2);
+
         logger.info("drools monitoring started... (ctrl-c to stop it)");
 
     }

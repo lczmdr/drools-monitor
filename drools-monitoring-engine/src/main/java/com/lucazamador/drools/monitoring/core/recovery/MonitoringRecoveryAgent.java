@@ -1,12 +1,21 @@
-package com.lucazamador.drools.monitoring.core;
+package com.lucazamador.drools.monitoring.core.recovery;
 
+import java.util.List;
 import java.util.Timer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
+import com.lucazamador.drools.monitoring.core.WhitePages;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
+import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
+/**
+ * 
+ * @author Lucas Amador
+ * 
+ */
 public class MonitoringRecoveryAgent {
 
     private Logger logger = LoggerFactory.getLogger(MonitoringRecoveryAgent.class);
@@ -15,7 +24,10 @@ public class MonitoringRecoveryAgent {
     private WhitePages whitePages;
 
     public void reconnect(String jvmId, DroolsMBeanConnector connector) {
-        int recoveryInterval = whitePages.getRecoveryInterval(jvmId);
+        DroolsMonitoringAgent monitoringAgent = whitePages.getMonitoringAgent(jvmId);
+        int recoveryInterval = monitoringAgent.getRecoveryInterval();
+        int scanInterval = monitoringAgent.getScanInterval();
+        List<DroolsMonitoringListener> listeners = monitoringAgent.getListeners();
         whitePages.unregister(jvmId);
         logger.info("Recovery agent created to reconnect with " + jvmId + " at " + connector.getAddress() + ":"
                 + connector.getPort());
@@ -25,6 +37,8 @@ public class MonitoringRecoveryAgent {
         recoveryTask.setAddress(connector.getAddress());
         recoveryTask.setPort(connector.getPort());
         recoveryTask.setRecoveryInterval(recoveryInterval);
+        recoveryTask.setScanInterval(scanInterval);
+        recoveryTask.setListeners(listeners);
         recoveryTask.setWhitePages(whitePages);
         recoveryTask.setReconnectionAgent(this);
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, recoveryInterval > 0 ? recoveryInterval
