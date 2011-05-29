@@ -19,7 +19,7 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
     private DroolsResourceScanner scanner;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsMonitoringScannerTask scannerTask;
-    private RecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryAgent reconnectionAgent;
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();
@@ -77,11 +77,11 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         this.recoveryInterval = recoveryInterval;
     }
 
-    public RecoveryAgent getReconnectionAgent() {
+    public MonitoringRecoveryAgent getReconnectionAgent() {
         return reconnectionAgent;
     }
 
-    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
     }
 

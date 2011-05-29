@@ -13,15 +13,15 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
  * @author Lucas Amador
  * 
  */
-public class RecoveryTask extends TimerTask {
+public class MonitoringRecoveryTask extends TimerTask {
 
-    private Logger logger = LoggerFactory.getLogger(RecoveryTask.class);
+    private Logger logger = LoggerFactory.getLogger(MonitoringRecoveryTask.class);
 
     private String jvmId;
     private String address;
     private int port;
     private WhitePages whitePages;
-    private RecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryAgent reconnectionAgent;
 
     private int recoveryInterval;
 
@@ -80,11 +80,11 @@ public class RecoveryTask extends TimerTask {
         this.whitePages = whitePages;
     }
 
-    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
     }
 
-    public RecoveryAgent getReconnectionAgent() {
+    public MonitoringRecoveryAgent getReconnectionAgent() {
         return reconnectionAgent;
     }
 

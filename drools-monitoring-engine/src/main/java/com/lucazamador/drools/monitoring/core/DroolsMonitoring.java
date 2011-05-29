@@ -14,7 +14,7 @@ public class DroolsMonitoring {
 
     private WhitePages whitePages;
     private MonitoringConfiguration configuration;
-    private RecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryAgent reconnectionAgent;
 
     public void configure() throws DroolsMonitoringException {
         for (JVMConfiguration jvmConfiguration : configuration.getConnections()) {
@@ -77,11 +77,11 @@ public class DroolsMonitoring {
         this.whitePages = whitePages;
     }
 
-    public RecoveryAgent getReconnectionAgent() {
+    public MonitoringRecoveryAgent getReconnectionAgent() {
         return reconnectionAgent;
     }
 
-    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
     }
 

@@ -20,7 +20,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
 
     private Logger logger = LoggerFactory.getLogger(DroolsMonitoringScannerTask.class);
 
-    private RecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryAgent reconnectionAgent;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsResourceScanner scanner;
 
@@ -45,11 +45,11 @@ public class DroolsMonitoringScannerTask extends TimerTask {
         }
     }
 
-    public RecoveryAgent getReconnectionAgent() {
+    public MonitoringRecoveryAgent getReconnectionAgent() {
         return reconnectionAgent;
     }
 
-    public void setReconnectionAgent(RecoveryAgent reconnectionAgent) {
+    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
     }
 

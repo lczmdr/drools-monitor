@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 
-public class RecoveryAgent {
+public class MonitoringRecoveryAgent {
 
-    private Logger logger = LoggerFactory.getLogger(RecoveryAgent.class);
+    private Logger logger = LoggerFactory.getLogger(MonitoringRecoveryAgent.class);
 
     private static final int DEFAULT_RECOVERY_INTERVAL = 10000;
     private WhitePages whitePages;
@@ -20,7 +20,7 @@ public class RecoveryAgent {
         logger.info("Recovery agent created to reconnect with " + jvmId + " at " + connector.getAddress() + ":"
                 + connector.getPort());
         Timer reconnectionTimer = new Timer();
-        RecoveryTask recoveryTask = new RecoveryTask();
+        MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask();
         recoveryTask.setJvmId(jvmId);
         recoveryTask.setAddress(connector.getAddress());
         recoveryTask.setPort(connector.getPort());

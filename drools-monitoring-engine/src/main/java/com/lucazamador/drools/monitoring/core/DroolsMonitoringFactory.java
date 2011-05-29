@@ -9,7 +9,7 @@ public class DroolsMonitoringFactory {
     public static DroolsMonitoring newDroolsMonitoring() {
         DroolsMonitoring droolsMonitoring = new DroolsMonitoring();
         WhitePages whitePages = new WhitePages();
-        RecoveryAgent reconnectionAgent = new RecoveryAgent();
+        MonitoringRecoveryAgent reconnectionAgent = new MonitoringRecoveryAgent();
         reconnectionAgent.setWhitePages(whitePages);
         droolsMonitoring.setReconnectionAgent(reconnectionAgent);
         droolsMonitoring.setWhitePages(whitePages);
