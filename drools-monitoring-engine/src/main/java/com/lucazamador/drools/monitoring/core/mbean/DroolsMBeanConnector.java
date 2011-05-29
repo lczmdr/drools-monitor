@@ -45,7 +45,7 @@ public class DroolsMBeanConnector {
             this.connection = jmxConnector.getMBeanServerConnection();
             this.connected = true;
             if (!isDroolsMonitored()) {
-                throw new DroolsMonitoringException("Drools Managament MBeans aren't enabled in this application");
+                throw new DroolsMonitoringException("Drools Management MBeans aren't enabled in this application");
             }
         } catch (MalformedURLException e) {
             throw new DroolsMonitoringException("Incorrect JVM connection parameters. adress: " + address + " port: "
