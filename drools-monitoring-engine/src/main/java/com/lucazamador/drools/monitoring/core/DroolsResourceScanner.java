@@ -1,10 +1,13 @@
 package com.lucazamador.drools.monitoring.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
+import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.BufferUtils;
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +23,7 @@ public class DroolsResourceScanner {
     private static final Logger logger = LoggerFactory.getLogger(DroolsResourceScanner.class);
     private static final int DEFAULT_INTERVAL = 1000;
 
-    private List<AbstractMetric> metrics = Collections.synchronizedList(new ArrayList<AbstractMetric>());
+    private Buffer metrics = BufferUtils.synchronizedBuffer(new CircularFifoBuffer(1000));
     private int interval;
     private Timer scannerScheduler;
     private DroolsMonitoringScannerTask scannerTask;
@@ -47,7 +50,9 @@ public class DroolsResourceScanner {
     public List<AbstractMetric> getMetricsClone() {
         ArrayList<AbstractMetric> metricsClone = new ArrayList<AbstractMetric>();
         synchronized (metrics) {
-            for (AbstractMetric metric : metrics) {
+            Iterator<AbstractMetric> iterator = metrics.iterator();
+            while (iterator.hasNext()) {
+                AbstractMetric metric = iterator.next();
                 metricsClone.add(metric);
             }
             metrics.clear();
@@ -67,11 +72,7 @@ public class DroolsResourceScanner {
         return scannerTask;
     }
 
-    public void setMetrics(List<AbstractMetric> metrics) {
-        this.metrics = metrics;
-    }
-
-    public List<AbstractMetric> getMetrics() {
+    public Buffer getMetrics() {
         return metrics;
     }
 

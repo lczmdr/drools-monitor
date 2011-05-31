@@ -2,7 +2,7 @@ package com.lucazamador.drools.monitoring.core;
 
 import java.util.Collection;
 
-import com.lucazamador.drools.monitoring.cfg.JVMConfiguration;
+import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
@@ -21,20 +21,20 @@ public class DroolsMonitoring {
     private MonitoringRecoveryAgent reconnectionAgent;
 
     public void configure() throws DroolsMonitoringException {
-        for (JVMConfiguration jvmConfiguration : configuration.getConnections()) {
-            createMonitoringAgent(jvmConfiguration);
+        for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
+            createMonitoringAgent(monitoringAgentConfiguration);
         }
     }
 
-    private void createMonitoringAgent(JVMConfiguration jvmConfiguration) throws DroolsMonitoringException {
+    private void createMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
         DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
         DroolsMBeanConnector connector = new DroolsMBeanConnector();
-        connector.setAddress(jvmConfiguration.getAddress());
-        connector.setPort(jvmConfiguration.getPort());
+        connector.setAddress(configuration.getAddress());
+        connector.setPort(configuration.getPort());
         connector.connect();
-        monitoringAgent.setJvmId(jvmConfiguration.getId());
-        monitoringAgent.setScanInterval(jvmConfiguration.getScanInterval());
-        monitoringAgent.setRecoveryInterval(jvmConfiguration.getRecoveryInterval());
+        monitoringAgent.setJvmId(configuration.getId());
+        monitoringAgent.setScanInterval(configuration.getScanInterval());
+        monitoringAgent.setRecoveryInterval(configuration.getRecoveryInterval());
         monitoringAgent.setConnector(connector);
         monitoringAgent.setReconnectionAgent(reconnectionAgent);
         registerMonitoringAgent(monitoringAgent);
@@ -52,7 +52,7 @@ public class DroolsMonitoring {
         }
     }
 
-    public void addMonitoringAgent(JVMConfiguration configuration) throws DroolsMonitoringException {
+    public void addMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
         createMonitoringAgent(configuration);
     }
 

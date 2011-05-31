@@ -18,7 +18,7 @@ public class MonitoringConfigurationReader {
     public MonitoringConfigurationReader() {
         xstream = new XStream();
         xstream.processAnnotations(MonitoringConfiguration.class);
-        xstream.processAnnotations(JVMConfiguration.class);
+        xstream.processAnnotations(MonitoringAgentConfiguration.class);
     }
 
     public MonitoringConfiguration read() throws DroolsMonitoringException {

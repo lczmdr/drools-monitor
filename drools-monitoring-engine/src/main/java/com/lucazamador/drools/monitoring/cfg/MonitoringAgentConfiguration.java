@@ -8,8 +8,8 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @author Lucas Amador
  * 
  */
-@XStreamAlias(value = "jvm")
-public class JVMConfiguration {
+@XStreamAlias(value = "agent")
+public class MonitoringAgentConfiguration {
 
     @XStreamAsAttribute
     private String id;

@@ -8,7 +8,6 @@
   <version>1.0.0-SNAPSHOT</version>
 
   <modules>
-    <!--module>drools-monitoring-api</module-->
     <module>drools-monitoring-model</module>
     <module>drools-monitoring-engine</module>
     <!--module>drools-monitoring-persistence</module-->

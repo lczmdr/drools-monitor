@@ -13,13 +13,13 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias(value = "configuration")
 public class MonitoringConfiguration {
 
-    private List<JVMConfiguration> connections = new ArrayList<JVMConfiguration>();
+    private List<MonitoringAgentConfiguration> connections = new ArrayList<MonitoringAgentConfiguration>();
 
-    public List<JVMConfiguration> getConnections() {
+    public List<MonitoringAgentConfiguration> getConnections() {
         return connections;
     }
 
-    public void setConnections(List<JVMConfiguration> connections) {
+    public void setConnections(List<MonitoringAgentConfiguration> connections) {
         this.connections = connections;
     }
 
