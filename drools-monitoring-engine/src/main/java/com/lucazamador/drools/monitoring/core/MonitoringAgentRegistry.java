@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Lucas Amador
  * 
  */
-public class WhitePages {
+public class MonitoringAgentRegistry {
 
     private Map<String, DroolsMonitoringAgent> agents = new HashMap<String, DroolsMonitoringAgent>();
 
@@ -17,8 +17,8 @@ public class WhitePages {
         agents.put(id, agent);
     }
 
-    public void unregister(String id) {
-        agents.remove(id);
+    public DroolsMonitoringAgent unregister(String id) {
+        return agents.remove(id);
     }
 
     public DroolsMonitoringAgent getMonitoringAgent(String id) {

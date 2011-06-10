@@ -9,11 +9,11 @@ public class DroolsMonitoringFactory {
 
     public static DroolsMonitoring newDroolsMonitoring() {
         DroolsMonitoring droolsMonitoring = new DroolsMonitoring();
-        WhitePages whitePages = new WhitePages();
+        MonitoringAgentRegistry registry = new MonitoringAgentRegistry();
         MonitoringRecoveryAgent reconnectionAgent = new MonitoringRecoveryAgent();
-        reconnectionAgent.setWhitePages(whitePages);
+        reconnectionAgent.setMonitoringAgentRegistry(registry);
         droolsMonitoring.setReconnectionAgent(reconnectionAgent);
-        droolsMonitoring.setWhitePages(whitePages);
+        droolsMonitoring.setMonitoringAgentRegistry(registry);
         return droolsMonitoring;
     }
 

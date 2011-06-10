@@ -8,6 +8,8 @@ import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
+import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
+import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 
 /**
  * 
@@ -17,7 +19,7 @@ import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
  */
 public class DroolsMonitoringAgent implements MonitoringAgent {
 
-    private String jvmId;
+    private String id;
     private int scanInterval;
     private int recoveryInterval;
     private DroolsMBeanConnector connector;
@@ -30,7 +32,7 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();
-        resourceDiscoverer.setJvmId(jvmId);
+        resourceDiscoverer.setAgentId(id);
         resourceDiscoverer.setConnector(connector);
         resourceDiscoverer.discover();
 
@@ -56,6 +58,13 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         }
     }
 
+    public boolean isConnected() {
+        if (connector == null) {
+            return false;
+        }
+        return connector.isConnected();
+    }
+
     public DroolsMBeanConnector getConnector() {
         return connector;
     }
@@ -64,12 +73,12 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         this.connector = connector;
     }
 
-    public String getJvmId() {
-        return jvmId;
+    public String getId() {
+        return id;
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getScanInterval() {
@@ -100,6 +109,14 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         this.listeners = listeners;
     }
 
+    public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases() {
+        return resourceDiscoverer.getDiscoveredKnowledgeBases();
+    }
+
+    public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions() {
+        return resourceDiscoverer.getDiscoveredKnowledgeSessions();
+    }
+
     public List<DroolsMonitoringListener> getListeners() {
         return listeners;
     }
@@ -110,5 +127,4 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
             scannerTask.addListener(listener);
         }
     }
-
 }

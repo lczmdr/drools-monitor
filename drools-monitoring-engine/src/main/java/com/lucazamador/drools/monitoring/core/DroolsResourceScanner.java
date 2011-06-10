@@ -42,7 +42,7 @@ public class DroolsResourceScanner {
 
     public synchronized void stop() {
         if (scannerTask != null) {
-            scannerScheduler.schedule(scannerTask, 0);
+//            scannerScheduler.schedule(scannerTask, 0);
         }
         scannerScheduler.cancel();
     }

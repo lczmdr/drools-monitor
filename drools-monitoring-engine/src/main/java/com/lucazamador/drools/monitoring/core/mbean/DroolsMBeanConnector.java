@@ -28,6 +28,14 @@ public class DroolsMBeanConnector {
     private MBeanServerConnection connection;
     private boolean connected;
 
+    public DroolsMBeanConnector() {
+    }
+
+    public DroolsMBeanConnector(String address, int port) {
+        this.address = address;
+        this.port = port;
+    }
+
     /**
      * Create the connection with the JVM and start the discovery of the
      * registered knowledges resources
@@ -92,6 +100,10 @@ public class DroolsMBeanConnector {
 
     public MBeanServerConnection getConnection() {
         return connection;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
 }

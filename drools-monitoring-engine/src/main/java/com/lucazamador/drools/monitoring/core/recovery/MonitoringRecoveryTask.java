@@ -1,16 +1,14 @@
 package com.lucazamador.drools.monitoring.core.recovery;
 
-import java.util.List;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
-import com.lucazamador.drools.monitoring.core.WhitePages;
+import com.lucazamador.drools.monitoring.core.MonitoringAgentRegistry;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
-import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
  * 
@@ -21,14 +19,12 @@ public class MonitoringRecoveryTask extends TimerTask {
 
     private Logger logger = LoggerFactory.getLogger(MonitoringRecoveryTask.class);
 
-    private String jvmId;
+    private String agentId;
     private String address;
     private int port;
-    private int scanInterval;
     private int recoveryInterval;
-    private WhitePages whitePages;
+    private MonitoringAgentRegistry registry;
     private MonitoringRecoveryAgent reconnectionAgent;
-    private List<DroolsMonitoringListener> listeners;
 
     @Override
     public void run() {
@@ -38,33 +34,28 @@ public class MonitoringRecoveryTask extends TimerTask {
         try {
             connector.connect();
         } catch (DroolsMonitoringException e) {
-            logger.debug("reconnection with " + jvmId + " at " + address + ":" + port + " failed. Trying again in "
+            logger.debug("reconnection with " + agentId + " at " + address + ":" + port + " failed. Trying again in "
                     + (recoveryInterval / 1000) + " seconds...");
             return;
         }
-        logger.info("reconnected with " + jvmId);
-        DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
-        monitoringAgent.setJvmId(jvmId);
-        monitoringAgent.setScanInterval(scanInterval);
-        monitoringAgent.setRecoveryInterval(recoveryInterval);
+        logger.info("reconnected with " + agentId);
+        DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         monitoringAgent.setConnector(connector);
-        monitoringAgent.setReconnectionAgent(reconnectionAgent);
-        monitoringAgent.setListeners(listeners);
         try {
             monitoringAgent.start();
         } catch (DroolsMonitoringException e) {
+            e.printStackTrace();
             return;
         }
-        whitePages.register(jvmId, monitoringAgent);
         cancel();
     }
 
-    public String getJvmId() {
-        return jvmId;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
     public String getAddress() {
@@ -83,8 +74,8 @@ public class MonitoringRecoveryTask extends TimerTask {
         this.port = port;
     }
 
-    public void setWhitePages(WhitePages whitePages) {
-        this.whitePages = whitePages;
+    public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
+        this.registry = registry;
     }
 
     public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
@@ -95,16 +86,8 @@ public class MonitoringRecoveryTask extends TimerTask {
         return reconnectionAgent;
     }
 
-    public void setScanInterval(int scanInterval) {
-        this.scanInterval = scanInterval;
-    }
-
     public void setRecoveryInterval(int recoveryInterval) {
         this.recoveryInterval = recoveryInterval;
-    }
-
-    public void setListeners(List<DroolsMonitoringListener> listeners) {
-        this.listeners = listeners;
     }
 
 }

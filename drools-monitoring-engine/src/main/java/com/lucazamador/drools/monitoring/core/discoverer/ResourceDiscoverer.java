@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
+import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
+import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 import com.lucazamador.drools.monitoring.scanner.MetricScanner;
 
 /**
@@ -15,18 +17,26 @@ import com.lucazamador.drools.monitoring.scanner.MetricScanner;
  */
 public class ResourceDiscoverer {
 
-    private String jvmId;
+    private String agentId;
     private DroolsMBeanConnector connector;
     private List<MetricScanner> resourceScanners = new ArrayList<MetricScanner>();
     private KnowledgeDiscoverer knowledgeResourceDiscoverer;
 
     public void discover() throws DroolsMonitoringException {
         knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
-        knowledgeResourceDiscoverer.setJvmId(jvmId);
+        knowledgeResourceDiscoverer.setAgentId(agentId);
         knowledgeResourceDiscoverer.setConnector(connector);
         knowledgeResourceDiscoverer.discover();
 
         resourceScanners.addAll(knowledgeResourceDiscoverer.getResourceScanners());
+    }
+
+    public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions() {
+        return knowledgeResourceDiscoverer.getKnowledgeSessionInfos();
+    }
+
+    public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases() {
+        return knowledgeResourceDiscoverer.getKnowledgeBaseInfos();
     }
 
     public void setConnector(DroolsMBeanConnector connector) {
@@ -41,12 +51,12 @@ public class ResourceDiscoverer {
         return resourceScanners;
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
-    public String getJvmId() {
-        return this.jvmId;
+    public String getAgentId() {
+        return this.agentId;
     }
 
 }

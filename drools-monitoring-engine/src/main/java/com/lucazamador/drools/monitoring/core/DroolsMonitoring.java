@@ -16,9 +16,10 @@ import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
  */
 public class DroolsMonitoring {
 
-    private WhitePages whitePages;
+    private MonitoringAgentRegistry registry;
     private MonitoringConfiguration configuration;
     private MonitoringRecoveryAgent reconnectionAgent;
+    private boolean started = false;
 
     public void configure() throws DroolsMonitoringException {
         for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
@@ -27,29 +28,39 @@ public class DroolsMonitoring {
     }
 
     private void createMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
-        DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
-        DroolsMBeanConnector connector = new DroolsMBeanConnector();
-        connector.setAddress(configuration.getAddress());
-        connector.setPort(configuration.getPort());
-        connector.connect();
-        monitoringAgent.setJvmId(configuration.getId());
-        monitoringAgent.setScanInterval(configuration.getScanInterval());
-        monitoringAgent.setRecoveryInterval(configuration.getRecoveryInterval());
-        monitoringAgent.setConnector(connector);
-        monitoringAgent.setReconnectionAgent(reconnectionAgent);
-        registerMonitoringAgent(monitoringAgent);
-    }
-
-    public void start() throws DroolsMonitoringException {
-        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitoringAgents()) {
+        DroolsMBeanConnector connector = null;
+        try {
+            connector = new DroolsMBeanConnector(configuration.getAddress(), configuration.getPort());
+            connector.connect();
+        } catch (DroolsMonitoringException e) {
+            DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(
+                    configuration, connector, reconnectionAgent);
+            registry.register(monitoringAgent.getId(), monitoringAgent);
+            reconnectionAgent.reconnect(configuration.getId(), configuration.getAddress(), configuration.getPort());
+            return;
+        }
+        DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
+                connector, reconnectionAgent);
+        registry.register(monitoringAgent.getId(), monitoringAgent);
+        if (started) {
             monitoringAgent.start();
         }
     }
 
+    public void start() throws DroolsMonitoringException {
+        for (DroolsMonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
+            if (monitoringAgent.isConnected()) {
+                monitoringAgent.start();
+            }
+        }
+        started = true;
+    }
+
     public void stop() {
-        for (DroolsMonitoringAgent monitoringAgent : whitePages.getMonitoringAgents()) {
+        for (DroolsMonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
             monitoringAgent.stop();
         }
+        started = false;
     }
 
     public void addMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
@@ -58,19 +69,16 @@ public class DroolsMonitoring {
 
     public void addMonitoringAgent(DroolsMonitoringAgent droolsMonitoringAgent) {
         droolsMonitoringAgent.setReconnectionAgent(reconnectionAgent);
-        registerMonitoringAgent(droolsMonitoringAgent);
+        registry.register(droolsMonitoringAgent.getId(), droolsMonitoringAgent);
     }
 
-    public void remove(DroolsMonitoringAgent droolsMonitoringAgent) {
-        unregisterMonitoringAgent(droolsMonitoringAgent);
+    public DroolsMonitoringAgent getMonitoringAgent(String id) {
+        return registry.getMonitoringAgent(id);
     }
 
-    private void registerMonitoringAgent(DroolsMonitoringAgent agent) {
-        whitePages.register(agent.getJvmId(), agent);
-    }
-
-    private void unregisterMonitoringAgent(DroolsMonitoringAgent agent) {
-        whitePages.unregister(agent.getJvmId());
+    public void remove(String id) {
+        DroolsMonitoringAgent unregistered = registry.unregister(id);
+        unregistered.stop();
     }
 
     public MonitoringConfiguration getConfiguration() {
@@ -81,16 +89,8 @@ public class DroolsMonitoring {
         this.configuration = configuration;
     }
 
-    public WhitePages getWhitePages() {
-        return whitePages;
-    }
-
-    public void setWhitePages(WhitePages whitePages) {
-        this.whitePages = whitePages;
-    }
-
-    public MonitoringRecoveryAgent getReconnectionAgent() {
-        return reconnectionAgent;
+    public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
+        this.registry = registry;
     }
 
     public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
@@ -98,10 +98,14 @@ public class DroolsMonitoring {
     }
 
     public void registerListener(DroolsMonitoringListener listener) {
-        Collection<DroolsMonitoringAgent> agents = whitePages.getMonitoringAgents();
+        Collection<DroolsMonitoringAgent> agents = registry.getMonitoringAgents();
         for (DroolsMonitoringAgent agent : agents) {
             agent.registerListener(listener);
         }
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 
 }

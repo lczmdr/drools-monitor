@@ -1,6 +1,7 @@
 package com.lucazamador.drools.monitoring.core.discoverer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.management.MalformedObjectNameException;
@@ -29,7 +30,10 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
     private static final String KBASE_RESOURCE_NAMESPACE = "org.drools.kbases:type=*";
     private static final String KSESSION_RESOURCE_NAMESPACE = "org.drools.kbases:type=*,group=Sessions,sessionId=Session-*";
 
-    private String jvmId;
+    private String agentId;
+
+    private List<KnowledgeSessionInfo> knowledgeSessionInfos = new ArrayList<KnowledgeSessionInfo>();
+    private List<KnowledgeBaseInfo> knowledgeBaseInfos = new ArrayList<KnowledgeBaseInfo>();
 
     /**
      * 
@@ -40,30 +44,30 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
         logger.info("Knowledge Base discovery...");
         discoverResource(KBASE_RESOURCE_NAMESPACE, new ResourceScanner() {
             public void add(ObjectName resource) {
-                resourceScanners.add(new KnowledgeBaseScanner(jvmId, resource, connector));
+                resourceScanners.add(new KnowledgeBaseScanner(agentId, resource, connector));
                 KnowledgeBaseInfo kbaseInfo = new KnowledgeBaseInfo();
                 kbaseInfo.setKnowledgeBaseId(resource.getKeyProperty("type"));
-                kbaseInfo.setJvmName(jvmId);
-                // persistence.save(kbaseInfo);
+                kbaseInfo.setJvmName(agentId);
+                knowledgeBaseInfos.add(kbaseInfo);
             }
         });
         logger.info("Knowledge Session discovery...");
         discoverResource(KSESSION_RESOURCE_NAMESPACE, new ResourceScanner() {
             public void add(ObjectName resource) {
-                resourceScanners.add(new KnowledgeSessionScanner(jvmId, resource, connector));
+                resourceScanners.add(new KnowledgeSessionScanner(agentId, resource, connector));
                 KnowledgeSessionInfo ksessionInfo = new KnowledgeSessionInfo();
                 ksessionInfo.setKnowledgeSessionId(Integer.valueOf(resource.getKeyProperty("sessionId").replace(
                         "Session-", "")));
-                ksessionInfo.setJvmName(jvmId);
+                ksessionInfo.setJvmName(agentId);
                 try {
                     String knowledgeBaseId = (String) connector.getConnection().getAttribute(resource,
                             "KnowledgeBaseId");
                     ksessionInfo.setKnowledgeBaseId(knowledgeBaseId);
+                    knowledgeSessionInfos.add(ksessionInfo);
                 } catch (Exception e) {
-                    logger.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + jvmId);
+                    logger.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + agentId);
                     e.printStackTrace();
                 }
-                // persistence.save(ksessionInfo);
             }
         });
     }
@@ -82,8 +86,16 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
         }
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public List<KnowledgeSessionInfo> getKnowledgeSessionInfos() {
+        return knowledgeSessionInfos;
+    }
+
+    public List<KnowledgeBaseInfo> getKnowledgeBaseInfos() {
+        return knowledgeBaseInfos;
     }
 
     private interface ResourceScanner {

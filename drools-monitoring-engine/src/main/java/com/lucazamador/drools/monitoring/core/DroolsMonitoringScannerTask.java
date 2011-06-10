@@ -48,7 +48,8 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                 }
             } catch (ConnectException e) {
                 logger.error("connection lost... trying again in a few seconds");
-                reconnectionAgent.reconnect(resourceDiscoverer.getJvmId(), resourceDiscoverer.getConnector());
+                reconnectionAgent.reconnect(resourceDiscoverer.getAgentId(), resourceDiscoverer.getConnector()
+                        .getAddress(), resourceDiscoverer.getConnector().getPort());
                 cancel();
                 return;
             } catch (IOException e) {
