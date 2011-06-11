@@ -1,5 +1,7 @@
 package com.lucazamador.drools.monitoring.core.recovery;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ public class MonitoringRecoveryAgent {
 
     private static final int DEFAULT_RECOVERY_INTERVAL = 10000;
     private MonitoringAgentRegistry registry;
+    private Map<String, MonitoringRecoveryTask> recoveryTaks = new HashMap<String, MonitoringRecoveryTask>();
 
     public void reconnect(String agentId, String address, int port) {
         DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
@@ -33,6 +36,7 @@ public class MonitoringRecoveryAgent {
         recoveryTask.setRecoveryInterval(recoveryInterval);
         recoveryTask.setMonitoringAgentRegistry(registry);
         recoveryTask.setReconnectionAgent(this);
+        recoveryTaks.put(agentId, recoveryTask);
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, recoveryInterval > 0 ? recoveryInterval
                 : DEFAULT_RECOVERY_INTERVAL);
     }
@@ -43,6 +47,13 @@ public class MonitoringRecoveryAgent {
 
     public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
         this.registry = registry;
+    }
+
+    public void removeRecoveryTask(String agentId) {
+        MonitoringRecoveryTask recoveryTask = recoveryTaks.remove(agentId);
+        if (recoveryTask != null) {
+            recoveryTask.cancel();
+        }
     }
 
 }

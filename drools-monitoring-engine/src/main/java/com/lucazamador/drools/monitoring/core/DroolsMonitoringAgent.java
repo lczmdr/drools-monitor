@@ -56,6 +56,7 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         if (scanner != null) {
             scanner.stop();
         }
+        reconnectionAgent.removeRecoveryTask(id);
     }
 
     public boolean isConnected() {

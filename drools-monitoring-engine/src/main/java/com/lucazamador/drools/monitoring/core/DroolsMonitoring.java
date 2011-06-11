@@ -76,9 +76,11 @@ public class DroolsMonitoring {
         return registry.getMonitoringAgent(id);
     }
 
-    public void remove(String id) {
+    public void removeMonitoringAgent(String id) {
         DroolsMonitoringAgent unregistered = registry.unregister(id);
-        unregistered.stop();
+        if (unregistered != null) {
+            unregistered.stop();
+        }
     }
 
     public MonitoringConfiguration getConfiguration() {
