@@ -9,6 +9,7 @@ import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.core.MonitoringAgentRegistry;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
+import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
 /**
  * 
@@ -24,7 +25,7 @@ public class MonitoringRecoveryTask extends TimerTask {
     private int port;
     private int recoveryInterval;
     private MonitoringAgentRegistry registry;
-    private MonitoringRecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryListener recoveryListener;
 
     @Override
     public void run() {
@@ -39,6 +40,9 @@ public class MonitoringRecoveryTask extends TimerTask {
             return;
         }
         logger.info("reconnected with " + agentId);
+        if (recoveryListener != null) {
+            recoveryListener.reconnected(agentId);
+        }
         DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         monitoringAgent.setConnector(connector);
         try {
@@ -74,20 +78,16 @@ public class MonitoringRecoveryTask extends TimerTask {
         this.port = port;
     }
 
+    public void setRecoveryInterval(int recoveryInterval) {
+        this.recoveryInterval = recoveryInterval;
+    }
+
     public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
         this.registry = registry;
     }
 
-    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
-        this.reconnectionAgent = reconnectionAgent;
-    }
-
-    public MonitoringRecoveryAgent getReconnectionAgent() {
-        return reconnectionAgent;
-    }
-
-    public void setRecoveryInterval(int recoveryInterval) {
-        this.recoveryInterval = recoveryInterval;
+    public void setRecoveryListener(MonitoringRecoveryListener recoveryListener) {
+        this.recoveryListener = recoveryListener;
     }
 
 }

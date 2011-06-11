@@ -8,6 +8,7 @@ import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
+import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
 /**
  * 
@@ -18,7 +19,7 @@ public class DroolsMonitoring {
 
     private MonitoringAgentRegistry registry;
     private MonitoringConfiguration configuration;
-    private MonitoringRecoveryAgent reconnectionAgent;
+    private MonitoringRecoveryAgent recoveryAgent;
     private boolean started = false;
 
     public void configure() throws DroolsMonitoringException {
@@ -34,13 +35,13 @@ public class DroolsMonitoring {
             connector.connect();
         } catch (DroolsMonitoringException e) {
             DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(
-                    configuration, connector, reconnectionAgent);
+                    configuration, connector, recoveryAgent);
             registry.register(monitoringAgent.getId(), monitoringAgent);
-            reconnectionAgent.reconnect(configuration.getId(), configuration.getAddress(), configuration.getPort());
+            recoveryAgent.reconnect(configuration.getId(), configuration.getAddress(), configuration.getPort());
             return;
         }
         DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                connector, reconnectionAgent);
+                connector, recoveryAgent);
         registry.register(monitoringAgent.getId(), monitoringAgent);
         if (started) {
             monitoringAgent.start();
@@ -68,7 +69,7 @@ public class DroolsMonitoring {
     }
 
     public void addMonitoringAgent(DroolsMonitoringAgent droolsMonitoringAgent) {
-        droolsMonitoringAgent.setReconnectionAgent(reconnectionAgent);
+        droolsMonitoringAgent.setReconnectionAgent(recoveryAgent);
         registry.register(droolsMonitoringAgent.getId(), droolsMonitoringAgent);
     }
 
@@ -95,8 +96,8 @@ public class DroolsMonitoring {
         this.registry = registry;
     }
 
-    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
-        this.reconnectionAgent = reconnectionAgent;
+    public void setRecoveryAgent(MonitoringRecoveryAgent recoveryAgent) {
+        this.recoveryAgent = recoveryAgent;
     }
 
     public void registerListener(DroolsMonitoringListener listener) {
@@ -108,6 +109,10 @@ public class DroolsMonitoring {
 
     public boolean isStarted() {
         return started;
+    }
+
+    public void registerRecoveryAgentListener(MonitoringRecoveryListener recoveryListener) {
+        recoveryAgent.registerListener(recoveryListener);
     }
 
 }
