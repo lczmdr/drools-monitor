@@ -1,6 +1,8 @@
 package com.lucazamador.drools.monitoring.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.cfg.MonitoringConfiguration;
@@ -21,6 +23,7 @@ public class DroolsMonitoring {
     private MonitoringConfiguration configuration;
     private MonitoringRecoveryAgent recoveryAgent;
     private boolean started = false;
+    private List<DroolsMonitoringListener> monitoringListeners = new ArrayList<DroolsMonitoringListener>();
 
     public void configure() throws DroolsMonitoringException {
         for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
@@ -37,12 +40,18 @@ public class DroolsMonitoring {
             DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(
                     configuration, connector, recoveryAgent);
             registry.register(monitoringAgent.getId(), monitoringAgent);
+            for (DroolsMonitoringListener listener : monitoringListeners) {
+                monitoringAgent.registerListener(listener);
+            }
             recoveryAgent.reconnect(configuration.getId(), configuration.getAddress(), configuration.getPort());
             return;
         }
         DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
                 connector, recoveryAgent);
         registry.register(monitoringAgent.getId(), monitoringAgent);
+        for (DroolsMonitoringListener listener : monitoringListeners) {
+            monitoringAgent.registerListener(listener);
+        }
         if (started) {
             monitoringAgent.start();
         }
@@ -102,6 +111,7 @@ public class DroolsMonitoring {
 
     public void registerListener(DroolsMonitoringListener listener) {
         Collection<DroolsMonitoringAgent> agents = registry.getMonitoringAgents();
+        monitoringListeners.add(listener);
         for (DroolsMonitoringAgent agent : agents) {
             agent.registerListener(listener);
         }
