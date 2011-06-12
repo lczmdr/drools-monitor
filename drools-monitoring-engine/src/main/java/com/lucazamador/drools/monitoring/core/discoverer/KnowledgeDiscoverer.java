@@ -47,7 +47,7 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
                 resourceScanners.add(new KnowledgeBaseScanner(agentId, resource, connector));
                 KnowledgeBaseInfo kbaseInfo = new KnowledgeBaseInfo();
                 kbaseInfo.setKnowledgeBaseId(resource.getKeyProperty("type"));
-                kbaseInfo.setJvmName(agentId);
+                kbaseInfo.setAgentId(agentId);
                 knowledgeBaseInfos.add(kbaseInfo);
             }
         });
@@ -58,7 +58,7 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
                 KnowledgeSessionInfo ksessionInfo = new KnowledgeSessionInfo();
                 ksessionInfo.setKnowledgeSessionId(Integer.valueOf(resource.getKeyProperty("sessionId").replace(
                         "Session-", "")));
-                ksessionInfo.setJvmName(agentId);
+                ksessionInfo.setAgentId(agentId);
                 try {
                     String knowledgeBaseId = (String) connector.getConnection().getAttribute(resource,
                             "KnowledgeBaseId");

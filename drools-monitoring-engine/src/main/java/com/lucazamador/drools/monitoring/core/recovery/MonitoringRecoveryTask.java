@@ -27,6 +27,16 @@ public class MonitoringRecoveryTask extends TimerTask {
     private MonitoringAgentRegistry registry;
     private MonitoringRecoveryListener recoveryListener;
 
+    public MonitoringRecoveryTask(String agentId, String address, int port, int recoveryInterval,
+            MonitoringAgentRegistry registry, MonitoringRecoveryListener recoveryListener) {
+        this.agentId = agentId;
+        this.address = address;
+        this.port = port;
+        this.recoveryInterval = recoveryInterval;
+        this.registry = registry;
+        this.recoveryListener = recoveryListener;
+    }
+
     @Override
     public void run() {
         DroolsMBeanConnector connector = new DroolsMBeanConnector();

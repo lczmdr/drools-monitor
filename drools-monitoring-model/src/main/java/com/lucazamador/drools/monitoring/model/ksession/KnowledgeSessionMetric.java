@@ -19,7 +19,7 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
     private String knowledgeBaseId;
     private Double averageFiringTime;
     private Integer knowledgeSessionId;
-    private String jvmName;
+    private String agentId;
     private Date lastReset;
     private Long totalActivationsCancelled;
     private Long totalActivationsCreated;
@@ -58,12 +58,12 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
         this.knowledgeSessionId = knowledgeSessionId;
     }
 
-    public void setJvmName(String jvmName) {
-        this.jvmName = jvmName;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
-    public String getJvmName() {
-        return jvmName;
+    public String getAgentId() {
+        return agentId;
     }
 
     public Date getLastReset() {
@@ -156,7 +156,7 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
         averageFiringTime = builder.getAverageFiringTime();
         knowledgeBaseId = builder.getKnowledgeBaseId();
         knowledgeSessionId = builder.getKnowledgeSessionId();
-        jvmName = builder.getJvmName();
+        agentId = builder.getJvmName();
         lastReset = builder.getLastReset();
         totalActivationsCancelled = builder.getTotalActivationsCancelled();
         totalActivationsCreated = builder.getTotalActivationsCreated();

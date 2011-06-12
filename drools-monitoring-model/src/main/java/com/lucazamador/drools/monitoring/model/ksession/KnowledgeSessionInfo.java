@@ -13,7 +13,7 @@ public class KnowledgeSessionInfo implements Serializable {
 
     private int id;
     private String knowledgeBaseId;
-    private String jvmName;
+    private String agentId;
 
     private int knowledgeSessionId;
 
@@ -41,12 +41,12 @@ public class KnowledgeSessionInfo implements Serializable {
         return knowledgeSessionId;
     }
 
-    public String getJvmName() {
-        return jvmName;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public void setJvmName(String jvmName) {
-        this.jvmName = jvmName;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
 }

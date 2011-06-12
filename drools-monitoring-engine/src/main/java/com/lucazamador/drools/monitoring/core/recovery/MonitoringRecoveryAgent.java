@@ -29,15 +29,10 @@ public class MonitoringRecoveryAgent {
         DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         int recoveryInterval = monitoringAgent.getRecoveryInterval();
         monitoringAgent.stop();
-        logger.info("Recovery agent created to reconnect with " + agentId + " at " + address + ":" + port);
         Timer reconnectionTimer = new Timer();
-        MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask();
-        recoveryTask.setAgentId(agentId);
-        recoveryTask.setAddress(address);
-        recoveryTask.setPort(port);
-        recoveryTask.setRecoveryInterval(recoveryInterval);
-        recoveryTask.setMonitoringAgentRegistry(registry);
-        recoveryTask.setRecoveryListener(recoveryListener);
+        MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask(agentId, address, port, recoveryInterval,
+                registry, recoveryListener);
+        logger.info("Recovery task created to reconnect with " + agentId + " at " + address + ":" + port);
         recoveryTasks.put(agentId, recoveryTask);
         recoveryListener.disconnected(agentId);
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, recoveryInterval > 0 ? recoveryInterval
