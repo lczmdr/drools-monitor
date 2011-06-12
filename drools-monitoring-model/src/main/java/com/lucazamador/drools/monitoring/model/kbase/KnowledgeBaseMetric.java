@@ -16,7 +16,7 @@ public class KnowledgeBaseMetric extends AbstractMetric implements Serializable 
     private static final long serialVersionUID = 1L;
 
     private String knowledgeBaseId;
-    private String jvmId;
+    private String agentId;
     private Long sessionCount;
     private String packages;
     private List<KnowledgeGlobalMetric> globals;
@@ -24,10 +24,10 @@ public class KnowledgeBaseMetric extends AbstractMetric implements Serializable 
     public KnowledgeBaseMetric() {
     }
 
-    public KnowledgeBaseMetric(String knowledgeBaseId, String jvmId, Long sessionCount, String packages,
+    public KnowledgeBaseMetric(String knowledgeBaseId, String agentId, Long sessionCount, String packages,
             List<KnowledgeGlobalMetric> globals) {
         this.knowledgeBaseId = knowledgeBaseId;
-        this.jvmId = jvmId;
+        this.agentId = agentId;
         this.sessionCount = sessionCount;
         this.packages = packages;
         this.globals = globals;
@@ -41,12 +41,12 @@ public class KnowledgeBaseMetric extends AbstractMetric implements Serializable 
         return knowledgeBaseId;
     }
 
-    public String getJvmId() {
-        return jvmId;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public void setJvmId(String jvmId) {
-        this.jvmId = jvmId;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
     public Long getSessionCount() {
