@@ -9,7 +9,6 @@ import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoringFactory;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
-import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
 /**
  * 
@@ -27,11 +26,10 @@ public class DroolsMonitoringApp {
                 .newMonitoringConfigurationReader("/configuration.xml");
         MonitoringConfiguration configuration = configurationReader.read();
 
-        final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration);
+        final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration,
+                new MyMonitoringRecoveryListener());
         DroolsMonitoringListener listener = new MyDroolsMonitoringListener();
-        MonitoringRecoveryListener recoveryListener = new MyMonitoringRecoveryListener();
         monitor.registerListener(listener);
-        monitor.registerRecoveryAgentListener(recoveryListener);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

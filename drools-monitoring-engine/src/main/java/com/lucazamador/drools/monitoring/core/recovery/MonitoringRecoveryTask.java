@@ -40,9 +40,6 @@ public class MonitoringRecoveryTask extends TimerTask {
             return;
         }
         logger.info("reconnected with " + agentId);
-        if (recoveryListener != null) {
-            recoveryListener.reconnected(agentId);
-        }
         DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         monitoringAgent.setConnector(connector);
         try {
@@ -50,6 +47,9 @@ public class MonitoringRecoveryTask extends TimerTask {
         } catch (DroolsMonitoringException e) {
             e.printStackTrace();
             return;
+        }
+        if (recoveryListener != null) {
+            recoveryListener.reconnected(agentId);
         }
         cancel();
     }

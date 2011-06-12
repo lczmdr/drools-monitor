@@ -22,9 +22,8 @@ public class MonitoringRecoveryAgent {
 
     private static final int DEFAULT_RECOVERY_INTERVAL = 10000;
     private MonitoringAgentRegistry registry;
-    private Map<String, MonitoringRecoveryTask> recoveryTasks = new HashMap<String, MonitoringRecoveryTask>();
-
     private MonitoringRecoveryListener recoveryListener;
+    private Map<String, MonitoringRecoveryTask> recoveryTasks = new HashMap<String, MonitoringRecoveryTask>();
 
     public void reconnect(String agentId, String address, int port) {
         DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
@@ -40,16 +39,9 @@ public class MonitoringRecoveryAgent {
         recoveryTask.setMonitoringAgentRegistry(registry);
         recoveryTask.setRecoveryListener(recoveryListener);
         recoveryTasks.put(agentId, recoveryTask);
+        recoveryListener.disconnected(agentId);
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, recoveryInterval > 0 ? recoveryInterval
                 : DEFAULT_RECOVERY_INTERVAL);
-    }
-
-    public MonitoringAgentRegistry getMonitoringAgentRegistry() {
-        return registry;
-    }
-
-    public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
-        this.registry = registry;
     }
 
     public void removeRecoveryTask(String agentId) {
@@ -64,6 +56,14 @@ public class MonitoringRecoveryAgent {
         for (MonitoringRecoveryTask recoveryTask : recoveryTasks.values()) {
             recoveryTask.setRecoveryListener(recoveryListener);
         }
+    }
+
+    public MonitoringAgentRegistry getMonitoringAgentRegistry() {
+        return registry;
+    }
+
+    public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
+        this.registry = registry;
     }
 
 }

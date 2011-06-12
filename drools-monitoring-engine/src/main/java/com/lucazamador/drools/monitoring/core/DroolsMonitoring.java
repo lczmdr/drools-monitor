@@ -107,12 +107,12 @@ public class DroolsMonitoring {
         }
     }
 
-    public boolean isStarted() {
-        return started;
-    }
-
     public void registerRecoveryAgentListener(MonitoringRecoveryListener recoveryListener) {
         recoveryAgent.registerListener(recoveryListener);
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 
 }
