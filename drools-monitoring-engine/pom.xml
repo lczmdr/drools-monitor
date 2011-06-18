@@ -7,7 +7,7 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>drools-monitoring-engine</artifactId>
-  <name>drools-monitoring-engine</name>
+  <name>Drools Monitoring Engine</name>
   <packaging>jar</packaging>
   <description>drools monitoring engine</description>
 
