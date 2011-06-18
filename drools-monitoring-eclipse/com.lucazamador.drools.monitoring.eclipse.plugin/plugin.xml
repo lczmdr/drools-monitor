@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.lucazamador.drools.monitoring.eclipse.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.lucazamador.drools.monitoring.eclipse.perspective.DroolsMonitoringPerspective"
+            fixed="true"
+            id="com.lucazamador.drools.monitoring.studio.perspective.droolsMonitoringPerspective"
+            icon="src/main/resources/icons/agent.png"
+            name="Drools Monitoring">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="addGraphic"
+            name="addGraphic">
+      </command>
+      <command
+            id="addMonitoringAgent"
+            name="addMonitoringAgent">
+      </command>
+      <command
+            id="removeGraphic"
+            name="removeGraphic">
+      </command>
+      <command
+            id="removeMonitoringAgent"
+            name="removeMonitoringAgent">
+      </command>
+      <command
+            id="removeMonitoringConsole"
+            name="removeMonitoringConsole">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView"
+            icon="src/main/resources/icons/bug.png"
+            id="com.lucazamador.drools.monitoring.studio.view.navigationView"
+            name="Monitoring Agents"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="com.lucazamador.drools.monitoring.eclipse.view.GraphicView"
+            icon="src/main/resources/icons/graphic.png"
+            id="com.lucazamador.drools.monitoring.studio.view.graphicView"
+            name="Graphic View"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            class="com.lucazamador.drools.monitoring.eclipse.view.KnowledgeBaseView"
+            icon="src/main/resources/icons/kbase.png"
+            id="com.lucazamador.drools.monitoring.studio.view.knowledgeBaseView"
+            name="Knowledge Base"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         id="drools-monitoring-studio"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.lucazamador.drools.monitoring.eclipse.plugin.application"
+            name="drools-monitoring-eclipse">
+         <property
+               name="appName"
+               value="drools-monitoring-eclipse">
+         </property>
+         <property
+               name="aboutText"
+               value="Drools Monitoring Studio">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="addMonitoringAgent"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+A">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="com.lucazamador.drools.monitoring.eclipse.console.ConsoleParticipant"
+            id="droolsMonitoringConsoleParticipant">
+         <enablement></enablement>
+      </consolePageParticipant>
+   </extension>
+
+</plugin>
