@@ -13,8 +13,8 @@ Bundle-ClassPath: .,
  lib/log4j-1.2.14.jar,
  lib/jcommon-1.0.12.jar,
  lib/jfreechart-1.0.9.jar,
- lib/jfreechart-experimental-1.0.9.jar,
- lib/jfreechart-swt-1.0.9.jar
+ lib/jfreechart-experimental-1.0.5.jar,
+ lib/jfreechart-swt-1.0.5.jar
 Bundle-Activator: com.lucazamador.drools.monitoring.eclipse.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.1",
  org.eclipse.core.runtime;bundle-version="3.6.0",
