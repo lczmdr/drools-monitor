@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.jfree.chart.ChartFactory;
@@ -28,12 +31,14 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.experimental.chart.swt.ChartComposite;
 import org.jfree.ui.RectangleInsets;
 
+import com.lucazamador.drools.monitoring.eclipse.model.Graphic;
+import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeSession;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringMetric;
 import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionMetric;
 
 public class GraphicView extends ViewPart {
 
-    public static final String ID = "com.lucazamador.drools.monitoring.studio.view.graphicView";
+    public static final String ID = "com.lucazamador.drools.monitoring.eclipse.view.graphicView";
 
     private static String DATE_PATTERN = "hh:mm:ss";
 
@@ -176,6 +181,27 @@ public class GraphicView extends ViewPart {
         }
         chart = createTimeSeriesChart();
         initialized = true;
+    }
+
+    public static void openView(Graphic graphic, List<MonitoringMetric> selectedMetrics) {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        try {
+            KnowledgeSession ksession = graphic.getParent();
+            String viewName = ksession.getParent().getId() + " - " + ksession.getId() + " - " + graphic.getName();
+            String viewTitle = viewName.concat(String.valueOf(graphic.getId()));
+            GraphicView graphicView = (GraphicView) window.getActivePage().showView(GraphicView.ID, viewTitle,
+                    IWorkbenchPage.VIEW_ACTIVATE);
+            graphicView.setViewTitle(viewName);
+            graphicView.setMetrics(selectedMetrics);
+            graphicView.setGraphicId(getGraphicViewId(ksession));
+            graphicView.initialize();
+        } catch (PartInitException e) {
+            MessageDialog.openError(window.getShell(), "Error", "Error opening graphic view");
+        }
+    }
+
+    public static String getGraphicViewId(KnowledgeSession ksession) {
+        return ksession.getParent().getParent().getId() + ":" + ksession.getParent().getId() + ":" + ksession.getId();
     }
 
 }

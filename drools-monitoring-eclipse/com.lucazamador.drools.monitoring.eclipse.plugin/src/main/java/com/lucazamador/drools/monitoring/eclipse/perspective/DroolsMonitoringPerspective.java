@@ -11,7 +11,7 @@ import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 
 public class DroolsMonitoringPerspective implements IPerspectiveFactory {
 
-    public static final String ID = "com.lucazamador.drools.monitoring.studio.perspective.droolsMonitoringPerspective";
+    public static final String ID = "com.lucazamador.drools.monitoring.eclipse.perspective.droolsMonitoringPerspective";
 
     public void createInitialLayout(IPageLayout layout) {
         String editorArea = layout.getEditorArea();

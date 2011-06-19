@@ -12,7 +12,7 @@ import com.lucazamador.drools.monitoring.eclipse.ICommandIds;
 import com.lucazamador.drools.monitoring.eclipse.model.Graphic;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeSession;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringMetric;
-import com.lucazamador.drools.monitoring.eclipse.view.GraphicViewFactory;
+import com.lucazamador.drools.monitoring.eclipse.view.GraphicView;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 import com.lucazamador.drools.monitoring.eclipse.wizard.NewGraphicWizard;
 
@@ -49,7 +49,7 @@ public class AddGraphicAction extends Action {
             MonitoringAgentView navigationView = (MonitoringAgentView) window.getActivePage().findView(
                     MonitoringAgentView.ID);
             navigationView.refresh();
-            GraphicViewFactory.openView(graphic, selectedMetrics);
+            GraphicView.openView(graphic, selectedMetrics);
         }
     }
 

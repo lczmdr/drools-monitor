@@ -12,6 +12,7 @@ import com.lucazamador.drools.monitoring.core.DroolsMonitoringFactory;
 import com.lucazamador.drools.monitoring.eclipse.model.DroolsMonitor;
 import com.lucazamador.drools.monitoring.eclipse.recovery.RecoveryStudioListener;
 import com.lucazamador.drools.monitoring.eclipse.view.GraphicUpdaterListener;
+import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentListener;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 /**
@@ -63,7 +64,10 @@ public class Application implements IApplication {
     public static DroolsMonitoring getDroolsMonitoring() {
         if (droolsMonitoring == null) {
             IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-            droolsMonitoring = DroolsMonitoringFactory.newDroolsMonitoring(new RecoveryStudioListener(window));
+            MonitoringAgentListener resourcesDiscoveredListener = new MonitoringAgentListener(window);
+            RecoveryStudioListener recoveryStudioListener = new RecoveryStudioListener(window);
+            droolsMonitoring = DroolsMonitoringFactory.newDroolsMonitoring(recoveryStudioListener,
+                    resourcesDiscoveredListener);
             droolsMonitoring.registerListener(new GraphicUpdaterListener(window));
             try {
                 droolsMonitoring.start();

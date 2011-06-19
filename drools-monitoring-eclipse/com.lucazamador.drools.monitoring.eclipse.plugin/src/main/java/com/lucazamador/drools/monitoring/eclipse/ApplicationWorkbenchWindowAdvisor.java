@@ -1,9 +1,20 @@
 package com.lucazamador.drools.monitoring.eclipse;
 
+import java.util.List;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.osgi.service.prefs.BackingStoreException;
+
+import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
+import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
+import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -29,5 +40,30 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void postWindowCreate() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
         configurer.getWindow().getShell().setMaximized(true);
+        initialize();
+    }
+
+    private void initialize() {
+        ConfigurationManager configurationManager = new ConfigurationManager();
+        DroolsMonitoring droolsMonitoring = Application.getDroolsMonitoring();
+        try {
+            List<MonitoringAgent> agents = configurationManager.read();
+            for (MonitoringAgent agent : agents) {
+                try {
+                    droolsMonitoring.addMonitoringAgent(MonitoringAgentFactory.newMonitoringAgentConfiguration(agent));
+                    DroolsMonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(agent.getId());
+                    if (monitoringAgent.isConnected()) {
+                        agent.build(monitoringAgent);
+                    }
+                } catch (DroolsMonitoringException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                Application.getDroolsMonitor().addMonitoringAgent(agent);
+            }
+        } catch (BackingStoreException e) {
+            MessageDialog.openError(getWindowConfigurer().getWindow().getShell(), "Error",
+                    "Error reading default configuration");
+        }
     }
 }

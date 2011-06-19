@@ -21,14 +21,15 @@ public class GraphicUpdaterListener implements DroolsMonitoringListener {
 
     @Override
     public void newMetric(AbstractMetric metric) {
-        System.out.println(metric);
         if (metric instanceof KnowledgeSessionMetric) {
             KnowledgeSessionMetric kmetric = (KnowledgeSessionMetric) metric;
-            IViewReference[] viewReferences = window.getActivePage().getViewReferences();
-            for (int i = 0; i < viewReferences.length; i++) {
-                if (viewReferences[i].getId().equals(GraphicView.ID)) {
-                    GraphicView view = (GraphicView) viewReferences[i].getPart(false);
-                    view.updateGraphic(kmetric);
+            if (window != null) {
+                IViewReference[] viewReferences = window.getActivePage().getViewReferences();
+                for (int i = 0; i < viewReferences.length; i++) {
+                    if (viewReferences[i].getId().equals(GraphicView.ID)) {
+                        GraphicView view = (GraphicView) viewReferences[i].getPart(false);
+                        view.updateGraphic(kmetric);
+                    }
                 }
             }
         } else if (metric instanceof KnowledgeBaseMetric) {

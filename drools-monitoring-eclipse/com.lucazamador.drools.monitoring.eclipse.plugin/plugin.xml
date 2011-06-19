@@ -16,7 +16,7 @@
       <perspective
             class="com.lucazamador.drools.monitoring.eclipse.perspective.DroolsMonitoringPerspective"
             fixed="true"
-            id="com.lucazamador.drools.monitoring.studio.perspective.droolsMonitoringPerspective"
+            id="com.lucazamador.drools.monitoring.eclipse.perspective.droolsMonitoringPerspective"
             icon="src/main/resources/icons/agent.png"
             name="Drools Monitoring">
       </perspective>
@@ -49,7 +49,7 @@
       <view
             class="com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView"
             icon="src/main/resources/icons/bug.png"
-            id="com.lucazamador.drools.monitoring.studio.view.navigationView"
+            id="com.lucazamador.drools.monitoring.eclipse.view.navigationView"
             name="Monitoring Agents"
             restorable="true">
       </view>
@@ -57,7 +57,7 @@
             allowMultiple="true"
             class="com.lucazamador.drools.monitoring.eclipse.view.GraphicView"
             icon="src/main/resources/icons/graphic.png"
-            id="com.lucazamador.drools.monitoring.studio.view.graphicView"
+            id="com.lucazamador.drools.monitoring.eclipse.view.graphicView"
             name="Graphic View"
             restorable="true">
       </view>
@@ -65,13 +65,13 @@
             allowMultiple="true"
             class="com.lucazamador.drools.monitoring.eclipse.view.KnowledgeBaseView"
             icon="src/main/resources/icons/kbase.png"
-            id="com.lucazamador.drools.monitoring.studio.view.knowledgeBaseView"
+            id="com.lucazamador.drools.monitoring.eclipse.view.knowledgeBaseView"
             name="Knowledge Base"
             restorable="true">
       </view>
    </extension>
    <extension
-         id="drools-monitoring-studio"
+         id="drools-monitoring-eclipse"
          point="org.eclipse.core.runtime.products">
       <product
             application="com.lucazamador.drools.monitoring.eclipse.plugin.application"

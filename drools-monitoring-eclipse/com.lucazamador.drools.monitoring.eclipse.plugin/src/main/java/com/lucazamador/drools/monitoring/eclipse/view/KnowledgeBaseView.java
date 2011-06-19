@@ -1,5 +1,6 @@
 package com.lucazamador.drools.monitoring.eclipse.view;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -12,6 +13,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -21,12 +26,13 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 
+import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeBase;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeGlobalMetric;
 
 public class KnowledgeBaseView extends ViewPart {
 
-    public static final String ID = "com.lucazamador.drools.monitoring.studio.view.knowledgeBaseView";
+    public static final String ID = "com.lucazamador.drools.monitoring.eclipse.view.knowledgeBaseView";
 
     private FormToolkit toolkit;
     private ScrolledForm form;
@@ -165,6 +171,19 @@ public class KnowledgeBaseView extends ViewPart {
         sessionCountLabel.setText("Session Count: " + lastMetric.getSessionCount());
         packagesTableViewer.setInput(lastMetric.getPackagesSplited().toArray());
         globalsTableViewer.setInput(lastMetric.getGlobals().toArray());
+    }
+
+    public static void openView(KnowledgeBase kbase) {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        try {
+            String viewName = kbase.getParent().getId() + " - " + kbase.getId();
+            KnowledgeBaseView view = (KnowledgeBaseView) window.getActivePage().showView(KnowledgeBaseView.ID,
+                    viewName, IWorkbenchPage.VIEW_ACTIVATE);
+            view.setViewTitle(viewName);
+            view.refresh(kbase.getLastMetric());
+        } catch (PartInitException e) {
+            MessageDialog.openError(window.getShell(), "Error", "Error opening knowledge base view");
+        }
     }
 
 }

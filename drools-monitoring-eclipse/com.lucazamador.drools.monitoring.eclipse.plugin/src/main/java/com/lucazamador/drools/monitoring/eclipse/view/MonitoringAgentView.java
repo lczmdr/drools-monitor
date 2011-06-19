@@ -34,7 +34,7 @@ import com.lucazamador.drools.monitoring.eclipse.view.provider.MonitorLabelProvi
 
 public class MonitoringAgentView extends ViewPart {
 
-    public static final String ID = "com.lucazamador.drools.monitoring.studio.view.navigationView";
+    public static final String ID = "com.lucazamador.drools.monitoring.eclipse.view.navigationView";
 
     private IWorkbenchWindow window;
 
@@ -68,14 +68,14 @@ public class MonitoringAgentView extends ViewPart {
                     Object element = selection.getFirstElement();
                     if (element instanceof KnowledgeBase) {
                         KnowledgeBase kbase = (KnowledgeBase) element;
-                        KnowledgeBaseViewFactory.openView(kbase);
+                        KnowledgeBaseView.openView(kbase);
                     } else if (element instanceof KnowledgeSession) {
                         KnowledgeSession ksession = (KnowledgeSession) element;
                         String activityConsoleId = ActivityConsoleFactory.getViewId(ksession);
                         ActivityConsoleFactory.openActivityConsole(activityConsoleId);
                     } else if (element instanceof Graphic) {
                         Graphic graphic = (Graphic) element;
-                        GraphicViewFactory.openView(graphic, graphic.getMetrics());
+                        GraphicView.openView(graphic, graphic.getMetrics());
                     }
                 }
             }
