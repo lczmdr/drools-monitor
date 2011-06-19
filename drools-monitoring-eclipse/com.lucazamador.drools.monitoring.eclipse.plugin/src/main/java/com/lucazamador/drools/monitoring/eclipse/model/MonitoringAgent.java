@@ -22,14 +22,15 @@ public class MonitoringAgent {
     private Map<String, KnowledgeBase> knowledgeBases = new HashMap<String, KnowledgeBase>();
 
     public void build(DroolsMonitoringAgent monitoringAgent) {
-        this.clear();
         this.connected = true;
         List<KnowledgeBaseInfo> kbases = monitoringAgent.getDiscoveredKnowledgeBases();
         for (KnowledgeBaseInfo kbaseInfo : kbases) {
-            KnowledgeBase kbase = new KnowledgeBase();
-            kbase.setParent(this);
-            kbase.setId(String.valueOf(kbaseInfo.getKnowledgeBaseId()));
-            this.knowledgeBases.put(kbase.getId(), kbase);
+            if (!knowledgeBases.containsKey(kbaseInfo.getKnowledgeBaseId())) {
+                KnowledgeBase kbase = new KnowledgeBase();
+                kbase.setParent(this);
+                kbase.setId(String.valueOf(kbaseInfo.getKnowledgeBaseId()));
+                this.knowledgeBases.put(kbase.getId(), kbase);
+            }
         }
         List<KnowledgeSessionInfo> ksessions = monitoringAgent.getDiscoveredKnowledgeSessions();
         for (KnowledgeSessionInfo ksessionInfo : ksessions) {
