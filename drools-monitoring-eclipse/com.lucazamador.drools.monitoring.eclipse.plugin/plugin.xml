@@ -78,11 +78,11 @@
             name="drools-monitoring-eclipse">
          <property
                name="appName"
-               value="drools-monitoring-eclipse">
+               value="Drools Monitoring">
          </property>
          <property
                name="aboutText"
-               value="Drools Monitoring Studio">
+               value="Drools Monitoring">
          </property>
       </product>
    </extension>

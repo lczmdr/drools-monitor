@@ -5,7 +5,7 @@
 
    <aboutInfo>
       <text>
-         Drools Monitoring Studio
+         Drools Monitoring
       </text>
    </aboutInfo>
 
@@ -17,12 +17,14 @@
 
    <windowImages/>
 
+
    <launcher name="drools-monitoring-studio">
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
