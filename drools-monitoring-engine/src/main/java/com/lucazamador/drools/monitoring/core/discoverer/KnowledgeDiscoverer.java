@@ -86,7 +86,7 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
             }
         });
         if (discoveredListener != null && discover) {
-            discoveredListener.discovered();
+            discoveredListener.discovered(agentId);
         }
     }
 
