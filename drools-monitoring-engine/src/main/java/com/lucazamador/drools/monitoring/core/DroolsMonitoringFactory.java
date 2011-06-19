@@ -25,6 +25,12 @@ public class DroolsMonitoringFactory {
         return droolsMonitoring;
     }
 
+    public static DroolsMonitoring newDroolsMonitoring(ResourceDiscoveredListener discoveredListener) {
+        DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
+        droolsMonitoring.registerResourceDiscoveredListener(discoveredListener);
+        return droolsMonitoring;
+    }
+
     public static DroolsMonitoring newDroolsMonitoring(MonitoringRecoveryListener recoveryListener,
             ResourceDiscoveredListener discoveredListener) {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
