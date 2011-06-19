@@ -1,4 +1,4 @@
-package com.lucazamador.drools.monitoring;
+package com.lucazamador.drools.monitoring.example;
 
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 

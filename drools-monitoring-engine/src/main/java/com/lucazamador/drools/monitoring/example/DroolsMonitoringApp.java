@@ -1,4 +1,4 @@
-package com.lucazamador.drools.monitoring;
+package com.lucazamador.drools.monitoring.example;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +26,10 @@ public class DroolsMonitoringApp {
                 .newMonitoringConfigurationReader("/configuration.xml");
         MonitoringConfiguration configuration = configurationReader.read();
 
-        final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration,
-                new MyMonitoringRecoveryListener());
+        MyResourceDiscoveredListener discoveredListener = new MyResourceDiscoveredListener();
+        MyMonitoringRecoveryListener recoveryListener = new MyMonitoringRecoveryListener();
+        final DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration, recoveryListener,
+                discoveredListener);
         DroolsMonitoringListener listener = new MyDroolsMonitoringListener();
         monitor.registerListener(listener);
 
