@@ -2,6 +2,7 @@ package com.lucazamador.drools.monitoring.core.discoverer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.management.MalformedObjectNameException;
@@ -32,8 +33,10 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
 
     private String agentId;
 
-    private List<KnowledgeSessionInfo> knowledgeSessionInfos = new ArrayList<KnowledgeSessionInfo>();
-    private List<KnowledgeBaseInfo> knowledgeBaseInfos = new ArrayList<KnowledgeBaseInfo>();
+    private List<KnowledgeSessionInfo> knowledgeSessionInfos = Collections
+            .synchronizedList(new ArrayList<KnowledgeSessionInfo>());
+    private List<KnowledgeBaseInfo> knowledgeBaseInfos = Collections
+            .synchronizedList(new ArrayList<KnowledgeBaseInfo>());
     private boolean discover;
 
     /**
@@ -51,7 +54,9 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
                         KnowledgeBaseInfo kbaseInfo = new KnowledgeBaseInfo();
                         kbaseInfo.setKnowledgeBaseId(knowledgeBaseId);
                         kbaseInfo.setAgentId(agentId);
-                        knowledgeBaseInfos.add(kbaseInfo);
+                        synchronized (knowledgeBaseInfos) {
+                            knowledgeBaseInfos.add(kbaseInfo);
+                        }
                         KnowledgeBaseScanner scanner = new KnowledgeBaseScanner(agentId, resource, connector);
                         resourceScanners.put(knowledgeBaseId, scanner);
                         logger.info("Drools KnowledgeBase discovered: " + resource.getCanonicalName());
@@ -78,7 +83,9 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
                         ksessionInfo.setKnowledgeSessionId(Integer.valueOf(knowledgeSessionId));
                         ksessionInfo.setAgentId(agentId);
                         ksessionInfo.setKnowledgeBaseId(knowledgeBaseId);
-                        knowledgeSessionInfos.add(ksessionInfo);
+                        synchronized (knowledgeSessionInfos) {
+                            knowledgeSessionInfos.add(ksessionInfo);
+                        }
                         KnowledgeSessionScanner scanner = new KnowledgeSessionScanner(agentId, resource, connector);
                         resourceScanners.put(scannerId, scanner);
                         logger.info("Drools KnowledgeSession discovered: " + resource.getCanonicalName());
@@ -110,11 +117,23 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
     }
 
     public List<KnowledgeSessionInfo> getKnowledgeSessionInfos() {
-        return knowledgeSessionInfos;
+        synchronized (knowledgeSessionInfos) {
+            List<KnowledgeSessionInfo> copy = new ArrayList<KnowledgeSessionInfo>(knowledgeSessionInfos.size());
+            for (KnowledgeSessionInfo knowledgeSessionInfo : knowledgeSessionInfos) {
+                copy.add(knowledgeSessionInfo);
+            }
+            return copy;
+        }
     }
 
     public List<KnowledgeBaseInfo> getKnowledgeBaseInfos() {
-        return knowledgeBaseInfos;
+        synchronized (knowledgeBaseInfos) {
+            List<KnowledgeBaseInfo> copy = new ArrayList<KnowledgeBaseInfo>(knowledgeBaseInfos.size());
+            for (KnowledgeBaseInfo knowledgeBaseInfo : knowledgeBaseInfos) {
+                copy.add(knowledgeBaseInfo);
+            }
+            return copy;
+        }
     }
 
     private interface ResourceScanner {
