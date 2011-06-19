@@ -14,6 +14,7 @@ import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
+import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
@@ -65,5 +66,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
             MessageDialog.openError(getWindowConfigurer().getWindow().getShell(), "Error",
                     "Error reading default configuration");
         }
+        MonitoringAgentView navigationView = (MonitoringAgentView) getWindowConfigurer().getWindow().getActivePage()
+                .findView(MonitoringAgentView.ID);
+        navigationView.refresh();
     }
 }
