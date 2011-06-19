@@ -14,7 +14,7 @@ public class KnowledgeSessionInfo implements Serializable {
     private int id;
     private String agentId;
     private String knowledgeBaseId;
-    private String knowledgeSessionId;
+    private Integer knowledgeSessionId;
 
     public int getId() {
         return id;
@@ -32,11 +32,11 @@ public class KnowledgeSessionInfo implements Serializable {
         return knowledgeBaseId;
     }
 
-    public void setKnowledgeSessionId(String knowledgeSessionId) {
+    public void setKnowledgeSessionId(Integer knowledgeSessionId) {
         this.knowledgeSessionId = knowledgeSessionId;
     }
 
-    public String getKnowledgeSessionId() {
+    public Integer getKnowledgeSessionId() {
         return knowledgeSessionId;
     }
 

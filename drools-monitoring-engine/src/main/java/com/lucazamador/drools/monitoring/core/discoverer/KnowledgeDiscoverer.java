@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.AttributeNotFoundException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+import javax.management.ReflectionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,23 +66,25 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
         });
         discoverResource(KSESSION_RESOURCE_NAMESPACE, new ResourceScanner() {
             public void add(ObjectName resource) {
-                String knowledgeSessionId = resource.getKeyProperty("sessionId");
+                String knowledgeSessionId = String
+                        .valueOf(resource.getKeyProperty("sessionId").replace("Session-", ""));
+                String knowledgeBaseId;
+                try {
+                    knowledgeBaseId = (String) connector.getConnection().getAttribute(resource, "KnowledgeBaseId");
+                } catch (Exception e1) {
+                    logger.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + agentId);
+                    return;
+                }
+                String scannerId = knowledgeBaseId.concat(knowledgeSessionId);
                 synchronized (resourceScanners) {
-                    if (!resourceScanners.containsKey(knowledgeSessionId)) {
+                    if (!resourceScanners.containsKey(scannerId)) {
                         KnowledgeSessionInfo ksessionInfo = new KnowledgeSessionInfo();
-                        ksessionInfo.setKnowledgeSessionId(knowledgeSessionId);
+                        ksessionInfo.setKnowledgeSessionId(Integer.valueOf(knowledgeSessionId));
                         ksessionInfo.setAgentId(agentId);
-                        try {
-                            String knowledgeBaseId = (String) connector.getConnection().getAttribute(resource,
-                                    "KnowledgeBaseId");
-                            ksessionInfo.setKnowledgeBaseId(knowledgeBaseId);
-                            knowledgeSessionInfos.add(ksessionInfo);
-                        } catch (Exception e) {
-                            logger.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + agentId);
-                            e.printStackTrace();
-                        }
+                        ksessionInfo.setKnowledgeBaseId(knowledgeBaseId);
+                        knowledgeSessionInfos.add(ksessionInfo);
                         KnowledgeSessionScanner scanner = new KnowledgeSessionScanner(agentId, resource, connector);
-                        resourceScanners.put(knowledgeSessionId, scanner);
+                        resourceScanners.put(scannerId, scanner);
                         logger.info("Drools KnowledgeSession discovered: " + resource.getCanonicalName());
                         discover = true;
                     }

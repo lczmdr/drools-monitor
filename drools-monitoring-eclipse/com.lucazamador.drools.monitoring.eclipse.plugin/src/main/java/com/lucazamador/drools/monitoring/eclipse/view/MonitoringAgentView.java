@@ -1,11 +1,8 @@
 package com.lucazamador.drools.monitoring.eclipse.view;
 
-import java.util.List;
-
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -21,25 +18,19 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.service.prefs.BackingStoreException;
 
-import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.Application;
 import com.lucazamador.drools.monitoring.eclipse.action.AddGraphicAction;
 import com.lucazamador.drools.monitoring.eclipse.action.AddMonitoringAgentAction;
 import com.lucazamador.drools.monitoring.eclipse.action.RemoveGraphicAction;
 import com.lucazamador.drools.monitoring.eclipse.action.RemoveMonitoringAgentAction;
-import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
 import com.lucazamador.drools.monitoring.eclipse.console.ActivityConsoleFactory;
 import com.lucazamador.drools.monitoring.eclipse.model.Graphic;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeBase;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeSession;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
 import com.lucazamador.drools.monitoring.eclipse.view.provider.MonitorContentProvider;
 import com.lucazamador.drools.monitoring.eclipse.view.provider.MonitorLabelProvider;
-import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 public class MonitoringAgentView extends ViewPart {
 
@@ -153,31 +144,6 @@ public class MonitoringAgentView extends ViewPart {
 
         treeViewer.getTree().setFocus();
 
-        initialize();
-    }
-
-    private void initialize() {
-        ConfigurationManager configurationManager = new ConfigurationManager();
-        DroolsMonitoring droolsMonitoring = Application.getDroolsMonitoring();
-        try {
-            List<MonitoringAgent> agents = configurationManager.read();
-            for (MonitoringAgent agent : agents) {
-                try {
-                    droolsMonitoring.addMonitoringAgent(MonitoringAgentFactory.newMonitoringAgentConfiguration(agent));
-                    DroolsMonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(agent.getId());
-                    if (monitoringAgent.isConnected()) {
-                        agent.build(monitoringAgent);
-                    }
-                } catch (DroolsMonitoringException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-                Application.getDroolsMonitor().addMonitoringAgent(agent);
-            }
-            refresh();
-        } catch (BackingStoreException e) {
-            MessageDialog.openError(window.getShell(), "Error", "Error reading default configuration");
-        }
     }
 
     @Override
