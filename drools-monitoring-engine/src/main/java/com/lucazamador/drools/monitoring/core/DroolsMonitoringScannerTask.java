@@ -3,8 +3,10 @@ package com.lucazamador.drools.monitoring.core;
 import java.io.IOException;
 import java.rmi.ConnectException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
@@ -33,27 +35,31 @@ public class DroolsMonitoringScannerTask extends TimerTask {
 
     @Override
     public void run() {
-        for (MetricScanner resourceScanner : resourceDiscoverer.getResourceScanners()) {
-            try {
-                AbstractMetric metric = resourceScanner.scan();
-                if (metric != null) {
-                    synchronized (scanner.getMetrics()) {
-                        scanner.getMetrics().add(metric);
-                    }
-                    synchronized (listeners) {
-                        for (DroolsMonitoringListener listener : listeners) {
-                            listener.newMetric(metric);
+        Map<String, MetricScanner> resourceScanners = resourceDiscoverer.getResourceScanners();
+        synchronized (resourceScanners) {
+            for (MetricScanner resourceScanner : resourceScanners.values()) {
+                try {
+                    AbstractMetric metric = resourceScanner.scan();
+                    if (metric != null) {
+                        synchronized (scanner.getMetrics()) {
+                            scanner.getMetrics().add(metric);
+                        }
+                        synchronized (listeners) {
+                            for (DroolsMonitoringListener listener : listeners) {
+                                listener.newMetric(metric);
+                            }
                         }
                     }
+                } catch (ConnectException e) {
+                    logger.error("connection lost... trying again in a few seconds");
+                    resourceDiscoverer.stop();
+                    reconnectionAgent.reconnect(resourceDiscoverer.getAgentId(), resourceDiscoverer.getConnector()
+                            .getAddress(), resourceDiscoverer.getConnector().getPort());
+                    cancel();
+                    return;
+                } catch (IOException e) {
+                    logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
                 }
-            } catch (ConnectException e) {
-                logger.error("connection lost... trying again in a few seconds");
-                reconnectionAgent.reconnect(resourceDiscoverer.getAgentId(), resourceDiscoverer.getConnector()
-                        .getAddress(), resourceDiscoverer.getConnector().getPort());
-                cancel();
-                return;
-            } catch (IOException e) {
-                logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
             }
         }
     }

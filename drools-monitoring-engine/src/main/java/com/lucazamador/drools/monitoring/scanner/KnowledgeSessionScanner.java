@@ -32,10 +32,10 @@ public class KnowledgeSessionScanner extends MetricScanner {
     private static final Logger logger = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
     private ProcessMetricParser processParser;
     private ProcessInstanceMetricParser processInstanceParser;
-    private final String jvmId;
+    private final String agentId;
 
-    public KnowledgeSessionScanner(String jvmId, ObjectName resource, DroolsMBeanConnector connector) {
-        this.jvmId = jvmId;
+    public KnowledgeSessionScanner(String agentId, ObjectName resource, DroolsMBeanConnector connector) {
+        this.agentId = agentId;
         this.resource = resource;
         this.connector = connector;
         this.processInstanceParser = ProcessInstanceMetricParser.getInstance();
@@ -61,9 +61,9 @@ public class KnowledgeSessionScanner extends MetricScanner {
         @SuppressWarnings("unchecked")
         Map<String, String> processStats = (HashMap<String, String>) getAttribute("StatsByProcess");
         List<KnowledgeProcessMetric> processMetrics = new ArrayList<KnowledgeProcessMetric>();
-        for (String processName : processStats.keySet()) {
-            String status = processStats.get(processName);
-            processMetrics.add(new KnowledgeProcessMetric(processName, processParser.getProcessCompleted(status),
+        for (String processId : processStats.keySet()) {
+            String status = processStats.get(processId);
+            processMetrics.add(new KnowledgeProcessMetric(processId, processParser.getProcessCompleted(status),
                     processParser.getProcessCompleted(status), processParser.getProcessNodeTriggered(status)));
         }
 
@@ -77,7 +77,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
                     processInstanceParser.getProcessNodeTriggered(status)));
         }
 
-        KnowledgeSessionMetric metric = new KnowledgeSessionMetricBuilder(jvmId, knowledgeBaseId)
+        KnowledgeSessionMetric metric = new KnowledgeSessionMetricBuilder(agentId, knowledgeBaseId)
                 .averageFiringTime(averageFiringTime).knowledgeSessionId(knowledgeSessionId).lastReset(lastReset)
                 .totalActivationsCancelled(totalActivationsCancelled).totalActivationsCreated(totalActivationsCreated)
                 .totalActivationsFired(totalActivationsFired).totalFactCount(totalFactCount)
@@ -85,7 +85,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
                 .totalProcessInstancesStarted(totalProcessInstancesStarted).processStats(processMetrics)
                 .processInstanceStats(processInstanceMetrics).build();
 
-        logger.info(jvmId + " metric: " + metric);
+        logger.info(agentId + " metric: " + metric);
         return metric;
     }
 

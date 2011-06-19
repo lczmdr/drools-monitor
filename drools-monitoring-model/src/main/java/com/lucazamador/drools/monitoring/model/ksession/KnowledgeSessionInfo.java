@@ -12,10 +12,9 @@ public class KnowledgeSessionInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String knowledgeBaseId;
     private String agentId;
-
-    private int knowledgeSessionId;
+    private String knowledgeBaseId;
+    private String knowledgeSessionId;
 
     public int getId() {
         return id;
@@ -33,11 +32,11 @@ public class KnowledgeSessionInfo implements Serializable {
         return knowledgeBaseId;
     }
 
-    public void setKnowledgeSessionId(int knowledgeSessionId) {
+    public void setKnowledgeSessionId(String knowledgeSessionId) {
         this.knowledgeSessionId = knowledgeSessionId;
     }
 
-    public int getKnowledgeSessionId() {
+    public String getKnowledgeSessionId() {
         return knowledgeSessionId;
     }
 

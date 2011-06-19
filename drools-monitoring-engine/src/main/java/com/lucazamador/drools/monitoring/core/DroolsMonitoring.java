@@ -11,6 +11,7 @@ import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
+import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
 /**
  * 
@@ -24,6 +25,7 @@ public class DroolsMonitoring {
     private MonitoringRecoveryAgent recoveryAgent;
     private boolean started = false;
     private List<DroolsMonitoringListener> monitoringListeners = new ArrayList<DroolsMonitoringListener>();
+    private ResourceDiscoveredListener discoveredListener;
 
     public void configure() throws DroolsMonitoringException {
         for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
@@ -38,7 +40,7 @@ public class DroolsMonitoring {
             connector.connect();
         } catch (DroolsMonitoringException e) {
             DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(
-                    configuration, connector, recoveryAgent);
+                    configuration, connector, recoveryAgent, discoveredListener);
             registry.register(monitoringAgent.getId(), monitoringAgent);
             for (DroolsMonitoringListener listener : monitoringListeners) {
                 monitoringAgent.registerListener(listener);
@@ -47,7 +49,7 @@ public class DroolsMonitoring {
             return;
         }
         DroolsMonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                connector, recoveryAgent);
+                connector, recoveryAgent, discoveredListener);
         registry.register(monitoringAgent.getId(), monitoringAgent);
         for (DroolsMonitoringListener listener : monitoringListeners) {
             monitoringAgent.registerListener(listener);
@@ -119,6 +121,10 @@ public class DroolsMonitoring {
 
     public void registerRecoveryAgentListener(MonitoringRecoveryListener recoveryListener) {
         recoveryAgent.registerListener(recoveryListener);
+    }
+
+    public void registerResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
+        this.discoveredListener = discoveredListener;
     }
 
     public boolean isStarted() {

@@ -8,6 +8,7 @@ import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
+import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
 import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 
@@ -27,12 +28,14 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsMonitoringScannerTask scannerTask;
     private MonitoringRecoveryAgent reconnectionAgent;
+    private ResourceDiscoveredListener discoveredListener;
     private List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
     private boolean started;
 
     public void start() throws DroolsMonitoringException {
         resourceDiscoverer = new ResourceDiscoverer();
         resourceDiscoverer.setAgentId(id);
+        resourceDiscoverer.setResourceDiscoveredListener(discoveredListener);
         resourceDiscoverer.setConnector(connector);
         resourceDiscoverer.discover();
 
@@ -127,5 +130,9 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
         if (started) {
             scannerTask.addListener(listener);
         }
+    }
+
+    public void setResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
+        this.discoveredListener = discoveredListener;
     }
 }

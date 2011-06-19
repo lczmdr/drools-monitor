@@ -5,6 +5,7 @@ import com.lucazamador.drools.monitoring.cfg.MonitoringConfigurationReader;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
+import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
 public class DroolsMonitoringFactory {
 
@@ -24,6 +25,14 @@ public class DroolsMonitoringFactory {
         return droolsMonitoring;
     }
 
+    public static DroolsMonitoring newDroolsMonitoring(MonitoringRecoveryListener recoveryListener,
+            ResourceDiscoveredListener discoveredListener) {
+        DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
+        droolsMonitoring.registerRecoveryAgentListener(recoveryListener);
+        droolsMonitoring.registerResourceDiscoveredListener(discoveredListener);
+        return droolsMonitoring;
+    }
+
     public static DroolsMonitoring newDroolsMonitoring(MonitoringConfiguration configuration)
             throws DroolsMonitoringException {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
@@ -37,6 +46,17 @@ public class DroolsMonitoringFactory {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
         droolsMonitoring.setConfiguration(configuration);
         droolsMonitoring.registerRecoveryAgentListener(recoveryListener);
+        droolsMonitoring.configure();
+        return droolsMonitoring;
+    }
+
+    public static DroolsMonitoring newDroolsMonitoring(MonitoringConfiguration configuration,
+            MonitoringRecoveryListener recoveryListener, ResourceDiscoveredListener discoveredListener)
+            throws DroolsMonitoringException {
+        DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
+        droolsMonitoring.setConfiguration(configuration);
+        droolsMonitoring.registerRecoveryAgentListener(recoveryListener);
+        droolsMonitoring.registerResourceDiscoveredListener(discoveredListener);
         droolsMonitoring.configure();
         return droolsMonitoring;
     }
