@@ -10,7 +10,7 @@
   <modules>
     <module>drools-monitoring-model</module>
     <module>drools-monitoring-engine</module>
-    <!--module>drools-monitoring-persistence</module -->
+    <module>drools-monitoring-persistence</module>
   </modules>
 
   <build>

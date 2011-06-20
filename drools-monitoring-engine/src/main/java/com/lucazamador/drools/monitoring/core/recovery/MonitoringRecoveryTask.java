@@ -5,8 +5,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.core.MonitoringAgentRegistry;
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
@@ -39,9 +39,7 @@ public class MonitoringRecoveryTask extends TimerTask {
 
     @Override
     public void run() {
-        DroolsMBeanConnector connector = new DroolsMBeanConnector();
-        connector.setAddress(address);
-        connector.setPort(port);
+        DroolsMBeanConnector connector = new DroolsMBeanConnector(address, port, recoveryInterval);
         try {
             connector.connect();
         } catch (DroolsMonitoringException e) {
@@ -50,7 +48,7 @@ public class MonitoringRecoveryTask extends TimerTask {
             return;
         }
         logger.info("reconnected with " + agentId);
-        DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
+        MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         monitoringAgent.setConnector(connector);
         try {
             monitoringAgent.start();

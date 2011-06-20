@@ -10,7 +10,6 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.Application;
 import com.lucazamador.drools.monitoring.eclipse.ICommandIds;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
@@ -52,7 +51,8 @@ public class AddMonitoringAgentAction extends Action {
             }
             // update view model with a new monitoring agent object
             MonitoringAgent agent = MonitoringAgentFactory.newMonitoringAgent(configuration);
-            DroolsMonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(configuration.getId());
+            com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = droolsMonitoring
+                    .getMonitoringAgent(configuration.getId());
             if (monitoringAgent.isConnected()) {
                 agent.build(monitoringAgent);
             }

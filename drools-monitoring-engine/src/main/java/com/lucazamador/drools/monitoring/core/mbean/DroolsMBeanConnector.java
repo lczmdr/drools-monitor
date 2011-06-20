@@ -25,15 +25,17 @@ public class DroolsMBeanConnector {
 
     private String address;
     private int port;
+    private int recoveryInterval;
     private MBeanServerConnection connection;
     private boolean connected;
 
     public DroolsMBeanConnector() {
     }
 
-    public DroolsMBeanConnector(String address, int port) {
+    public DroolsMBeanConnector(String address, int port, int recoveryInterval) {
         this.address = address;
         this.port = port;
+        this.recoveryInterval = recoveryInterval;
     }
 
     /**
@@ -96,6 +98,14 @@ public class DroolsMBeanConnector {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getRecoveryInterval() {
+        return recoveryInterval;
+    }
+
+    public void setRecoveryInterval(int recoveryInterval) {
+        this.recoveryInterval = recoveryInterval;
     }
 
     public MBeanServerConnection getConnection() {

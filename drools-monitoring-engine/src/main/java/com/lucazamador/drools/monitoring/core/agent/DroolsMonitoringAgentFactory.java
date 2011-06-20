@@ -1,4 +1,4 @@
-package com.lucazamador.drools.monitoring.core;
+package com.lucazamador.drools.monitoring.core.agent;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
@@ -7,7 +7,7 @@ import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
 public class DroolsMonitoringAgentFactory {
 
-    public static DroolsMonitoringAgent newDroolsMonitoringAgent(MonitoringAgentConfiguration configuration,
+    public static MonitoringAgent newDroolsMonitoringAgent(MonitoringAgentConfiguration configuration,
             DroolsMBeanConnector connector, MonitoringRecoveryAgent reconnectionAgent,
             ResourceDiscoveredListener discoveredListener) {
         DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();

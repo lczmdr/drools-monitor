@@ -19,6 +19,7 @@ public class MonitoringConfigurationReader {
         xstream = new XStream();
         xstream.processAnnotations(MonitoringConfiguration.class);
         xstream.processAnnotations(MonitoringAgentConfiguration.class);
+        xstream.processAnnotations(PersistenceConfiguration.class);
     }
 
     public MonitoringConfiguration read() throws DroolsMonitoringException {
@@ -36,5 +37,4 @@ public class MonitoringConfigurationReader {
     public void setConfigurationFile(String configurationFile) {
         this.configurationFile = configurationFile;
     }
-
 }

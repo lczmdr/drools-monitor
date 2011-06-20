@@ -1,12 +1,13 @@
-package com.lucazamador.drools.monitoring.core;
+package com.lucazamador.drools.monitoring.core.agent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lucazamador.drools.monitoring.core.DroolsMonitoringScannerTask;
+import com.lucazamador.drools.monitoring.core.DroolsResourceScanner;
 import com.lucazamador.drools.monitoring.core.discoverer.ResourceDiscoverer;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
-import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
@@ -14,53 +15,22 @@ import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 
 /**
  * 
- * 
  * @author Lucas Amador
  * 
  */
-public class DroolsMonitoringAgent implements MonitoringAgent {
+public abstract class CommonMonitoringAgent implements MonitoringAgent {
 
-    private String id;
-    private int scanInterval;
-    private int recoveryInterval;
-    private DroolsMBeanConnector connector;
-    private DroolsResourceScanner scanner;
-    private ResourceDiscoverer resourceDiscoverer;
-    private DroolsMonitoringScannerTask scannerTask;
-    private MonitoringRecoveryAgent reconnectionAgent;
-    private ResourceDiscoveredListener discoveredListener;
-    private List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
-    private boolean started;
-
-    public void start() throws DroolsMonitoringException {
-        resourceDiscoverer = new ResourceDiscoverer();
-        resourceDiscoverer.setAgentId(id);
-        resourceDiscoverer.setResourceDiscoveredListener(discoveredListener);
-        resourceDiscoverer.setConnector(connector);
-        resourceDiscoverer.discover();
-
-        scanner = new DroolsResourceScanner();
-        scanner.setInterval(scanInterval);
-
-        scannerTask = new DroolsMonitoringScannerTask();
-        scannerTask.setResourceDiscoverer(resourceDiscoverer);
-        scannerTask.setScanner(scanner);
-        scannerTask.setReconnectionAgent(reconnectionAgent);
-        for (DroolsMonitoringListener listener : listeners) {
-            scannerTask.addListener(listener);
-        }
-
-        scanner.setScannerTask(scannerTask);
-        scanner.start();
-        started = true;
-    }
-
-    public synchronized void stop() {
-        if (scanner != null) {
-            scanner.stop();
-        }
-        reconnectionAgent.removeRecoveryTask(id);
-    }
+    protected String id;
+    protected int scanInterval;
+    protected int recoveryInterval;
+    protected DroolsMBeanConnector connector;
+    protected DroolsResourceScanner scanner;
+    protected ResourceDiscoverer resourceDiscoverer;
+    protected DroolsMonitoringScannerTask scannerTask;
+    protected MonitoringRecoveryAgent reconnectionAgent;
+    protected ResourceDiscoveredListener discoveredListener;
+    protected List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
+    protected boolean started;
 
     public boolean isConnected() {
         if (connector == null) {
@@ -135,4 +105,5 @@ public class DroolsMonitoringAgent implements MonitoringAgent {
     public void setResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
         this.discoveredListener = discoveredListener;
     }
+
 }

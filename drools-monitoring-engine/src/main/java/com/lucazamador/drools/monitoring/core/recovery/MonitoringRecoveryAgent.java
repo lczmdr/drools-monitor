@@ -7,8 +7,8 @@ import java.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.core.MonitoringAgentRegistry;
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
 /**
@@ -26,17 +26,17 @@ public class MonitoringRecoveryAgent {
     private Map<String, MonitoringRecoveryTask> recoveryTasks = new HashMap<String, MonitoringRecoveryTask>();
 
     public void reconnect(String agentId, String address, int port) {
-        DroolsMonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
-        int recoveryInterval = monitoringAgent.getRecoveryInterval();
+        MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
+        int recoveryInterval = monitoringAgent.getConnector().getRecoveryInterval();
         monitoringAgent.stop();
         Timer reconnectionTimer = new Timer();
-        MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask(agentId, address, port, recoveryInterval,
-                registry, recoveryListener);
+        int period = recoveryInterval > 0 ? recoveryInterval : DEFAULT_RECOVERY_INTERVAL;
+        MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask(agentId, address, port, period, registry,
+                recoveryListener);
         logger.info("Recovery task created to reconnect with " + agentId + " at " + address + ":" + port);
         recoveryTasks.put(agentId, recoveryTask);
         recoveryListener.disconnected(agentId);
-        reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, recoveryInterval > 0 ? recoveryInterval
-                : DEFAULT_RECOVERY_INTERVAL);
+        reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, period);
     }
 
     public void removeRecoveryTask(String agentId) {

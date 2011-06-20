@@ -10,7 +10,6 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.osgi.service.prefs.BackingStoreException;
 
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
-import com.lucazamador.drools.monitoring.core.DroolsMonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
@@ -52,7 +51,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
             for (MonitoringAgent agent : agents) {
                 try {
                     droolsMonitoring.addMonitoringAgent(MonitoringAgentFactory.newMonitoringAgentConfiguration(agent));
-                    DroolsMonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(agent.getId());
+                    com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = droolsMonitoring
+                            .getMonitoringAgent(agent.getId());
                     if (monitoringAgent.isConnected()) {
                         agent.build(monitoringAgent);
                     }
