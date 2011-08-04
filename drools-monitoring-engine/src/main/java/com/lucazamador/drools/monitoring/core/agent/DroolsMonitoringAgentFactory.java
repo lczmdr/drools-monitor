@@ -10,13 +10,23 @@ public class DroolsMonitoringAgentFactory {
     public static MonitoringAgent newDroolsMonitoringAgent(MonitoringAgentConfiguration configuration,
             DroolsMBeanConnector connector, MonitoringRecoveryAgent reconnectionAgent,
             ResourceDiscoveredListener discoveredListener) {
-        DroolsMonitoringAgent monitoringAgent = new DroolsMonitoringAgent();
+        CommonMonitoringAgent monitoringAgent;
+        if (configuration.persistenceEnabled()) {
+            monitoringAgent = new DroolsPersistenceMonitoringAgent();
+        } else {
+            monitoringAgent = new DroolsMonitoringAgent();
+        }
         monitoringAgent.setId(configuration.getId());
         monitoringAgent.setScanInterval(configuration.getScanInterval());
         monitoringAgent.setRecoveryInterval(configuration.getRecoveryInterval());
         monitoringAgent.setReconnectionAgent(reconnectionAgent);
         monitoringAgent.setConnector(connector);
         monitoringAgent.setResourceDiscoveredListener(discoveredListener);
+        if (configuration.persistenceEnabled()) {
+            ((DroolsPersistenceMonitoringAgent) monitoringAgent).setPersistence(null);
+            ((DroolsPersistenceMonitoringAgent) monitoringAgent).setPersistenceInterval(configuration.getPersistence()
+                    .getInterval());
+        }
         return monitoringAgent;
     }
 

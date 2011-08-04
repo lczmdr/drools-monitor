@@ -71,6 +71,10 @@ public class MonitoringAgentConfiguration {
         this.persistence = persistence;
     }
 
+    public boolean persistenceEnabled() {
+        return persistence != null && persistence.getClassName().trim().length() > 0;
+    }
+
     @Override
     public String toString() {
         return "id=" + id + " address=" + address + " port=" + port + " scanInterval=" + scanInterval
