@@ -6,6 +6,7 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.thoughtworks.xstream.XStream;
 
 /**
+ * Monitoring configuration XML reader
  * 
  * @author Lucas Amador
  * 
@@ -22,6 +23,13 @@ public class MonitoringConfigurationReader {
         xstream.processAnnotations(PersistenceConfiguration.class);
     }
 
+    /**
+     * Read the configuration file and unmarshall the monitoring configurations
+     * 
+     * @return a MonitoringConfiguration object with the monitoring agent
+     *         connections
+     * @throws DroolsMonitoringException
+     */
     public MonitoringConfiguration read() throws DroolsMonitoringException {
         if (configurationFile == null) {
             throw new DroolsMonitoringException("configuration file not specified");

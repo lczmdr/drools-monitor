@@ -18,6 +18,8 @@ import com.lucazamador.drools.monitoring.model.AbstractMetric;
 import com.lucazamador.drools.monitoring.scanner.MetricScanner;
 
 /**
+ * A scanner timer task used to scan the available metrics for a monitoring
+ * agent. It also creates a reconnection task when the connection is lost.
  * 
  * @author Lucas Amador
  * 
@@ -32,6 +34,10 @@ public class DroolsMonitoringScannerTask extends TimerTask {
     private List<DroolsMonitoringListener> listeners = Collections
             .synchronizedList(new ArrayList<DroolsMonitoringListener>());
 
+    /**
+     * Obtain the current metrics from the available resources and trigger the
+     * registered metric listeners.
+     */
     @Override
     public void run() {
         Map<String, MetricScanner> resourceScanners = resourceDiscoverer.getResourceScanners();
@@ -83,6 +89,12 @@ public class DroolsMonitoringScannerTask extends TimerTask {
         this.scanner = scanner;
     }
 
+    /**
+     * Register a listener to the current scanner task
+     * 
+     * @param listener
+     *            the listener to be registered
+     */
     public void registerListener(DroolsMonitoringListener listener) {
         synchronized (listeners) {
             listeners.add(listener);

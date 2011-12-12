@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.lucazamador.drools.monitoring.model.AbstractMetric;
 
 /**
+ * A metric resource scanner used to store the metrics and initialize the metric
+ * scanner scheduler
  * 
  * @author Lucas Amador
  * 
@@ -28,6 +30,9 @@ public class DroolsResourceScanner {
     private Timer scannerScheduler;
     private DroolsMonitoringScannerTask scannerTask;
 
+    /**
+     * Initialize the metric scanner
+     */
     public void start() {
         this.scannerScheduler = new Timer();
         if (scannerTask != null) {

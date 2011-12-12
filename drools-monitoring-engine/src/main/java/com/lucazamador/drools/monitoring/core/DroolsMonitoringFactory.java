@@ -8,13 +8,20 @@ import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
 /**
+ * Factory class used to create a DroolsMonitoring object with all the necessary
+ * registry and recover agents.
  * 
  * @author Lucas Amador
  * 
  */
 public class DroolsMonitoringFactory {
 
-    public static DroolsMonitoring newDroolsMonitoring() {
+    /**
+     * Creates a default and without configure DroolsMonitoring object.
+     * 
+     * @return a DroolsMonitoring object
+     */
+    private static DroolsMonitoring newDroolsMonitoring() {
         DroolsMonitoring droolsMonitoring = new DroolsMonitoring();
         MonitoringAgentRegistry registry = new MonitoringAgentRegistry();
         MonitoringRecoveryAgent recoveryAgent = new MonitoringRecoveryAgent();
@@ -24,12 +31,27 @@ public class DroolsMonitoringFactory {
         return droolsMonitoring;
     }
 
+    /**
+     * Creates a DroolsMonitoring object with a custom recovery listener.
+     * 
+     * @param recoveryListener
+     *            a custom recovery listener
+     * @return a DroolsMonitoring object
+     */
     public static DroolsMonitoring newDroolsMonitoring(MonitoringRecoveryListener recoveryListener) {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
         droolsMonitoring.registerRecoveryAgentListener(recoveryListener);
         return droolsMonitoring;
     }
 
+    /**
+     * Creates a DroolsMonitoring object with a custom resource discovery
+     * listener.
+     * 
+     * @param discoveredListener
+     *            a custom resource recovery listener
+     * @return a DroolsMonitoring object
+     */
     public static DroolsMonitoring newDroolsMonitoring(ResourceDiscoveredListener discoveredListener) {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
         droolsMonitoring.registerResourceDiscoveredListener(discoveredListener);
@@ -72,6 +94,14 @@ public class DroolsMonitoringFactory {
         return droolsMonitoring;
     }
 
+    /**
+     * Creates a new monitoring configuration reader configured with a
+     * configution file.
+     * 
+     * @param configurationFile
+     *            a configuration file
+     * @return a monitoring configuration reader
+     */
     public static MonitoringConfigurationReader newMonitoringConfigurationReader(String configurationFile) {
         MonitoringConfigurationReader configurationReader = new MonitoringConfigurationReader();
         configurationReader.setConfigurationFile(configurationFile);

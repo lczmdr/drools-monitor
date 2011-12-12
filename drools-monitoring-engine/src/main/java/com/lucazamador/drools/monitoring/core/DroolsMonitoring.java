@@ -34,7 +34,7 @@ public class DroolsMonitoring {
     private ResourceDiscoveredListener discoveredListener;
 
     /**
-     * Used to configure the monitoring agents configured in the configuration
+     * Used to configure the monitoring agents configured in the configuration.
      * file
      */
     public void configure() {
@@ -81,7 +81,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Initializes all the registered monitoring agents
+     * Initializes all the registered monitoring agents.
      * 
      * @throws DroolsMonitoringException
      */
@@ -95,7 +95,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Stops all the registered monitoring agents
+     * Stops all the registered monitoring agents.
      */
     public void stop() {
         for (MonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
@@ -105,7 +105,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Add a manually configured jvm configuration
+     * Add a manually configured jvm configuration.
      * 
      * @param configuration
      *            the jvm instance connection configuration
@@ -116,7 +116,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Register a monitoring agent created programatically
+     * Register a monitoring agent created programatically.
      * 
      * @param droolsMonitoringAgent
      */
@@ -126,7 +126,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Obtain a registered monitoring agent using their ID
+     * Obtain a registered monitoring agent using their ID.
      * 
      * @param id
      *            the monitoring agent ID
@@ -137,7 +137,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Unregister and stop a monitoring agent using their ID
+     * Unregister and stop a monitoring agent using their ID.
      * 
      * @param id
      *            the monitoring agent ID
@@ -151,7 +151,7 @@ public class DroolsMonitoring {
 
     /**
      * Obtain the monitoring configuration object used to create the monitoring
-     * agents
+     * agents.
      * 
      * @return the monitoring configuration object
      */
@@ -161,7 +161,7 @@ public class DroolsMonitoring {
 
     /**
      * Set the monitoring configuration object used later to create the
-     * monitoring agents
+     * monitoring agents.
      * 
      * @param configuration
      *            the monitoring configuration object
@@ -179,7 +179,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Register a custom metric listener in all the monitoring agents
+     * Register a custom metric listener in all the monitoring agents.
      * 
      * @param listener
      *            the custom metric listener
@@ -193,7 +193,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Register a custom recovery agent listener in the recovery agent
+     * Register a custom recovery agent listener in the recovery agent.
      * 
      * @param recoveryListener
      *            the custom recovery listener
@@ -203,7 +203,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Register a custom discovery resource listener
+     * Register a custom discovery resource listener.
      * 
      * @param discoveredListener
      *            the custom discovery resource listener
@@ -213,7 +213,7 @@ public class DroolsMonitoring {
     }
 
     /**
-     * Returns the status of the drools monitoring instance
+     * Returns the status of the drools monitoring instance.
      * 
      * @return true or false
      */
