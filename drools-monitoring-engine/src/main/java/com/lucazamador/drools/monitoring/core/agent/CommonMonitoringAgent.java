@@ -98,7 +98,7 @@ public abstract class CommonMonitoringAgent implements MonitoringAgent {
     public void registerListener(DroolsMonitoringListener listener) {
         listeners.add(listener);
         if (started) {
-            scannerTask.addListener(listener);
+            scannerTask.registerListener(listener);
         }
     }
 

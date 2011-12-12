@@ -83,7 +83,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
         this.scanner = scanner;
     }
 
-    public void addListener(DroolsMonitoringListener listener) {
+    public void registerListener(DroolsMonitoringListener listener) {
         synchronized (listeners) {
             listeners.add(listener);
         }

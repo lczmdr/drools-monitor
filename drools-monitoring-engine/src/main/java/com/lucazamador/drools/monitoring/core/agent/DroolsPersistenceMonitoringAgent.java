@@ -35,7 +35,7 @@ public class DroolsPersistenceMonitoringAgent extends CommonMonitoringAgent {
         scannerTask.setScanner(scanner);
         scannerTask.setReconnectionAgent(reconnectionAgent);
         for (DroolsMonitoringListener listener : listeners) {
-            scannerTask.addListener(listener);
+            scannerTask.registerListener(listener);
         }
         scanner.setScannerTask(scannerTask);
 

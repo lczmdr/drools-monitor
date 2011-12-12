@@ -3,7 +3,6 @@ package com.lucazamador.drools.monitoring.core.agent;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoringScannerTask;
 import com.lucazamador.drools.monitoring.core.DroolsResourceScanner;
 import com.lucazamador.drools.monitoring.core.discoverer.ResourceDiscoverer;
-import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
@@ -29,7 +28,7 @@ public class DroolsMonitoringAgent extends CommonMonitoringAgent {
         scannerTask.setScanner(scanner);
         scannerTask.setReconnectionAgent(reconnectionAgent);
         for (DroolsMonitoringListener listener : listeners) {
-            scannerTask.addListener(listener);
+            scannerTask.registerListener(listener);
         }
 
         scanner.setScannerTask(scannerTask);
