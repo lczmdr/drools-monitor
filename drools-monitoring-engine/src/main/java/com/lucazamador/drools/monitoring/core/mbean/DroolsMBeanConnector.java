@@ -1,8 +1,16 @@
 package com.lucazamador.drools.monitoring.core.mbean;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -83,6 +91,70 @@ public class DroolsMBeanConnector {
             throw new DroolsMonitoringException("JVM connection error", e);
         }
     }
+
+    public void connectWithTimeout(long timeout, TimeUnit unit) throws IOException {
+        final String connectionURL = JMX_URL.replace("$address", address).replace("$port", String.valueOf(port));
+        final BlockingQueue<Object> mailbox = new ArrayBlockingQueue<Object>(1);
+        ExecutorService executor = Executors.newSingleThreadExecutor(daemonThreadFactory);
+        executor.submit(new Runnable() {
+            public void run() {
+                try {
+                    JMXConnector connector = JMXConnectorFactory.connect(new JMXServiceURL(connectionURL));
+                    if (!mailbox.offer(connector)) {
+                        connector.close();
+                    }
+                } catch (Throwable t) {
+                    mailbox.offer(t);
+                }
+            }
+        });
+        Object result;
+        try {
+            result = mailbox.poll(timeout, unit);
+            if (result == null) {
+                if (!mailbox.offer(""))
+                    result = mailbox.take();
+            }
+        } catch (InterruptedException e) {
+            throw initCause(new InterruptedIOException(e.getMessage()), e);
+        } finally {
+            executor.shutdown();
+        }
+        if (result == null) {
+            throw new SocketTimeoutException("Connect timed out: " + address + ":" + port);
+        }
+        if (result instanceof JMXConnector) {
+            this.connection = ((JMXConnector) result).getMBeanServerConnection();
+            return;
+        }
+        try {
+            throw (Throwable) result;
+        } catch (IOException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Error e) {
+            throw e;
+        } catch (Throwable e) {
+            // In principle this can't happen but we wrap it anyway
+            throw new IOException(e.toString(), e);
+        }
+    }
+
+    private static <T extends Throwable> T initCause(T wrapper, Throwable wrapped) {
+        wrapper.initCause(wrapped);
+        return wrapper;
+    }
+
+    private static class DaemonThreadFactory implements ThreadFactory {
+        public Thread newThread(Runnable r) {
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            t.setDaemon(true);
+            return t;
+        }
+    }
+
+    private static final ThreadFactory daemonThreadFactory = new DaemonThreadFactory();
 
     public String getAddress() {
         return this.address;

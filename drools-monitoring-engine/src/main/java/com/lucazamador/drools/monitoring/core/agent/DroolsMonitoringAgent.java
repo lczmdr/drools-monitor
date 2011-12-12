@@ -14,7 +14,7 @@ import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
  */
 public class DroolsMonitoringAgent extends CommonMonitoringAgent {
 
-    public void start() throws DroolsMonitoringException {
+    public void start() {
         resourceDiscoverer = new ResourceDiscoverer();
         resourceDiscoverer.setAgentId(id);
         resourceDiscoverer.setResourceDiscoveredListener(discoveredListener);

@@ -50,12 +50,7 @@ public class MonitoringRecoveryTask extends TimerTask {
         logger.info("reconnected with " + agentId);
         MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         monitoringAgent.setConnector(connector);
-        try {
-            monitoringAgent.start();
-        } catch (DroolsMonitoringException e) {
-            e.printStackTrace();
-            return;
-        }
+        monitoringAgent.start();
         if (recoveryListener != null) {
             recoveryListener.reconnected(agentId);
         }

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Timer;
 
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
-import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
 import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
@@ -25,7 +24,7 @@ public class ResourceDiscoverer {
     private ResourceDiscoveredListener discoveredListener;
     private KnowledgeDiscovererTask knowledgeDiscovererTask;
 
-    public void discover() throws DroolsMonitoringException {
+    public void discover() {
         knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
         knowledgeResourceDiscoverer.setAgentId(agentId);
         knowledgeResourceDiscoverer.setConnector(connector);

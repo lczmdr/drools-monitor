@@ -6,12 +6,12 @@ public class MyMonitoringRecoveryListener implements MonitoringRecoveryListener 
 
     @Override
     public void reconnected(String agentId) {
-        System.out.println("reconnection created with " + agentId);
+        System.out.println("recovery listener: reconnection created with " + agentId);
     }
 
     @Override
     public void disconnected(String agentId) {
-        System.out.println("disconnected from " + agentId);
+        System.out.println("recovery listener: disconnected from " + agentId);
     }
 
 }

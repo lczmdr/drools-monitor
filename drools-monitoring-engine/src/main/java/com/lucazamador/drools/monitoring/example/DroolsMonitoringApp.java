@@ -47,8 +47,9 @@ public class DroolsMonitoringApp {
 
         monitor.start();
 
-        DroolsMonitoringListener listener2 = new MyDroolsMonitoringListener();
-        monitor.registerListener(listener2);
+        // listeners can be added on demand
+//        DroolsMonitoringListener listener2 = new MyDroolsMonitoringListener();
+//        monitor.registerListener(listener2);
 
         logger.info("drools monitoring started... (ctrl-c to stop it)");
 

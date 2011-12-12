@@ -30,13 +30,13 @@ public class DroolsMonitoring {
     private List<DroolsMonitoringListener> monitoringListeners = new ArrayList<DroolsMonitoringListener>();
     private ResourceDiscoveredListener discoveredListener;
 
-    public void configure() throws DroolsMonitoringException {
+    public void configure() {
         for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
             createMonitoringAgent(monitoringAgentConfiguration);
         }
     }
 
-    private void createMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
+    private void createMonitoringAgent(MonitoringAgentConfiguration configuration) {
         DroolsMBeanConnector connector = null;
         try {
             connector = new DroolsMBeanConnector(configuration.getAddress(), configuration.getPort(),
@@ -63,7 +63,7 @@ public class DroolsMonitoring {
         }
     }
 
-    public void start() throws DroolsMonitoringException {
+    public void start() {
         for (MonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
             if (monitoringAgent.isConnected()) {
                 monitoringAgent.start();
@@ -116,10 +116,10 @@ public class DroolsMonitoring {
     }
 
     public void registerListener(DroolsMonitoringListener listener) {
-        Collection<MonitoringAgent> agents = registry.getMonitoringAgents();
+        Collection<MonitoringAgent> monitoringAgents = registry.getMonitoringAgents();
         monitoringListeners.add(listener);
-        for (MonitoringAgent agent : agents) {
-            agent.registerListener(listener);
+        for (MonitoringAgent monitoringAgent : monitoringAgents) {
+            monitoringAgent.registerListener(listener);
         }
     }
 

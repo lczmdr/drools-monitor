@@ -7,7 +7,7 @@ public class MyDroolsMonitoringListener implements DroolsMonitoringListener {
 
     @Override
     public void newMetric(AbstractMetric metric) {
-        System.out.println("new metric obtained at " + metric.getTimestamp());
+        System.out.println("custom metric listener: new metric obtained at " + metric.getTimestamp());
     }
 
 }

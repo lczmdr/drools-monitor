@@ -7,6 +7,11 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
+/**
+ * 
+ * @author Lucas Amador
+ * 
+ */
 public class DroolsMonitoringFactory {
 
     public static DroolsMonitoring newDroolsMonitoring() {

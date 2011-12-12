@@ -2,7 +2,7 @@
 <configuration>
   <connections>
     <agent id="jvm1" address="localhost" port="9003" scanInterval="1000" recoveryInterval="2000" >
-      <persistence interval="10000" className="org.plugtree.drools.persistence.HibernateMetricsPersistence"/>
+      <!-- <persistence interval="10000" className="org.plugtree.drools.persistence.HibernateMetricsPersistence"/> -->
     </agent>
   </connections>
 </configuration>

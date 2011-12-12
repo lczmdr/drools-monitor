@@ -6,7 +6,7 @@ public class MyResourceDiscoveredListener implements ResourceDiscoveredListener 
 
     @Override
     public void discovered(String agentId) {
-        System.out.println("resources discovered in agent: " + agentId);
+        System.out.println("resource discovery listener: resources discovered in agent: " + agentId);
     }
 
 }

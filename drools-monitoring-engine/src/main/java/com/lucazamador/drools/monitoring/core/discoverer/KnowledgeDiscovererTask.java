@@ -19,6 +19,7 @@ public class KnowledgeDiscovererTask extends TimerTask {
             discoverer.discover();
         } catch (DroolsMonitoringException e) {
             // e.printStackTrace();
+            // TODO: discovering
         }
     }
 
