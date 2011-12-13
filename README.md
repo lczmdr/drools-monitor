@@ -14,6 +14,7 @@ Current features
 * Custom metrics, recovery and discoverer metrics.
 
 What doesn't supports yet (but it's supposed to do soon):
+
 * Metrics persistence (Currently working on it).
 * JMX connection timeout (JMX specification doesn't supports timeout so it needs to be implemented in another way. There is current progress on it).
 
