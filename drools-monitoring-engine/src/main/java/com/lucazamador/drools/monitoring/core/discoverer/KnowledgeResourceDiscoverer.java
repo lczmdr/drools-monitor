@@ -18,15 +18,15 @@ import com.lucazamador.drools.monitoring.scanner.KnowledgeBaseScanner;
 import com.lucazamador.drools.monitoring.scanner.KnowledgeSessionScanner;
 
 /**
- * Discover all the registered KnowledgeBase and KnowledgeSession in the JVM
- * MBeanServer
+ * Discover all the registered knowledge base and knowledge session MBeans in
+ * the JVM
  * 
  * @author Lucas Amador
  * 
  */
-public class KnowledgeDiscoverer extends BaseDiscoverer {
+public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
 
-    private static final Logger logger = LoggerFactory.getLogger(KnowledgeDiscoverer.class);
+    private static final Logger logger = LoggerFactory.getLogger(KnowledgeResourceDiscoverer.class);
 
     private static final String KBASE_RESOURCE_NAMESPACE = "org.drools.kbases:type=*";
     private static final String KSESSION_RESOURCE_NAMESPACE = "org.drools.kbases:type=*,group=Sessions,sessionId=Session-*";
@@ -40,6 +40,9 @@ public class KnowledgeDiscoverer extends BaseDiscoverer {
     private boolean discover;
 
     /**
+     * Discover all the registered Drools knowledge resources (aka: knowledge
+     * base and knowledge sessions). Register and initalize a knowledge scanner
+     * for each of the knowledge resources discovered.
      * 
      * @throws DroolsMonitoringException
      */

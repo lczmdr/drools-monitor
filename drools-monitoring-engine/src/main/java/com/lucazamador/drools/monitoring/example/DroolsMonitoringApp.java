@@ -11,7 +11,8 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 
 /**
- * 
+ * An drools monitoring example using a configuration file and customs
+ * listeners.
  * 
  * @author Lucas Amador
  * 
@@ -46,10 +47,6 @@ public class DroolsMonitoringApp {
         });
 
         monitor.start();
-
-        // listeners can be added on demand
-//        DroolsMonitoringListener listener2 = new MyDroolsMonitoringListener();
-//        monitor.registerListener(listener2);
 
         logger.info("drools monitoring started... (ctrl-c to stop it)");
 

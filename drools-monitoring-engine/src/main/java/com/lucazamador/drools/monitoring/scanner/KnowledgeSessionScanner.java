@@ -22,7 +22,8 @@ import com.lucazamador.drools.monitoring.model.ksession.KnowledgeProcessMetric;
 import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionMetric;
 
 /**
- * Scanner to update the metrics of the associated KnowledgeSession
+ * Knowledge session scanner to update the metrics of the associated knowledge
+ * session.
  * 
  * @author Lucas Amador
  * 

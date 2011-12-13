@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Process metrics parser used to parse the Drools JMX metrics custom format.
  * 
  * @author Lucas Amador
  * 

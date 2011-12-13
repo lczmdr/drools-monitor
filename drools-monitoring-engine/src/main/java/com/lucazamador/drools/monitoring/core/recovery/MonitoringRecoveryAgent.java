@@ -12,6 +12,7 @@ import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
 /**
+ * An agent to recovery the connection with the JVM.
  * 
  * @author Lucas Amador
  * 
@@ -25,6 +26,16 @@ public class MonitoringRecoveryAgent {
     private MonitoringRecoveryListener recoveryListener;
     private Map<String, MonitoringRecoveryTask> recoveryTasks = new HashMap<String, MonitoringRecoveryTask>();
 
+    /**
+     * Creates a connection recovery task when the connection is lost.
+     * 
+     * @param agentId
+     *            the monitoring agent id
+     * @param address
+     *            the monitoring agent IP address
+     * @param port
+     *            the monitoring agent port.
+     */
     public void reconnect(String agentId, String address, int port) {
         MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
         int recoveryInterval = monitoringAgent.getConnector().getRecoveryInterval();
@@ -39,6 +50,12 @@ public class MonitoringRecoveryAgent {
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, period);
     }
 
+    /**
+     * Remvoes a connection recovery task.
+     * 
+     * @param agentId
+     *            the agent ID of the task to be removed
+     */
     public void removeRecoveryTask(String agentId) {
         MonitoringRecoveryTask recoveryTask = recoveryTasks.remove(agentId);
         if (recoveryTask != null) {
@@ -46,6 +63,12 @@ public class MonitoringRecoveryAgent {
         }
     }
 
+    /**
+     * Register a connection recovery listener.
+     * 
+     * @param recoveryListener
+     *            the custom recovery listener to be registered
+     */
     public void registerListener(MonitoringRecoveryListener recoveryListener) {
         this.recoveryListener = recoveryListener;
         for (MonitoringRecoveryTask recoveryTask : recoveryTasks.values()) {

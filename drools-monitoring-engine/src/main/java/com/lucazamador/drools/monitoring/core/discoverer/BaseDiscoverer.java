@@ -17,6 +17,8 @@ import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 import com.lucazamador.drools.monitoring.scanner.MetricScanner;
 
 /**
+ * Basic functionality for the knowledge discoverer. Discover the registered
+ * Drools MBean resources.
  * 
  * @author Lucas Amador
  * 

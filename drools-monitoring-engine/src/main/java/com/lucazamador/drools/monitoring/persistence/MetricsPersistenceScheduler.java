@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Scheduler which executes a persistence task after a period of time
+ * Scheduler timer to executes a persistence task after a period of time
  * 
  * @author Lucas Amador
  * 

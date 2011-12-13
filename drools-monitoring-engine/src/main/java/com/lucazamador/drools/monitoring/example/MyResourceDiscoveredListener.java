@@ -2,6 +2,12 @@ package com.lucazamador.drools.monitoring.example;
 
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
+/**
+ * A custom resource discoverer listener
+ * 
+ * @author Lucas Amador
+ * 
+ */
 public class MyResourceDiscoveredListener implements ResourceDiscoveredListener {
 
     @Override

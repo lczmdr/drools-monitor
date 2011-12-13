@@ -11,7 +11,8 @@ import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 import com.lucazamador.drools.monitoring.scanner.MetricScanner;
 
 /**
- * Discoverer wrapper
+ * Resouces discoverer wrapper used by the MonitoringAgent. Initialize the
+ * knowledge discoverer and his timer.
  * 
  * @author Lucas Amador
  * 
@@ -20,12 +21,16 @@ public class ResourceDiscoverer {
 
     private String agentId;
     private DroolsMBeanConnector connector;
-    private KnowledgeDiscoverer knowledgeResourceDiscoverer;
+    private KnowledgeResourceDiscoverer knowledgeResourceDiscoverer;
     private ResourceDiscoveredListener discoveredListener;
     private KnowledgeDiscovererTask knowledgeDiscovererTask;
 
+    /**
+     * Initialize the knowledge resource discoverer timer and his knowledge
+     * discoverer timer task.
+     */
     public void discover() {
-        knowledgeResourceDiscoverer = new KnowledgeDiscoverer();
+        knowledgeResourceDiscoverer = new KnowledgeResourceDiscoverer();
         knowledgeResourceDiscoverer.setAgentId(agentId);
         knowledgeResourceDiscoverer.setConnector(connector);
         knowledgeResourceDiscoverer.setResourceDiscoveredListener(discoveredListener);

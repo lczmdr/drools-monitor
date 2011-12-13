@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Process instance metrics parser used to parse the Drools JMX metrics custom
+ * format.
  * 
  * @author Lucas Amador
  * 

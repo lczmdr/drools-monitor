@@ -22,6 +22,8 @@ import javax.management.remote.JMXServiceURL;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 /**
+ * Class used to connect with the JVM using JMX. Sad to say that this
+ * implementation doesn't supports connection timeout.
  * 
  * @author Lucas Amador
  * 

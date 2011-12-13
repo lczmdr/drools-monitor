@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.lucazamador.drools.monitoring.core.mbean.DroolsMBeanConnector;
 
 /**
+ * Basic metric scanner functionality.
  * 
  * @author Lucas Amador
  * 

@@ -18,7 +18,8 @@ import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeGlobalMetric;
 
 /**
- * Scanner that update the metrics of the associated KnowledgeBase
+ * Knowledge base scanner to update the metrics of the associated knowledge
+ * base.
  * 
  * @author Lucas Amador
  * 
