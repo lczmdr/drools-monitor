@@ -1,8 +1,7 @@
-JBoss Drools monitoring using JMX
-=================================
+JBoss Drools monitoring 
+=======================
 
-The goal of this project is to create an embbedable framework to monitor JBoss Drools knowledge bases and sessions that can be integrated into a webapp or a standalone application.
-In this repository you can also find a minimal Eclipse RCP application using the drools-monitoring project.
+The goal of this project is to create an embbedable framework to monitor JBoss Drools knowledge bases and sessions using JMX, and that can be integrated into a webapp or a standalone application. As a proof of concept in this repository you can also find a minimal Eclipse RCP application using the drools-monitoring project.
 
 Current features
 ----------------
