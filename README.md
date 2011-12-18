@@ -8,26 +8,33 @@ Current features
 
 * XML and API configuration.
 * Automatic knowledge base and sessions discovery.
-* Knowledge Base and sessions metrics scanner with a configurable scan time.
+* Configurable knowledge Base and sessions metrics scanner.
 * Connection recovery in case of connection lost or JVM restart.
 * Custom metrics, recovery and discoverer metrics.
+* Pluggable metrics persistence mechanism.
+* Easy to configure using the Spring Framework.
+
+What's next:
+* Improve the pluggable persistence (Initial implementation is done).
+* Custom reporting framework.
+* A testing framework is needed.
+* Nobody knows!
 
 What doesn't supports yet (but it's supposed to do soon):
 
-* Metrics persistence (Currently working on it).
-* JMX connection timeout (JMX specification doesn't supports timeout so it needs to be implemented in another way. There is current progress on it).
+* JMX connection timeout (JMX specification doesn't supports timeout so it needs to be implemented in another way. There is current poc on it).
 
 How to use it
 -------------
 
-Just writing the next lines of code:
+Just write the next lines of code in a Java project:
 
 	MonitoringConfigurationReader configurationReader = DroolsMonitoringFactory.newMonitoringConfigurationReader("/configuration.xml");
     MonitoringConfiguration configuration = configurationReader.read();
     DroolsMonitoring monitor = DroolsMonitoringFactory.newDroolsMonitoring(configuration);
     monitor.start();
 
-But to configure it you will need to create a configuration file with the next format:
+And don't forget to create a configuration file with the next format:
 
 	<?xml version="1.0" encoding="UTF-8"?>
 	<configuration>
@@ -37,6 +44,10 @@ But to configure it you will need to create a configuration file with the next f
 	  </connections>
 	</configuration>
 
+And that's all!
+
 Contributing
 ------------
-Want to contribute? Great, contributions are always welcome.
+Do you feel in mood to contribute? Great, contributions are always welcome. Just fork it or ask me to join the project.
+Questions are always welcome.
+
