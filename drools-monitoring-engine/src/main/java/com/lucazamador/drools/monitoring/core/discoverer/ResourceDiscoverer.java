@@ -38,6 +38,7 @@ public class ResourceDiscoverer {
         knowledgeDiscovererTask = new KnowledgeDiscovererTask();
         knowledgeDiscovererTask.setKnowledgeResourceDiscoverer(knowledgeResourceDiscoverer);
 
+        // TODO: configure the discoverer timer time
         Timer discovererTimer = new Timer();
         discovererTimer.scheduleAtFixedRate(knowledgeDiscovererTask, 0, 2000);
 

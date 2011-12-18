@@ -11,7 +11,7 @@ import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
  * @author Lucas Amador
  * 
  */
-public class DroolsMonitoringAgent extends CommonMonitoringAgent {
+public class DroolsMonitoringAgent extends DroolsMonitoringAgentBase {
 
     public void start() {
         resourceDiscoverer = new ResourceDiscoverer();
@@ -27,6 +27,12 @@ public class DroolsMonitoringAgent extends CommonMonitoringAgent {
         scannerTask.setResourceDiscoverer(resourceDiscoverer);
         scannerTask.setScanner(scanner);
         scannerTask.setReconnectionAgent(reconnectionAgent);
+        scannerTask.setOnConnectionLost(new ConnectionLost() {
+            @Override
+            public void stop() {
+                resourceDiscoverer.stop();
+            }
+        });
         for (DroolsMonitoringListener listener : listeners) {
             scannerTask.registerListener(listener);
         }

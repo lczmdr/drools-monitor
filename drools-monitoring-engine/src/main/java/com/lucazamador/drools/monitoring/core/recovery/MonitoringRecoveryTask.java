@@ -47,7 +47,7 @@ public class MonitoringRecoveryTask extends TimerTask {
         DroolsMBeanConnector connector = new DroolsMBeanConnector(address, port, recoveryInterval);
         try {
             connector.connect();
-            logger.info("reconnected with " + agentId);
+            logger.info("reconnected with " + agentId + " at " + address + ":" + port);
             MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
             monitoringAgent.setConnector(connector);
             monitoringAgent.start();

@@ -13,7 +13,7 @@ import com.lucazamador.drools.monitoring.persistence.api.MetricsPersistence;
  * @author Lucas Amador
  * 
  */
-public class DroolsPersistenceMonitoringAgent extends CommonMonitoringAgent {
+public class DroolsMonitoringPersistenceAgent extends DroolsMonitoringAgentBase {
 
     private int persistenceInterval;
     private MetricsPersistence persistence;
@@ -34,6 +34,14 @@ public class DroolsPersistenceMonitoringAgent extends CommonMonitoringAgent {
         scannerTask.setResourceDiscoverer(resourceDiscoverer);
         scannerTask.setScanner(scanner);
         scannerTask.setReconnectionAgent(reconnectionAgent);
+        scannerTask.setOnConnectionLost(new ConnectionLost() {
+            @Override
+            public void stop() {
+                resourceDiscoverer.stop();
+                persistenceScheduler.stop();
+            }
+        });
+
         for (DroolsMonitoringListener listener : listeners) {
             scannerTask.registerListener(listener);
         }

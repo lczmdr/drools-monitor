@@ -46,7 +46,9 @@ public class MonitoringRecoveryAgent {
                 recoveryListener);
         logger.info("Recovery task created to reconnect with " + agentId + " at " + address + ":" + port);
         recoveryTasks.put(agentId, recoveryTask);
-        recoveryListener.disconnected(agentId);
+        if (recoveryListener != null) {
+            recoveryListener.disconnected(agentId);
+        }
         reconnectionTimer.scheduleAtFixedRate(recoveryTask, 0, period);
     }
 

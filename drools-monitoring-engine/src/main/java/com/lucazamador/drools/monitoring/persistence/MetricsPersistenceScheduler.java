@@ -16,7 +16,7 @@ public class MetricsPersistenceScheduler {
     private static final Logger logger = LoggerFactory.getLogger(MetricsPersistenceScheduler.class);
     private static final long DEFAULT_PERIOD = 60000;
 
-    private final Timer timerScheduler;
+    private Timer timerScheduler;
     private MetricsPersistenceSchedulerTask task;
     private long period;
 
@@ -27,18 +27,18 @@ public class MetricsPersistenceScheduler {
     public void start() {
         if (task != null) {
             if (period <= 0) {
-                logger.info("Time period wasn't provided or less-equal to zero. Using default persistence period: "
-                        + DEFAULT_PERIOD);
                 period = DEFAULT_PERIOD;
+                logger.info("Time period wasn't provided or less-equal to zero. Using default period: " + period);
             }
             timerScheduler.scheduleAtFixedRate(task, 0, period);
         }
     }
 
     public void stop() {
-        if (task != null) {
-            timerScheduler.schedule(task, 0);
-        }
+        // TODO: persist the currents metrics in memory
+        // if (task != null) {
+        // timerScheduler.schedule(task, 0);
+        // }
         timerScheduler.cancel();
     }
 

@@ -21,7 +21,8 @@ public class MonitoringAgentConfiguration {
     private int scanInterval = 1000;
     @XStreamAsAttribute
     private int recoveryInterval = 10000;
-    private PersistenceConfiguration persistence;
+    @XStreamAsAttribute
+    private int persistenceInterval = 10000;
 
     public String getId() {
         return id;
@@ -63,16 +64,16 @@ public class MonitoringAgentConfiguration {
         this.recoveryInterval = recoveryInterval;
     }
 
-    public PersistenceConfiguration getPersistence() {
-        return persistence;
+    public int getPersistenceInterval() {
+        return persistenceInterval;
     }
 
-    public void setPersistence(PersistenceConfiguration persistence) {
-        this.persistence = persistence;
+    public void setPersistenceInterval(int persistenceInterval) {
+        this.persistenceInterval = persistenceInterval;
     }
 
     public boolean persistenceEnabled() {
-        return persistence != null && persistence.getClassName().trim().length() > 0;
+        return persistenceInterval > 100;
     }
 
     @Override

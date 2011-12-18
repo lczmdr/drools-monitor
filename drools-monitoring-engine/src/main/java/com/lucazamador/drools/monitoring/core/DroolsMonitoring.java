@@ -15,6 +15,7 @@ import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
+import com.lucazamador.drools.monitoring.persistence.api.MetricsPersistence;
 
 /**
  * The DroolsMonitoring class is the main class used to configure and create the
@@ -27,6 +28,7 @@ import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 public class DroolsMonitoring {
 
     private MonitoringAgentRegistry registry;
+    private MetricsPersistence persistence;
     private MonitoringConfiguration configuration;
     private MonitoringRecoveryAgent recoveryAgent;
     private boolean started = false;
@@ -34,7 +36,7 @@ public class DroolsMonitoring {
     private ResourceDiscoveredListener discoveredListener;
 
     /**
-     * Used to configure the monitoring agents configured in the configuration.
+     * Used to create the monitoring agents configured in the configuration.
      * file
      */
     public void configure() {
@@ -61,7 +63,7 @@ public class DroolsMonitoring {
             connector.connect();
         } catch (DroolsMonitoringException e) {
             MonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                    connector, recoveryAgent, discoveredListener);
+                    connector, recoveryAgent, discoveredListener, persistence);
             registry.register(monitoringAgent.getId(), monitoringAgent);
             for (DroolsMonitoringListener listener : monitoringListeners) {
                 monitoringAgent.registerListener(listener);
@@ -70,7 +72,7 @@ public class DroolsMonitoring {
             return;
         }
         MonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                connector, recoveryAgent, discoveredListener);
+                connector, recoveryAgent, discoveredListener, persistence);
         registry.register(monitoringAgent.getId(), monitoringAgent);
         for (DroolsMonitoringListener listener : monitoringListeners) {
             monitoringAgent.registerListener(listener);
@@ -176,6 +178,10 @@ public class DroolsMonitoring {
 
     public void setRecoveryAgent(MonitoringRecoveryAgent recoveryAgent) {
         this.recoveryAgent = recoveryAgent;
+    }
+
+    public void registerPersistenceImpl(MetricsPersistence persistence) {
+        this.persistence = persistence;
     }
 
     /**

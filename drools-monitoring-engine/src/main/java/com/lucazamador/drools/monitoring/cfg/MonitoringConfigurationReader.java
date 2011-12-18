@@ -20,7 +20,6 @@ public class MonitoringConfigurationReader {
         xstream = new XStream();
         xstream.processAnnotations(MonitoringConfiguration.class);
         xstream.processAnnotations(MonitoringAgentConfiguration.class);
-        xstream.processAnnotations(PersistenceConfiguration.class);
     }
 
     /**

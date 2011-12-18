@@ -11,6 +11,7 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lucazamador.drools.monitoring.core.agent.DroolsMonitoringAgentBase.ConnectionLost;
 import com.lucazamador.drools.monitoring.core.discoverer.ResourceDiscoverer;
 import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.listener.DroolsMonitoringListener;
@@ -31,12 +32,14 @@ public class DroolsMonitoringScannerTask extends TimerTask {
     private MonitoringRecoveryAgent reconnectionAgent;
     private ResourceDiscoverer resourceDiscoverer;
     private DroolsResourceScanner scanner;
+    private ConnectionLost connectionLost;
     private List<DroolsMonitoringListener> listeners = Collections
             .synchronizedList(new ArrayList<DroolsMonitoringListener>());
 
     /**
      * Obtain the current metrics from the available resources and trigger the
-     * registered metric listeners.
+     * registered metric listeners. In case of a connection error the resource
+     * discoverer is stopped and a recovery task is started.
      */
     @Override
     public void run() {
@@ -57,15 +60,29 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                     }
                 } catch (ConnectException e) {
                     logger.error("connection lost... trying again in a few seconds");
-                    resourceDiscoverer.stop();
-                    reconnectionAgent.reconnect(resourceDiscoverer.getAgentId(), resourceDiscoverer.getConnector()
-                            .getAddress(), resourceDiscoverer.getConnector().getPort());
+                    connectionLost.stop();
+                    String agentId = resourceDiscoverer.getAgentId();
+                    String address = resourceDiscoverer.getConnector().getAddress();
+                    int port = resourceDiscoverer.getConnector().getPort();
+                    reconnectionAgent.reconnect(agentId, address, port);
                     cancel();
                     return;
                 } catch (IOException e) {
                     logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
                 }
             }
+        }
+    }
+
+    /**
+     * Register a metric listener to the current scanner task
+     * 
+     * @param listener
+     *            the listener to be registered
+     */
+    public void registerListener(DroolsMonitoringListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
         }
     }
 
@@ -89,16 +106,8 @@ public class DroolsMonitoringScannerTask extends TimerTask {
         this.scanner = scanner;
     }
 
-    /**
-     * Register a listener to the current scanner task
-     * 
-     * @param listener
-     *            the listener to be registered
-     */
-    public void registerListener(DroolsMonitoringListener listener) {
-        synchronized (listeners) {
-            listeners.add(listener);
-        }
+    public void setOnConnectionLost(ConnectionLost onConnectionLost) {
+        this.connectionLost = onConnectionLost;
     }
 
 }

@@ -6,7 +6,7 @@
     <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://192.168.0.12/fm</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/fm</property>
     <property name="hibernate.connection.username">fm_user</property>
     <property name="hibernate.connection.password">fm_pass</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>

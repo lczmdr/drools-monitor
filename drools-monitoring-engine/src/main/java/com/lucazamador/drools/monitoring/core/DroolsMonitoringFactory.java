@@ -6,6 +6,7 @@ import com.lucazamador.drools.monitoring.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
+import com.lucazamador.drools.monitoring.persistence.api.MetricsPersistence;
 
 /**
  * Factory class used to create a DroolsMonitoring object with all the necessary
@@ -69,6 +70,24 @@ public class DroolsMonitoringFactory {
     public static DroolsMonitoring newDroolsMonitoring(MonitoringConfiguration configuration)
             throws DroolsMonitoringException {
         DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
+        droolsMonitoring.setConfiguration(configuration);
+        droolsMonitoring.configure();
+        return droolsMonitoring;
+    }
+
+    /**
+     * 
+     * 
+     * @param configuration
+     *            the monitoring configuration
+     * @param persistence
+     *            the metrics persistence implementation
+     * @return
+     */
+    public static DroolsMonitoring newDroolsMonitoring(MonitoringConfiguration configuration,
+            MetricsPersistence persistence) {
+        DroolsMonitoring droolsMonitoring = newDroolsMonitoring();
+        droolsMonitoring.registerPersistenceImpl(persistence);
         droolsMonitoring.setConfiguration(configuration);
         droolsMonitoring.configure();
         return droolsMonitoring;

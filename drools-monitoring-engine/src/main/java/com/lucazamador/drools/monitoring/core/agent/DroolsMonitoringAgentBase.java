@@ -18,7 +18,7 @@ import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
  * @author Lucas Amador
  * 
  */
-public abstract class CommonMonitoringAgent implements MonitoringAgent {
+public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
 
     protected String id;
     protected int scanInterval;
@@ -104,6 +104,10 @@ public abstract class CommonMonitoringAgent implements MonitoringAgent {
 
     public void setResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
         this.discoveredListener = discoveredListener;
+    }
+
+    public interface ConnectionLost {
+        public void stop();
     }
 
 }
