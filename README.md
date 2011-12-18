@@ -15,6 +15,7 @@ Current features
 * Easy to configure using the Spring Framework.
 
 What's next:
+
 * Improve the pluggable persistence (Initial implementation is done).
 * Custom reporting framework.
 * A testing framework is needed.
