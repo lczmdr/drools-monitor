@@ -1,5 +1,8 @@
 package com.lucazamador.drools.monitoring.persistence;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,28 +18,26 @@ public class HibernateMetricsPersistence implements MetricsPersistence {
 
     private static final Logger logger = LoggerFactory.getLogger(HibernateMetricsPersistence.class);
 
-//    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     public HibernateMetricsPersistence() {
-//        try {
-//            Configuration configuration = new Configuration();
-//            sessionFactory = configuration.buildSessionFactory();
-//        } catch (Throwable e) {
-//            logger.error("Initial SessionFactory creation failed." + e);
-//            throw new ExceptionInInitializerError(e);
-//        }
+        try {
+            sessionFactory = new Configuration().configure().buildSessionFactory();
+        } catch (Throwable e) {
+            logger.error("Initial SessionFactory creation failed." + e);
+            throw new ExceptionInInitializerError(e);
+        }
     }
 
     public void save(Object object) {
-        logger.info("save : " + object);
-//        Session session = sessionFactory.getCurrentSession();
-//        session.beginTransaction();
-//        session.persist(object);
-//        session.getTransaction().commit();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.persist(object);
+        session.getTransaction().commit();
     }
 
     public void stop() {
-//        sessionFactory.close();
+        sessionFactory.close();
     }
 
 }

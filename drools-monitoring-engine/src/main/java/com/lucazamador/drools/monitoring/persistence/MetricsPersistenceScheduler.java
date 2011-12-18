@@ -39,6 +39,7 @@ public class MetricsPersistenceScheduler {
         // if (task != null) {
         // timerScheduler.schedule(task, 0);
         // }
+        task.stop();
         timerScheduler.cancel();
     }
 

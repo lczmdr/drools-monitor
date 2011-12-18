@@ -11,15 +11,15 @@ public class KnowledgeBaseInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int id;
+    private Long id;
     private String knowledgeBaseId;
     private String agentId;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -50,4 +50,8 @@ public class MetricsPersistenceSchedulerTask extends TimerTask {
         logger.info("Metrics persistence task done. Elapsed time: " + (endTime - startTime) + " ms.");
     }
 
+    public void stop() {
+        persistence.stop();
+    }
+
 }

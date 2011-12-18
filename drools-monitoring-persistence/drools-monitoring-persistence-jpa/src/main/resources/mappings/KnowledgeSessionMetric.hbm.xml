@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <union-subclass name="com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionMetric" table="ksession_metric" extends="com.lucazamador.drools.monitoring.model.AbstractMetric">
+    <property name="knowledgeBaseId" type="string">
+      <column name="knowledgeBaseId" length="100"/>
+    </property>
+    <property name="knowledgeSessionId" type="java.lang.Integer" />
+    <property name="agentId" type="string">
+      <column name="agentId" length="100"/>
+    </property>
+    <property name="averageFiringTime" type="java.lang.Double" />
+    <property name="lastReset" type="java.util.Date" />
+    <property name="totalActivationsCancelled" type="java.lang.Long" />
+    <property name="totalActivationsCreated" type="java.lang.Long" />
+    <property name="totalActivationsFired" type="java.lang.Long" />
+    <property name="totalFactCount" type="java.lang.Long" />
+    <property name="totalFiringTime" type="java.lang.Long" />
+    <property name="totalProcessInstancesCompleted" type="java.lang.Long" />
+    <property name="totalProcessInstancesStarted" type="java.lang.Long" />
+  </union-subclass>
+</hibernate-mapping>

@@ -9,4 +9,6 @@ public interface MetricsPersistence {
 
     public void save(Object object);
 
+    public void stop();
+
 }
