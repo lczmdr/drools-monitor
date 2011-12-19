@@ -102,5 +102,17 @@
          <enablement></enablement>
       </consolePageParticipant>
    </extension>
+   <extension
+         id="drools-monitoring-studio"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.lucazamador.drools.monitoring.eclipse.plugin.application"
+            name="drools-monitoring-eclipse">
+         <property
+               name="aboutText"
+               value="Drools Monitoring">
+         </property>
+      </product>
+   </extension>
 
 </plugin>

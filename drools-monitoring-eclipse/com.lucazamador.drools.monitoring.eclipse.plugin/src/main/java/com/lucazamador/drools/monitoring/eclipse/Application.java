@@ -13,7 +13,6 @@ import com.lucazamador.drools.monitoring.eclipse.model.DroolsMonitor;
 import com.lucazamador.drools.monitoring.eclipse.recovery.RecoveryStudioListener;
 import com.lucazamador.drools.monitoring.eclipse.view.GraphicUpdaterListener;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentListener;
-import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
 /**
  * This class controls all aspects of the application's execution
@@ -69,11 +68,7 @@ public class Application implements IApplication {
             droolsMonitoring = DroolsMonitoringFactory.newDroolsMonitoring(recoveryStudioListener,
                     resourcesDiscoveredListener);
             droolsMonitoring.registerListener(new GraphicUpdaterListener(window));
-            try {
-                droolsMonitoring.start();
-            } catch (DroolsMonitoringException e) {
-                e.printStackTrace();
-            }
+            droolsMonitoring.start();
         }
         return droolsMonitoring;
     }
