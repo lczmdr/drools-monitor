@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.console.ActivityConsoleFactory;
 import com.lucazamador.drools.monitoring.eclipse.console.ActivityConsoleListener;
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseInfo;
 import com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionInfo;
 
-public class MonitoringAgent {
+public class MonitoringAgentInfo {
 
     private DroolsMonitor parent;
     private String id;
@@ -20,7 +21,7 @@ public class MonitoringAgent {
     private boolean connected;
     private Map<String, KnowledgeBase> knowledgeBases = new HashMap<String, KnowledgeBase>();
 
-    public void build(com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent) {
+    public void build(MonitoringAgent monitoringAgent) {
         this.connected = true;
         List<KnowledgeBaseInfo> kbases = monitoringAgent.getDiscoveredKnowledgeBases();
         for (KnowledgeBaseInfo kbaseInfo : kbases) {

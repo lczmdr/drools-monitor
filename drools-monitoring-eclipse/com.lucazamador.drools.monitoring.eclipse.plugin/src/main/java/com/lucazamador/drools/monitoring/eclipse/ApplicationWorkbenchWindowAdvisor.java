@@ -10,9 +10,10 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.osgi.service.prefs.BackingStoreException;
 
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfoFactory;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
 
@@ -47,12 +48,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         ConfigurationManager configurationManager = new ConfigurationManager();
         DroolsMonitoring droolsMonitoring = Application.getDroolsMonitoring();
         try {
-            List<MonitoringAgent> agents = configurationManager.read();
-            for (MonitoringAgent agent : agents) {
+            List<MonitoringAgentInfo> agents = configurationManager.read();
+            for (MonitoringAgentInfo agent : agents) {
                 try {
-                    droolsMonitoring.addMonitoringAgent(MonitoringAgentFactory.newMonitoringAgentConfiguration(agent));
-                    com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = droolsMonitoring
-                            .getMonitoringAgent(agent.getId());
+                    droolsMonitoring.addMonitoringAgent(MonitoringAgentInfoFactory
+                            .newMonitoringAgentConfiguration(agent));
+                    MonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(agent.getId());
                     if (monitoringAgent.isConnected()) {
                         agent.build(monitoringAgent);
                     }

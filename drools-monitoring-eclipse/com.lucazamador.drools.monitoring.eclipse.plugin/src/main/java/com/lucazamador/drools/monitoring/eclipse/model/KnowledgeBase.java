@@ -8,7 +8,7 @@ import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseMetric;
 public class KnowledgeBase {
 
     private String id;
-    private MonitoringAgent parent;
+    private MonitoringAgentInfo parent;
     private KnowledgeBaseMetric lastMetric;
     private List<KnowledgeSession> knowledgeSessions = new ArrayList<KnowledgeSession>();
 
@@ -20,11 +20,11 @@ public class KnowledgeBase {
         this.id = id;
     }
 
-    public MonitoringAgent getParent() {
+    public MonitoringAgentInfo getParent() {
         return parent;
     }
 
-    public void setParent(MonitoringAgent parent) {
+    public void setParent(MonitoringAgentInfo parent) {
         this.parent = parent;
     }
 

@@ -10,11 +10,12 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.core.DroolsMonitoring;
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.Application;
 import com.lucazamador.drools.monitoring.eclipse.ICommandIds;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfoFactory;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 import com.lucazamador.drools.monitoring.eclipse.wizard.NewMonitoringAgentWizard;
 import com.lucazamador.drools.monitoring.exception.DroolsMonitoringException;
@@ -50,9 +51,8 @@ public class AddMonitoringAgentAction extends Action {
                 return;
             }
             // update view model with a new monitoring agent object
-            MonitoringAgent agent = MonitoringAgentFactory.newMonitoringAgent(configuration);
-            com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = droolsMonitoring
-                    .getMonitoringAgent(configuration.getId());
+            MonitoringAgentInfo agent = MonitoringAgentInfoFactory.newMonitoringAgent(configuration);
+            MonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(configuration.getId());
             if (monitoringAgent.isConnected()) {
                 agent.build(monitoringAgent);
             }
@@ -66,7 +66,6 @@ public class AddMonitoringAgentAction extends Action {
             try {
                 reader.store(configuration);
             } catch (BackingStoreException e) {
-                e.printStackTrace();
                 MessageDialog.openError(window.getShell(), "error", "Storing agent configuration");
             }
         }

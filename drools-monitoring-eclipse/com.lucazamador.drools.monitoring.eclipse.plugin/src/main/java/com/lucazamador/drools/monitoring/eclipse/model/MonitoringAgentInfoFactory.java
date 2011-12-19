@@ -2,30 +2,30 @@ package com.lucazamador.drools.monitoring.eclipse.model;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 
-public class MonitoringAgentFactory {
+public class MonitoringAgentInfoFactory {
 
-    public static MonitoringAgent newMonitoringAgent(MonitoringAgentConfiguration configuration) {
-        MonitoringAgent monitoringAgent = new MonitoringAgent();
-        monitoringAgent.setId(configuration.getId());
-        monitoringAgent.setAddress(configuration.getAddress());
-        monitoringAgent.setPort(configuration.getPort());
-        monitoringAgent.setScanInterval(configuration.getScanInterval());
-        monitoringAgent.setRecoveryInterval(configuration.getRecoveryInterval());
-        return monitoringAgent;
+    public static MonitoringAgentInfo newMonitoringAgent(MonitoringAgentConfiguration configuration) {
+        MonitoringAgentInfo monitoringAgentInfo = new MonitoringAgentInfo();
+        monitoringAgentInfo.setId(configuration.getId());
+        monitoringAgentInfo.setAddress(configuration.getAddress());
+        monitoringAgentInfo.setPort(configuration.getPort());
+        monitoringAgentInfo.setScanInterval(configuration.getScanInterval());
+        monitoringAgentInfo.setRecoveryInterval(configuration.getRecoveryInterval());
+        return monitoringAgentInfo;
     }
 
-    public static MonitoringAgent newMonitoringAgent(String id, String address, int port, int scanInterval,
+    public static MonitoringAgentInfo newMonitoringAgent(String id, String address, int port, int scanInterval,
             int recoveryInterval) {
-        MonitoringAgent monitoringAgent = new MonitoringAgent();
-        monitoringAgent.setId(id);
-        monitoringAgent.setAddress(address);
-        monitoringAgent.setPort(port);
-        monitoringAgent.setScanInterval(scanInterval);
-        monitoringAgent.setRecoveryInterval(recoveryInterval);
-        return monitoringAgent;
+        MonitoringAgentInfo monitoringAgentInfo = new MonitoringAgentInfo();
+        monitoringAgentInfo.setId(id);
+        monitoringAgentInfo.setAddress(address);
+        monitoringAgentInfo.setPort(port);
+        monitoringAgentInfo.setScanInterval(scanInterval);
+        monitoringAgentInfo.setRecoveryInterval(recoveryInterval);
+        return monitoringAgentInfo;
     }
 
-    public static MonitoringAgentConfiguration newMonitoringAgentConfiguration(MonitoringAgent agent) {
+    public static MonitoringAgentConfiguration newMonitoringAgentConfiguration(MonitoringAgentInfo agent) {
         MonitoringAgentConfiguration configuration = new MonitoringAgentConfiguration();
         configuration.setId(agent.getId());
         configuration.setAddress(agent.getAddress());

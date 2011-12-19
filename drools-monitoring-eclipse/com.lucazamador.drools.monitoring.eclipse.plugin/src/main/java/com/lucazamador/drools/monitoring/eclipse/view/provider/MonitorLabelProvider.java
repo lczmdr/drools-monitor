@@ -9,7 +9,7 @@ import com.lucazamador.drools.monitoring.eclipse.model.DroolsMonitor;
 import com.lucazamador.drools.monitoring.eclipse.model.Graphic;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeBase;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeSession;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
 
 public class MonitorLabelProvider extends LabelProvider {
 
@@ -27,8 +27,8 @@ public class MonitorLabelProvider extends LabelProvider {
     public Image getImage(Object element) {
         if (element instanceof DroolsMonitor) {
             return imageRegistry.get("monitor");
-        } else if (element instanceof MonitoringAgent) {
-            MonitoringAgent agent = (MonitoringAgent) element;
+        } else if (element instanceof MonitoringAgentInfo) {
+            MonitoringAgentInfo agent = (MonitoringAgentInfo) element;
             if (agent.isConnected()) {
                 return imageRegistry.get("agent");
             }
@@ -46,8 +46,8 @@ public class MonitorLabelProvider extends LabelProvider {
     public String getText(Object element) {
         if (element instanceof DroolsMonitor) {
             return "Drools Monitoring";
-        } else if (element instanceof MonitoringAgent) {
-            MonitoringAgent agent = (MonitoringAgent) element;
+        } else if (element instanceof MonitoringAgentInfo) {
+            MonitoringAgentInfo agent = (MonitoringAgentInfo) element;
             return agent.getId() + " (" + agent.getAddress() + ":" + agent.getPort() + ")";
         } else if (element instanceof KnowledgeBase) {
             return ((KnowledgeBase) element).getId();

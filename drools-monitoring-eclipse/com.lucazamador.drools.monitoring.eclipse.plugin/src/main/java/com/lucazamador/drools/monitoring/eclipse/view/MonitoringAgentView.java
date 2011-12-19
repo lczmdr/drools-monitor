@@ -28,7 +28,7 @@ import com.lucazamador.drools.monitoring.eclipse.console.ActivityConsoleFactory;
 import com.lucazamador.drools.monitoring.eclipse.model.Graphic;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeBase;
 import com.lucazamador.drools.monitoring.eclipse.model.KnowledgeSession;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
 import com.lucazamador.drools.monitoring.eclipse.view.provider.MonitorContentProvider;
 import com.lucazamador.drools.monitoring.eclipse.view.provider.MonitorLabelProvider;
 
@@ -87,9 +87,9 @@ public class MonitoringAgentView extends ViewPart {
                 IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
                 Object object = selection.getFirstElement();
                 if (object != null) {
-                    if (object instanceof MonitoringAgent) {
+                    if (object instanceof MonitoringAgentInfo) {
                         removeAgentAction.setEnabled(true);
-                        removeAgentAction.setMonitoringAgent((MonitoringAgent) object);
+                        removeAgentAction.setMonitoringAgent((MonitoringAgentInfo) object);
                     } else {
                         removeAgentAction.setEnabled(false);
                         removeAgentAction.setMonitoringAgent(null);

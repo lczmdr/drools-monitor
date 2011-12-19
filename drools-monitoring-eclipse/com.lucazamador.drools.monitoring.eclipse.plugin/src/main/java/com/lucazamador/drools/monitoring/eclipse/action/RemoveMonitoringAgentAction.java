@@ -9,13 +9,13 @@ import org.osgi.service.prefs.BackingStoreException;
 import com.lucazamador.drools.monitoring.eclipse.Application;
 import com.lucazamador.drools.monitoring.eclipse.ICommandIds;
 import com.lucazamador.drools.monitoring.eclipse.cfg.ConfigurationManager;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 
 public class RemoveMonitoringAgentAction extends Action {
 
     private final IWorkbenchWindow window;
-    private MonitoringAgent monitoringAgent;
+    private MonitoringAgentInfo monitoringAgentInfo;
 
     public RemoveMonitoringAgentAction(IWorkbenchWindow window, String label) {
         this.window = window;
@@ -29,27 +29,27 @@ public class RemoveMonitoringAgentAction extends Action {
     public void run() {
         if (window != null) {
             if (MessageDialog.openConfirm(window.getShell(), "Warning", "Do you want to remove the monitoring agent "
-                    + monitoringAgent.getId() + " ?")) {
-                Application.getDroolsMonitoring().removeMonitoringAgent(monitoringAgent.getId());
-                Application.getDroolsMonitor().removeMonitorAgent(monitoringAgent.getId());
+                    + monitoringAgentInfo.getId() + " ?")) {
+                Application.getDroolsMonitoring().removeMonitoringAgent(monitoringAgentInfo.getId());
+                Application.getDroolsMonitor().removeMonitorAgent(monitoringAgentInfo.getId());
                 // update navigation view
                 MonitoringAgentView navigationView = (MonitoringAgentView) window.getActivePage().findView(
                         MonitoringAgentView.ID);
                 navigationView.refresh();
                 ConfigurationManager manager = new ConfigurationManager();
                 try {
-                    manager.remove(monitoringAgent.getId());
+                    manager.remove(monitoringAgentInfo.getId());
                 } catch (BackingStoreException e) {
                     MessageDialog.openError(window.getShell(), "Error", "Error updating the configuration");
                 }
-                monitoringAgent = null;
+                monitoringAgentInfo = null;
                 setEnabled(false);
             }
         }
     }
 
-    public void setMonitoringAgent(MonitoringAgent monitoringAgent) {
-        this.monitoringAgent = monitoringAgent;
+    public void setMonitoringAgent(MonitoringAgentInfo monitoringAgentInfo) {
+        this.monitoringAgentInfo = monitoringAgentInfo;
     }
 
 }

@@ -10,8 +10,8 @@ import org.osgi.service.prefs.Preferences;
 
 import com.lucazamador.drools.monitoring.cfg.MonitoringAgentConfiguration;
 import com.lucazamador.drools.monitoring.eclipse.Activator;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentFactory;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfoFactory;
 
 public class ConfigurationManager {
 
@@ -34,10 +34,10 @@ public class ConfigurationManager {
         configurations.flush();
     }
 
-    public List<MonitoringAgent> read() throws BackingStoreException {
+    public List<MonitoringAgentInfo> read() throws BackingStoreException {
         IEclipsePreferences preferences = new ConfigurationScope().getNode(Activator.PLUGIN_ID);
         Preferences configurations = preferences.node(AGENT_CONFIGURATIONS);
-        List<MonitoringAgent> agents = new ArrayList<MonitoringAgent>();
+        List<MonitoringAgentInfo> agents = new ArrayList<MonitoringAgentInfo>();
         for (int i = 0; i < configurations.childrenNames().length; i++) {
             String agentName = configurations.childrenNames()[i];
             Preferences agentPreferences = configurations.node(agentName);
@@ -46,7 +46,7 @@ public class ConfigurationManager {
             Integer port = Integer.valueOf(agentPreferences.get(AGENT_PORT, ""));
             Integer scanInterval = Integer.valueOf(agentPreferences.get(AGENT_SCAN_INTERVAL, ""));
             Integer recoveryInterval = Integer.valueOf(agentPreferences.get(AGENT_RECOVERY_INTERVAL, ""));
-            MonitoringAgent agent = MonitoringAgentFactory.newMonitoringAgent(id, address, port, scanInterval,
+            MonitoringAgentInfo agent = MonitoringAgentInfoFactory.newMonitoringAgent(id, address, port, scanInterval,
                     recoveryInterval);
             agents.add(agent);
         }

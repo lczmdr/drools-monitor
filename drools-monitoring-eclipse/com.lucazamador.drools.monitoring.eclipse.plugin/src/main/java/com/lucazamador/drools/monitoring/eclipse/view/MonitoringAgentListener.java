@@ -2,8 +2,9 @@ package com.lucazamador.drools.monitoring.eclipse.view;
 
 import org.eclipse.ui.IWorkbenchWindow;
 
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.Application;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
 import com.lucazamador.drools.monitoring.listener.ResourceDiscoveredListener;
 
 public class MonitoringAgentListener implements ResourceDiscoveredListener {
@@ -16,9 +17,8 @@ public class MonitoringAgentListener implements ResourceDiscoveredListener {
 
     @Override
     public void discovered(String agentId) {
-        com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = Application
-                .getDroolsMonitoring().getMonitoringAgent(agentId);
-        MonitoringAgent agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
+        MonitoringAgent monitoringAgent = Application.getDroolsMonitoring().getMonitoringAgent(agentId);
+        MonitoringAgentInfo agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
         agent.build(monitoringAgent);
         refreshMonitoringAgents();
     }

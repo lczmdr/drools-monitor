@@ -2,8 +2,9 @@ package com.lucazamador.drools.monitoring.eclipse.recovery;
 
 import org.eclipse.ui.IWorkbenchWindow;
 
+import com.lucazamador.drools.monitoring.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitoring.eclipse.Application;
-import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgent;
+import com.lucazamador.drools.monitoring.eclipse.model.MonitoringAgentInfo;
 import com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView;
 import com.lucazamador.drools.monitoring.listener.MonitoringRecoveryListener;
 
@@ -17,16 +18,15 @@ public class RecoveryStudioListener implements MonitoringRecoveryListener {
 
     @Override
     public void reconnected(final String agentId) {
-        com.lucazamador.drools.monitoring.core.agent.MonitoringAgent monitoringAgent = Application
-                .getDroolsMonitoring().getMonitoringAgent(agentId);
-        MonitoringAgent agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
+        MonitoringAgent monitoringAgent = Application.getDroolsMonitoring().getMonitoringAgent(agentId);
+        MonitoringAgentInfo agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
         agent.build(monitoringAgent);
         refreshMonitoringAgents();
     }
 
     @Override
     public void disconnected(String agentId) {
-        MonitoringAgent agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
+        MonitoringAgentInfo agent = Application.getDroolsMonitor().getMonitoringAgent(agentId);
         if (agent != null) {
             agent.setConnected(false);
             agent.clear();
