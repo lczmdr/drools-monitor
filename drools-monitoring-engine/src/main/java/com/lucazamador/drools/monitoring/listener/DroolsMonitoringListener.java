@@ -1,5 +1,7 @@
 package com.lucazamador.drools.monitoring.listener;
 
+import java.util.EventListener;
+
 import com.lucazamador.drools.monitoring.model.AbstractMetric;
 
 /**
@@ -8,7 +10,7 @@ import com.lucazamador.drools.monitoring.model.AbstractMetric;
  * @author Lucas Amador
  * 
  */
-public interface DroolsMonitoringListener {
+public interface DroolsMonitoringListener extends EventListener {
 
     public void newMetric(AbstractMetric metric);
 
