@@ -27,7 +27,7 @@ public class MonitorContentProvider implements ITreeContentProvider {
             return monitoringAgentInfo.getKnowledgeBases().values().toArray();
         } else if (parentElement instanceof KnowledgeBase) {
             KnowledgeBase kbase = (KnowledgeBase) parentElement;
-            return kbase.getKnowledgeSessions().toArray();
+            return kbase.getKnowledgeSessions().values().toArray();
         } else if (parentElement instanceof KnowledgeSession) {
             KnowledgeSession ksession = (KnowledgeSession) parentElement;
             return ksession.getGraphics().toArray();

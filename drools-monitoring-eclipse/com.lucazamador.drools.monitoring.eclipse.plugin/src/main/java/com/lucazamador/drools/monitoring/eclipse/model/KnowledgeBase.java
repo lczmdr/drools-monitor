@@ -1,7 +1,7 @@
 package com.lucazamador.drools.monitoring.eclipse.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.lucazamador.drools.monitoring.model.kbase.KnowledgeBaseMetric;
 
@@ -10,7 +10,7 @@ public class KnowledgeBase {
     private String id;
     private MonitoringAgentInfo parent;
     private KnowledgeBaseMetric lastMetric;
-    private List<KnowledgeSession> knowledgeSessions = new ArrayList<KnowledgeSession>();
+    private Map<String, KnowledgeSession> knowledgeSessions = new HashMap<String, KnowledgeSession>();
 
     public String getId() {
         return id;
@@ -36,15 +36,15 @@ public class KnowledgeBase {
         this.lastMetric = lastMetric;
     }
 
-    public List<KnowledgeSession> getKnowledgeSessions() {
+    public Map<String, KnowledgeSession> getKnowledgeSessions() {
         return knowledgeSessions;
     }
 
     public void addKnowledgeSession(KnowledgeSession knowledgeSession) {
-        this.knowledgeSessions.add(knowledgeSession);
+        this.knowledgeSessions.put(knowledgeSession.getId(), knowledgeSession);
     }
 
-    public void setKnowledgeSessions(List<KnowledgeSession> knowledgeSessions) {
+    public void setKnowledgeSessions(Map<String, KnowledgeSession> knowledgeSessions) {
         this.knowledgeSessions = knowledgeSessions;
     }
 

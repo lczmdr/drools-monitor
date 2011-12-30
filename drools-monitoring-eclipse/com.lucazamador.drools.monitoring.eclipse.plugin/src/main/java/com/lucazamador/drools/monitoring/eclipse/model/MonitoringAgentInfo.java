@@ -36,14 +36,16 @@ public class MonitoringAgentInfo {
         for (KnowledgeSessionInfo ksessionInfo : ksessions) {
             KnowledgeBase knowledgeBase = knowledgeBases.get(ksessionInfo.getKnowledgeBaseId());
             if (knowledgeBase != null) {
-                KnowledgeSession ksession = new KnowledgeSession();
-                ksession.setId(String.valueOf(ksessionInfo.getKnowledgeSessionId()));
-                ksession.setParent(knowledgeBase);
-                knowledgeBase.addKnowledgeSession(ksession);
-                String consoleId = ActivityConsoleFactory.getViewId(ksession);
-                String id = ksession.getParent().getId() + ":" + ksession.getId();
-                ActivityConsoleListener listener = new ActivityConsoleListener(id, consoleId);
-                monitoringAgent.registerListener(listener);
+                if (!knowledgeBase.getKnowledgeSessions().containsKey(ksessionInfo.getKnowledgeSessionId())) {
+                    KnowledgeSession ksession = new KnowledgeSession();
+                    ksession.setId(String.valueOf(ksessionInfo.getKnowledgeSessionId()));
+                    ksession.setParent(knowledgeBase);
+                    knowledgeBase.addKnowledgeSession(ksession);
+                    String consoleId = ActivityConsoleFactory.getViewId(ksession);
+                    String id = ksession.getParent().getId() + ":" + ksession.getId();
+                    ActivityConsoleListener listener = new ActivityConsoleListener(id, consoleId);
+                    monitoringAgent.registerListener(listener);
+                }
             }
         }
     }
