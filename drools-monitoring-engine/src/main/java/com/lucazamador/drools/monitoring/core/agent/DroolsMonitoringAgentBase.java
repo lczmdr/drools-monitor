@@ -39,6 +39,13 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         return connector.isConnected();
     }
 
+    public synchronized void stop() {
+        if (scanner != null) {
+            scanner.stop();
+        }
+        reconnectionAgent.removeRecoveryTask(id);
+    }
+
     public DroolsMBeanConnector getConnector() {
         return connector;
     }

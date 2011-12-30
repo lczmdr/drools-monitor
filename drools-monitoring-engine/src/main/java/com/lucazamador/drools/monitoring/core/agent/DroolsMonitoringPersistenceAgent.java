@@ -60,13 +60,6 @@ public class DroolsMonitoringPersistenceAgent extends DroolsMonitoringAgentBase 
         started = true;
     }
 
-    public synchronized void stop() {
-        if (scanner != null) {
-            scanner.stop();
-        }
-        reconnectionAgent.removeRecoveryTask(id);
-    }
-
     public int getPersistenceInterval() {
         return persistenceInterval;
     }

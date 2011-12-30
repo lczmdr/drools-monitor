@@ -42,11 +42,4 @@ public class DroolsMonitoringAgent extends DroolsMonitoringAgentBase {
         started = true;
     }
 
-    public synchronized void stop() {
-        if (scanner != null) {
-            scanner.stop();
-        }
-        reconnectionAgent.removeRecoveryTask(id);
-    }
-
 }
