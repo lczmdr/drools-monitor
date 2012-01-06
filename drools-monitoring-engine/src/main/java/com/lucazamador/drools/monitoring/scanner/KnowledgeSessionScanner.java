@@ -86,7 +86,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
                 .totalProcessInstancesStarted(totalProcessInstancesStarted).processStats(processMetrics)
                 .processInstanceStats(processInstanceMetrics).build();
 
-        logger.info(agentId + " metric: " + metric);
+        logger.debug(agentId + " metric: " + metric);
         return metric;
     }
 
