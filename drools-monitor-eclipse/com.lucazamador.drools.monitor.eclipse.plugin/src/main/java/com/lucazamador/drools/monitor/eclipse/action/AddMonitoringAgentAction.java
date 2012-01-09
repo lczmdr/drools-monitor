@@ -44,6 +44,10 @@ public class AddMonitoringAgentAction extends Action {
             MonitoringAgentConfiguration configuration = wizard.getConfiguration();
 
             DroolsMonitoring droolsMonitoring = Application.getDroolsMonitoring();
+            if (droolsMonitoring.getMonitoringAgent(configuration.getId())!=null) {
+                MessageDialog.openInformation(window.getShell(), "Error", "A monitoring agent with the same ID already exists.");
+                return;
+            }
             try {
                 droolsMonitoring.addMonitoringAgent(configuration);
             } catch (DroolsMonitoringException e) {
