@@ -3,23 +3,23 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.lucazamador</groupId>
-    <artifactId>drools-monitoring</artifactId>
+    <artifactId>drools-monitor</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>drools-monitoring-engine</artifactId>
-  <name>Drools Monitoring Engine</name>
+  <artifactId>drools-monitor-engine</artifactId>
+  <name>Drools monitor Engine</name>
   <packaging>jar</packaging>
-  <description>drools monitoring engine</description>
+  <description>drools monitor engine</description>
 
   <dependencies>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-model</artifactId>
+      <artifactId>drools-monitor-model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-persistence-api</artifactId>
+      <artifactId>drools-monitor-persistence-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 

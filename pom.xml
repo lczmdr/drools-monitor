@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lucazamador</groupId>
-  <artifactId>drools-monitoring</artifactId>
-  <name>Drools Monitoring</name>
+  <artifactId>drools-monitor</artifactId>
+  <name>Drools monitor</name>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
 
   <modules>
-    <module>drools-monitoring-model</module>
-    <module>drools-monitoring-engine</module>
-    <module>drools-monitoring-persistence</module>
+    <module>drools-monitor-model</module>
+    <module>drools-monitor-engine</module>
+    <module>drools-monitor-persistence</module>
   </modules>
 
   <build>
@@ -28,6 +28,7 @@
       </plugins>
     </pluginManagement>
   </build>
+
   <repositories>
     <repository>
       <id>jboss</id>
@@ -59,7 +60,7 @@
         </property>
       </activation>
       <modules>
-        <module>drools-monitoring-eclipse</module>
+        <module>drools-monitor-eclipse</module>
       </modules>
     </profile>
   </profiles>

@@ -3,11 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.lucazamador</groupId>
-    <artifactId>drools-monitoring-persistence</artifactId>
+    <artifactId>drools-monitor</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>drools-monitoring-persistence-api</artifactId>
-  <name>Drools Monitoring Persistence API</name>
-  <packaging>jar</packaging>
+  <artifactId>drools-monitor-persistence</artifactId>
+  <name>Drools Monitor Persistence</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>drools-monitor-persistence-api</module>
+    <module>drools-monitor-persistence-hibernate</module>
+  </modules>
 
 </project>

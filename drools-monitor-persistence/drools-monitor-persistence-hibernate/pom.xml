@@ -3,22 +3,22 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.lucazamador</groupId>
-    <artifactId>drools-monitoring-persistence</artifactId>
+    <artifactId>drools-monitor-persistence</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>drools-monitoring-persistence-jpa</artifactId>
-  <name>Drools Monitoring JPA Persistence</name>
+  <artifactId>drools-monitor-persistence-hibernate</artifactId>
+  <name>Drools Monitor Hibernate Persistence</name>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-model</artifactId>
+      <artifactId>drools-monitor-model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-persistence-api</artifactId>
+      <artifactId>drools-monitor-persistence-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
