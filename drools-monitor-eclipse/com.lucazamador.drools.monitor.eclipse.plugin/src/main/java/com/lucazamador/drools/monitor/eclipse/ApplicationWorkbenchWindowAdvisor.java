@@ -19,7 +19,7 @@ import com.lucazamador.drools.monitor.exception.DroolsMonitoringException;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-    public static final String APP_TITLE = "Drools Monitoring";
+    public static final String APP_TITLE = "Drools Monitor";
 
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
