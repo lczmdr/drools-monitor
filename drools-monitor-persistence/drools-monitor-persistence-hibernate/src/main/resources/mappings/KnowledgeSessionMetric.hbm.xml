@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <union-subclass name="com.lucazamador.drools.monitoring.model.ksession.KnowledgeSessionMetric" table="ksession_metric" extends="com.lucazamador.drools.monitoring.model.AbstractMetric">
+  <union-subclass name="com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric" table="ksession_metric" extends="com.lucazamador.drools.monitor.model.AbstractMetric">
     <property name="knowledgeBaseId" type="string">
       <column name="knowledgeBaseId" length="100"/>
     </property>

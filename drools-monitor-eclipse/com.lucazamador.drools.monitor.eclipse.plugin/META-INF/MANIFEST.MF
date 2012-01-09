@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Drools Monitoring Eclipse Plugin
-Bundle-SymbolicName: com.lucazamador.drools.monitoring.eclipse.plugin;singleton:=true
+Bundle-Name: Drools Monitor Eclipse Plugin
+Bundle-SymbolicName: com.lucazamador.drools.monitor.eclipse.plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .,
- lib/drools-monitoring-engine-1.0.0-SNAPSHOT.jar,
- lib/drools-monitoring-model-1.0.0-SNAPSHOT.jar,
+ lib/drools-monitor-engine-1.0.0-SNAPSHOT.jar,
+ lib/drools-monitor-model-1.0.0-SNAPSHOT.jar,
  lib/commons-collections-3.2.1.jar,
  lib/slf4j-api-1.5.8.jar,
  lib/slf4j-log4j12-1.5.8.jar,
@@ -15,14 +15,14 @@ Bundle-ClassPath: .,
  lib/jfreechart-1.0.9.jar,
  lib/jfreechart-experimental-1.0.5.jar,
  lib/jfreechart-swt-1.0.5.jar,
- lib/drools-monitoring-persistence-api-1.0.0-SNAPSHOT.jar
-Bundle-Activator: com.lucazamador.drools.monitoring.eclipse.Activator
+ lib/drools-monitor-persistence-api-1.0.0-SNAPSHOT.jar
+Bundle-Activator: com.lucazamador.drools.monitor.eclipse.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.6.1",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.ui.forms;bundle-version="3.5.2",
  org.eclipse.ui.console;bundle-version="3.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.lucazamador.drools.monitoring.eclipse,
- com.lucazamador.drools.monitoring.eclipse.perspective,
- com.lucazamador.drools.monitoring.eclipse.view
+Export-Package: com.lucazamador.drools.monitor.eclipse,
+ com.lucazamador.drools.monitor.eclipse.perspective,
+ com.lucazamador.drools.monitor.eclipse.view

@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.lucazamador</groupId>
-    <artifactId>drools-monitoring-eclipse</artifactId>
+    <artifactId>drools-monitor-eclipse</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>com.lucazamador.drools.monitoring.eclipse</artifactId>
-  <name>Drools Monitoring Standalone App</name>
+  <artifactId>com.lucazamador.drools.monitor.eclipse</artifactId>
+  <name>Drools Monitor Standalone App</name>
   <packaging>eclipse-application</packaging>
 </project>

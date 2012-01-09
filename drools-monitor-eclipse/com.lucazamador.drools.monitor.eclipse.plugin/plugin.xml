@@ -7,16 +7,16 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="com.lucazamador.drools.monitoring.eclipse.Application">
+               class="com.lucazamador.drools.monitor.eclipse.Application">
          </run>
       </application>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.lucazamador.drools.monitoring.eclipse.perspective.DroolsMonitoringPerspective"
+            class="com.lucazamador.drools.monitor.eclipse.perspective.DroolsMonitoringPerspective"
             fixed="true"
-            id="com.lucazamador.drools.monitoring.eclipse.perspective.droolsMonitoringPerspective"
+            id="com.lucazamador.drools.monitor.eclipse.perspective.droolsMonitoringPerspective"
             icon="src/main/resources/icons/agent.png"
             name="Drools Monitoring">
       </perspective>
@@ -47,25 +47,25 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            class="com.lucazamador.drools.monitoring.eclipse.view.MonitoringAgentView"
+            class="com.lucazamador.drools.monitor.eclipse.view.MonitoringAgentView"
             icon="src/main/resources/icons/bug.png"
-            id="com.lucazamador.drools.monitoring.eclipse.view.navigationView"
+            id="com.lucazamador.drools.monitor.eclipse.view.navigationView"
             name="Monitoring Agents"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            class="com.lucazamador.drools.monitoring.eclipse.view.GraphicView"
+            class="com.lucazamador.drools.monitor.eclipse.view.GraphicView"
             icon="src/main/resources/icons/graphic.png"
-            id="com.lucazamador.drools.monitoring.eclipse.view.graphicView"
+            id="com.lucazamador.drools.monitor.eclipse.view.graphicView"
             name="Graphic View"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            class="com.lucazamador.drools.monitoring.eclipse.view.KnowledgeBaseView"
+            class="com.lucazamador.drools.monitor.eclipse.view.KnowledgeBaseView"
             icon="src/main/resources/icons/kbase.png"
-            id="com.lucazamador.drools.monitoring.eclipse.view.knowledgeBaseView"
+            id="com.lucazamador.drools.monitor.eclipse.view.knowledgeBaseView"
             name="Knowledge Base"
             restorable="true">
       </view>
@@ -74,15 +74,15 @@
          id="drools-monitoring-eclipse"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.lucazamador.drools.monitoring.eclipse.plugin.application"
+            application="com.lucazamador.drools.monitor.eclipse.plugin.application"
             name="drools-monitoring-eclipse">
          <property
                name="appName"
-               value="Drools Monitoring">
+               value="Drools Monitor">
          </property>
          <property
                name="aboutText"
-               value="Drools Monitoring">
+               value="Drools Monitor">
          </property>
       </product>
    </extension>
@@ -97,7 +97,7 @@
    <extension
          point="org.eclipse.ui.console.consolePageParticipants">
       <consolePageParticipant
-            class="com.lucazamador.drools.monitoring.eclipse.console.ConsoleParticipant"
+            class="com.lucazamador.drools.monitor.eclipse.console.ConsoleParticipant"
             id="droolsMonitoringConsoleParticipant">
          <enablement></enablement>
       </consolePageParticipant>
@@ -106,11 +106,27 @@
          id="drools-monitoring-studio"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.lucazamador.drools.monitoring.eclipse.plugin.application"
+            application="com.lucazamador.drools.monitor.eclipse.plugin.application"
             name="drools-monitoring-eclipse">
          <property
                name="aboutText"
                value="Drools Monitoring">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="studio"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.lucazamador.drools.monitor.eclipse.plugin.application"
+            name="drools-monitor-eclipse">
+         <property
+               name="aboutText"
+               value="Drools Monitor">
+         </property>
+         <property
+               name="appName"
+               value="drools-monitor-eclipse">
          </property>
       </product>
    </extension>

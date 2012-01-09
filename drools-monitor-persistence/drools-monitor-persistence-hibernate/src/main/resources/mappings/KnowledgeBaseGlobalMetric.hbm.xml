@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <class name="com.lucazamador.drools.monitoring.model.kbase.KnowledgeGlobalMetric" table="kbase_global_metric">
+  <class name="com.lucazamador.drools.monitor.model.kbase.KnowledgeGlobalMetric" table="kbase_global_metric">
     <id name="id" type="java.lang.Long">
       <column name="id" />
       <generator class="identity" />

@@ -5,25 +5,25 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.lucazamador</groupId>
-    <artifactId>drools-monitoring-eclipse</artifactId>
+    <artifactId>drools-monitor-eclipse</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>com.lucazamador.drools.monitoring.eclipse.plugin</artifactId>
-  <name>Drools Monitoring Eclipse Plugin</name>
+  <artifactId>com.lucazamador.drools.monitor.eclipse.plugin</artifactId>
+  <name>Drools Monitor Eclipse Plugin</name>
   <packaging>eclipse-plugin</packaging>
 
   <dependencies>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-engine</artifactId>
+      <artifactId>drools-monitor-engine</artifactId>
     </dependency>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-model</artifactId>
+      <artifactId>drools-monitor-model</artifactId>
     </dependency>
     <dependency>
       <groupId>com.lucazamador</groupId>
-      <artifactId>drools-monitoring-persistence-api</artifactId>
+      <artifactId>drools-monitor-persistence-api</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -85,15 +85,15 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>com.lucazamador</groupId>
-                  <artifactId>drools-monitoring-engine</artifactId>
+                  <artifactId>drools-monitor-engine</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>com.lucazamador</groupId>
-                  <artifactId>drools-monitoring-model</artifactId>
+                  <artifactId>drools-monitor-model</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>com.lucazamador</groupId>
-                  <artifactId>drools-monitoring-persistence-api</artifactId>
+                  <artifactId>drools-monitor-persistence-api</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>commons-collections</groupId>

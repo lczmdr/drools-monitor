@@ -21,7 +21,7 @@
 		<level value="INFO"/>
 	</logger>
     <logger name="com.lucazamador">
-      <level value="INFO"/>
+      <level value="DEBUG"/>
     </logger>
 	<root>
 		<priority value="ERROR"/>

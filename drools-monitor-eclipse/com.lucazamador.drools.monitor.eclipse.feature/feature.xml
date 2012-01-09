@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.lucazamador.drools.monitoring.eclipse.feature"
-      label="Drools Monitoring Eclipse Feature"
+      id="com.lucazamador.drools.monitor.eclipse.feature"
+      label="Drools Monitor Eclipse Feature"
       version="1.0.0.qualifier"
-      plugin="com.lucazamador.drools.monitoring.eclipse.plugin">
+      plugin="com.lucazamador.drools.monitor.eclipse.plugin">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -18,7 +18,7 @@
    </license>
 
    <plugin
-         id="com.lucazamador.drools.monitoring.eclipse.plugin"
+         id="com.lucazamador.drools.monitor.eclipse.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"
