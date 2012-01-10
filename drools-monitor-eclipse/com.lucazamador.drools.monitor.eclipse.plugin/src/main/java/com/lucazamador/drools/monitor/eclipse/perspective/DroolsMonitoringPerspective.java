@@ -7,6 +7,7 @@ import org.eclipse.ui.console.IConsoleConstants;
 
 import com.lucazamador.drools.monitor.eclipse.view.GraphicView;
 import com.lucazamador.drools.monitor.eclipse.view.KnowledgeBaseView;
+import com.lucazamador.drools.monitor.eclipse.view.KnowledgeSessionView;
 import com.lucazamador.drools.monitor.eclipse.view.MonitoringAgentView;
 
 public class DroolsMonitoringPerspective implements IPerspectiveFactory {
@@ -21,9 +22,12 @@ public class DroolsMonitoringPerspective implements IPerspectiveFactory {
 
         IFolderLayout folder = layout.createFolder("views", IPageLayout.TOP, 0.5f, editorArea);
         folder.addPlaceholder(KnowledgeBaseView.ID + ":*");
+        folder.addPlaceholder(KnowledgeSessionView.ID + ":*");
         folder.addPlaceholder(GraphicView.ID + ":*");
         layout.getViewLayout(KnowledgeBaseView.ID).setMoveable(false);
         layout.getViewLayout(KnowledgeBaseView.ID).setCloseable(true);
+        layout.getViewLayout(KnowledgeSessionView.ID).setMoveable(false);
+        layout.getViewLayout(KnowledgeSessionView.ID).setCloseable(true);
         layout.getViewLayout(GraphicView.ID).setMoveable(false);
         layout.getViewLayout(GraphicView.ID).setCloseable(true);
         layout.getViewLayout(MonitoringAgentView.ID).setCloseable(false);

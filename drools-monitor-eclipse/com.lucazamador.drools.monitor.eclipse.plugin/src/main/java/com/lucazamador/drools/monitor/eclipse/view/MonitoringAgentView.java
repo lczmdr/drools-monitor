@@ -73,6 +73,7 @@ public class MonitoringAgentView extends ViewPart {
                         KnowledgeSession ksession = (KnowledgeSession) element;
                         String activityConsoleId = ActivityConsoleFactory.getViewId(ksession);
                         ActivityConsoleFactory.openActivityConsole(activityConsoleId);
+                        KnowledgeSessionView.openView(ksession);
                     } else if (element instanceof Graphic) {
                         Graphic graphic = (Graphic) element;
                         GraphicView.openView(graphic, graphic.getMetrics());

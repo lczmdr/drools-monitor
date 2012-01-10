@@ -69,6 +69,14 @@
             name="Knowledge Base"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            class="com.lucazamador.drools.monitor.eclipse.view.KnowledgeSessionView"
+            icon="src/main/resources/icons/ksession.png"
+            id="com.lucazamador.drools.monitor.eclipse.view.knowledgeSessionView"
+            name="Knowledge Session"
+            restorable="true">
+      </view>
    </extension>
    <extension
          id="drools-monitoring-eclipse"

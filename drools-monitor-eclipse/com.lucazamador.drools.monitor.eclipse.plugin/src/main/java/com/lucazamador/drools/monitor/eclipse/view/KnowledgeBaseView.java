@@ -167,10 +167,12 @@ public class KnowledgeBaseView extends ViewPart {
     }
 
     public void refresh(KnowledgeBaseMetric lastMetric) {
-        form.setText("Knowledge Base: " + lastMetric.getKnowledgeBaseId());
-        sessionCountLabel.setText("Session Count: " + lastMetric.getSessionCount());
-        packagesTableViewer.setInput(lastMetric.getPackagesSplited().toArray());
-        globalsTableViewer.setInput(lastMetric.getGlobals().toArray());
+        if (lastMetric != null) {
+            form.setText("Knowledge Base: " + lastMetric.getKnowledgeBaseId());
+            sessionCountLabel.setText("Session Count: " + lastMetric.getSessionCount());
+            packagesTableViewer.setInput(lastMetric.getPackagesSplited().toArray());
+            globalsTableViewer.setInput(lastMetric.getGlobals().toArray());
+        }
     }
 
     public static void openView(KnowledgeBase kbase) {

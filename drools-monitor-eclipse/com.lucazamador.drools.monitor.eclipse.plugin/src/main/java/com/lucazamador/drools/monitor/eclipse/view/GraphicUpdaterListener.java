@@ -5,6 +5,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 
 import com.lucazamador.drools.monitor.eclipse.Application;
 import com.lucazamador.drools.monitor.eclipse.model.KnowledgeBase;
+import com.lucazamador.drools.monitor.eclipse.model.KnowledgeSession;
 import com.lucazamador.drools.monitor.eclipse.model.MonitoringAgentInfo;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitor.model.AbstractMetric;
@@ -32,6 +33,19 @@ public class GraphicUpdaterListener implements DroolsMonitoringListener {
                     }
                 }
             }
+            MonitoringAgentInfo agent = Application.getDroolsMonitor().getMonitoringAgent(kmetric.getAgentId());
+            if (agent != null) {
+                for (KnowledgeBase kbase : agent.getKnowledgeBases().values()) {
+                    if (kbase.getId().equals(kmetric.getKnowledgeBaseId())) {
+                        for (KnowledgeSession ksession : kbase.getKnowledgeSessions().values()) {
+                            if (ksession.getId().equals(kmetric.getKnowledgeSessionId().toString())) {
+                                ksession.setLastMetric(kmetric);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         } else if (metric instanceof KnowledgeBaseMetric) {
             KnowledgeBaseMetric kmetric = (KnowledgeBaseMetric) metric;
             MonitoringAgentInfo agent = Application.getDroolsMonitor().getMonitoringAgent(kmetric.getAgentId());
@@ -43,7 +57,6 @@ public class GraphicUpdaterListener implements DroolsMonitoringListener {
                     }
                 }
             }
-
         }
     }
 }
