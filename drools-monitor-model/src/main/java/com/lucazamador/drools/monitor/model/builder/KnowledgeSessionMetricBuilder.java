@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessInstanceMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessMetric;
+import com.lucazamador.drools.monitor.model.ksession.KnowledgeRuleMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
 
 /**
@@ -29,6 +30,7 @@ public class KnowledgeSessionMetricBuilder {
     private Long totalProcessInstancesStarted;
     private List<KnowledgeProcessMetric> processStats;
     private List<KnowledgeProcessInstanceMetric> processInstanceStats;
+    private List<KnowledgeRuleMetric> ruleStats;
 
     public KnowledgeSessionMetricBuilder(String jvmName, String knowledgeBaseId) {
         this.jvmName = jvmName;
@@ -95,6 +97,11 @@ public class KnowledgeSessionMetricBuilder {
         return this;
     }
 
+    public KnowledgeSessionMetricBuilder ruleStats(List<KnowledgeRuleMetric> ruleStats) {
+        this.ruleStats = ruleStats;
+        return this;
+    }
+
     public KnowledgeSessionMetric build() {
         return new KnowledgeSessionMetric(this);
     }
@@ -153,6 +160,10 @@ public class KnowledgeSessionMetricBuilder {
 
     public List<KnowledgeProcessInstanceMetric> getProcessInstanceStats() {
         return processInstanceStats;
+    }
+
+    public List<KnowledgeRuleMetric> getRuleStats() {
+        return ruleStats;
     }
 
 }

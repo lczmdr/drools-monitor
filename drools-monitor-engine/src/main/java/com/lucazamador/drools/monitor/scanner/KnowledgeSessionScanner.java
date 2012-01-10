@@ -15,10 +15,12 @@ import org.slf4j.LoggerFactory;
 import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitor.metrics.parser.ProcessInstanceMetricParser;
 import com.lucazamador.drools.monitor.metrics.parser.ProcessMetricParser;
+import com.lucazamador.drools.monitor.metrics.parser.RuleMetricParser;
 import com.lucazamador.drools.monitor.model.AbstractMetric;
 import com.lucazamador.drools.monitor.model.builder.KnowledgeSessionMetricBuilder;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessInstanceMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessMetric;
+import com.lucazamador.drools.monitor.model.ksession.KnowledgeRuleMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
 
 /**
@@ -33,6 +35,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
     private static final Logger logger = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
     private ProcessMetricParser processParser;
     private ProcessInstanceMetricParser processInstanceParser;
+    private RuleMetricParser ruleParser;
     private final String agentId;
 
     public KnowledgeSessionScanner(String agentId, ObjectName resource, DroolsMBeanConnector connector) {
@@ -41,6 +44,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
         this.connector = connector;
         this.processInstanceParser = ProcessInstanceMetricParser.getInstance();
         this.processParser = ProcessMetricParser.getInstance();
+        this.ruleParser = RuleMetricParser.getInstance();
     }
 
     public AbstractMetric scan() throws IOException {
@@ -58,6 +62,16 @@ public class KnowledgeSessionScanner extends MetricScanner {
         Long totalFiringTime = (Long) getAttribute("TotalFiringTime");
         Long totalProcessInstancesCompleted = (Long) getAttribute("TotalProcessInstancesCompleted");
         Long totalProcessInstancesStarted = (Long) getAttribute("TotalProcessInstancesStarted");
+
+        @SuppressWarnings("unchecked")
+        Map<String, String> rulesStats = (HashMap<String, String>) getAttribute("StatsByRule");
+        List<KnowledgeRuleMetric> rulesMetrics = new ArrayList<KnowledgeRuleMetric>();
+        for (String ruleId : rulesStats.keySet()) {
+            String status = rulesStats.get(ruleId);
+            rulesMetrics.add(new KnowledgeRuleMetric(ruleId, ruleParser.getFiringTime(status), ruleParser
+                    .getActivationsCancelled(status), ruleParser.getActivationsCreated(status), ruleParser
+                    .getActivationsFired(status)));
+        }
 
         @SuppressWarnings("unchecked")
         Map<String, String> processStats = (HashMap<String, String>) getAttribute("StatsByProcess");
@@ -84,10 +98,9 @@ public class KnowledgeSessionScanner extends MetricScanner {
                 .totalActivationsFired(totalActivationsFired).totalFactCount(totalFactCount)
                 .totalFiringTime(totalFiringTime).totalProcessInstancesCompleted(totalProcessInstancesCompleted)
                 .totalProcessInstancesStarted(totalProcessInstancesStarted).processStats(processMetrics)
-                .processInstanceStats(processInstanceMetrics).build();
+                .processInstanceStats(processInstanceMetrics).ruleStats(rulesMetrics).build();
 
         logger.debug(agentId + " metric: " + metric);
         return metric;
     }
-
 }

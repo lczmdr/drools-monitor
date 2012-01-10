@@ -30,6 +30,7 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
     private Long totalProcessInstancesStarted;
     private List<KnowledgeProcessMetric> processStats;
     private List<KnowledgeProcessInstanceMetric> processInstancesStats;
+    private List<KnowledgeRuleMetric> ruleStats;
 
     public KnowledgeSessionMetric() {
     }
@@ -146,6 +147,14 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
         this.processInstancesStats = processInstances;
     }
 
+    public List<KnowledgeRuleMetric> getRuleStats() {
+        return ruleStats;
+    }
+
+    public void setRuleStats(List<KnowledgeRuleMetric> ruleStats) {
+        this.ruleStats = ruleStats;
+    }
+
     @Override
     public String toString() {
         return "KnowledgeSession=" + knowledgeSessionId + " averageFiringTime: " + averageFiringTime
@@ -167,5 +176,6 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
         totalProcessInstancesStarted = builder.getTotalProcessInstancesStarted();
         processStats = builder.getProcessStats();
         processInstancesStats = builder.getProcessInstanceStats();
+        ruleStats = builder.getRuleStats();
     }
 }
