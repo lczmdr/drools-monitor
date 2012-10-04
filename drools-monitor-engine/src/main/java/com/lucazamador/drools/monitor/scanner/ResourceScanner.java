@@ -2,7 +2,7 @@ package com.lucazamador.drools.monitor.scanner;
 
 import java.io.IOException;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 
 /**
  * Interface used by the knowledge scanners.
@@ -12,6 +12,6 @@ import com.lucazamador.drools.monitor.model.AbstractMetric;
  */
 public interface ResourceScanner {
 
-	public AbstractMetric scan() throws IOException;
+    Metric scan() throws IOException;
 
 }

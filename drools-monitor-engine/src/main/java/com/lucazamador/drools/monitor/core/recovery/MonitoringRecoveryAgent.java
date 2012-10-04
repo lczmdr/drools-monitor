@@ -19,9 +19,10 @@ import com.lucazamador.drools.monitor.listener.MonitoringRecoveryListener;
  */
 public class MonitoringRecoveryAgent {
 
-    private Logger logger = LoggerFactory.getLogger(MonitoringRecoveryAgent.class);
-
     private static final int DEFAULT_RECOVERY_INTERVAL = 10000;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MonitoringRecoveryAgent.class);
+
     private MonitoringAgentRegistry registry;
     private MonitoringRecoveryListener recoveryListener;
     private Map<String, MonitoringRecoveryTask> recoveryTasks = new HashMap<String, MonitoringRecoveryTask>();
@@ -38,13 +39,13 @@ public class MonitoringRecoveryAgent {
      */
     public void reconnect(String agentId, String address, int port) {
         MonitoringAgent monitoringAgent = registry.getMonitoringAgent(agentId);
-        int recoveryInterval = monitoringAgent.getConnector().getRecoveryInterval();
+        int recoveryInterval = monitoringAgent.getRecoveryInterval();
         monitoringAgent.stop();
         Timer reconnectionTimer = new Timer();
         int period = recoveryInterval > 0 ? recoveryInterval : DEFAULT_RECOVERY_INTERVAL;
         MonitoringRecoveryTask recoveryTask = new MonitoringRecoveryTask(agentId, address, port, period, registry,
                 recoveryListener);
-        logger.info("Recovery task created to reconnect with " + agentId + " at " + address + ":" + port);
+        LOGGER.info("Recovery task created to reconnect with " + agentId + " at " + address + ":" + port);
         recoveryTasks.put(agentId, recoveryTask);
         if (recoveryListener != null) {
             recoveryListener.disconnected(agentId);

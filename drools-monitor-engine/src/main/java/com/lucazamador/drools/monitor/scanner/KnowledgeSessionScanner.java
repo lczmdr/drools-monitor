@@ -16,7 +16,7 @@ import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitor.metrics.parser.ProcessInstanceMetricParser;
 import com.lucazamador.drools.monitor.metrics.parser.ProcessMetricParser;
 import com.lucazamador.drools.monitor.metrics.parser.RuleMetricParser;
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 import com.lucazamador.drools.monitor.model.builder.KnowledgeSessionMetricBuilder;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessInstanceMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeProcessMetric;
@@ -32,7 +32,8 @@ import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
  */
 public class KnowledgeSessionScanner extends MetricScanner {
 
-    private static final Logger logger = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeSessionScanner.class);
+
     private ProcessMetricParser processParser;
     private ProcessInstanceMetricParser processInstanceParser;
     private RuleMetricParser ruleParser;
@@ -40,14 +41,14 @@ public class KnowledgeSessionScanner extends MetricScanner {
 
     public KnowledgeSessionScanner(String agentId, ObjectName resource, DroolsMBeanConnector connector) {
         this.agentId = agentId;
-        this.resource = resource;
-        this.connector = connector;
+        this.setResource(resource);
+        this.setConnector(connector);
         this.processInstanceParser = ProcessInstanceMetricParser.getInstance();
         this.processParser = ProcessMetricParser.getInstance();
         this.ruleParser = RuleMetricParser.getInstance();
     }
 
-    public AbstractMetric scan() throws IOException {
+    public Metric scan() throws IOException {
         double averageFiringTime = (Double) getAttribute("AverageFiringTime");
         String knowledgeBaseId = (String) getAttribute("KnowledgeBaseId");
         Integer knowledgeSessionId = (Integer) getAttribute("KnowledgeSessionId");
@@ -100,7 +101,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
                 .totalProcessInstancesStarted(totalProcessInstancesStarted).processStats(processMetrics)
                 .processInstanceStats(processInstanceMetrics).ruleStats(rulesMetrics).build();
 
-        logger.debug(agentId + " metric: " + metric);
+        LOGGER.debug(agentId + " metric: " + metric);
         return metric;
     }
 }

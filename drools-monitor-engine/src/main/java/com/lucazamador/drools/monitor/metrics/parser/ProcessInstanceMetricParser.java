@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ProcessInstanceMetricParser {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProcessInstanceMetricParser.class);
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd HH:mm:ss zzzz yyyy");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessInstanceMetricParser.class);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd HH:mm:ss zzzz yyyy");
 
     private static final String PROCESS_STARTED_PATTERN = "processStarted=(.*)processCompleted";
     private static final String PROCESS_COMPLETED_PATTERN = "processCompleted=(.*)processNodesTriggered";
@@ -43,9 +43,9 @@ public class ProcessInstanceMetricParser {
             String matched = matcher.group();
             String date = matched.replace("processStarted=", "").replace("processCompleted", "").trim();
             try {
-                return dateFormat.parse(date.substring(4));
+                return DATE_FORMAT.parse(date.substring(4));
             } catch (ParseException e) {
-                logger.error("Unparseable Process Instance started date: " + date, e);
+                LOGGER.error("Unparseable Process Instance started date: " + date, e);
                 return null;
             }
         }
@@ -58,9 +58,9 @@ public class ProcessInstanceMetricParser {
             String matched = matcher.group();
             String date = matched.replace("processCompleted=", "").replace("processNodesTriggered", "").trim();
             try {
-                return dateFormat.parse(date.substring(4));
+                return DATE_FORMAT.parse(date.substring(4));
             } catch (ParseException e) {
-                logger.error("Unparseable Process Instance completed date: " + date, e);
+                LOGGER.error("Unparseable Process Instance completed date: " + date, e);
                 return null;
             }
         }

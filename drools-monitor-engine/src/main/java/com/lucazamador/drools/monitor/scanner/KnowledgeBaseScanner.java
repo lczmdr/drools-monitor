@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeGlobalMetric;
 
@@ -26,17 +26,17 @@ import com.lucazamador.drools.monitor.model.kbase.KnowledgeGlobalMetric;
  */
 public class KnowledgeBaseScanner extends MetricScanner {
 
-    private static final Logger logger = LoggerFactory.getLogger(KnowledgeBaseScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseScanner.class);
     private KnowledgeBaseMetric currentMetric;
     private String jvmId;
 
     public KnowledgeBaseScanner(String jvmId, ObjectName resource, DroolsMBeanConnector connector) {
         this.jvmId = jvmId;
-        this.resource = resource;
-        this.connector = connector;
+        this.setResource(resource);
+        this.setConnector(connector);
     }
 
-    public AbstractMetric scan() throws IOException {
+    public Metric scan() throws IOException {
         String id = (String) getAttribute("Id");
         String[] packages = (String[]) getAttribute("Packages");
         Long sessionCount = (Long) getAttribute("SessionCount");
@@ -61,7 +61,7 @@ public class KnowledgeBaseScanner extends MetricScanner {
         KnowledgeBaseMetric lastMetric = new KnowledgeBaseMetric(id, jvmId, sessionCount, packagesList,
                 knowledgeGlobals);
         if (lastMetric == null || !lastMetric.equals(currentMetric)) {
-            logger.info("KnowledgeBase id=" + id + " metrics changed. " + lastMetric);
+            LOGGER.info("KnowledgeBase id=" + id + " metrics changed. " + lastMetric);
             currentMetric = lastMetric;
             return lastMetric;
         }

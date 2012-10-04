@@ -92,8 +92,8 @@ public class KnowledgeSessionMetricBuilder {
         return this;
     }
 
-    public KnowledgeSessionMetricBuilder processInstanceStats(List<KnowledgeProcessInstanceMetric> processInstanceStats) {
-        this.processInstanceStats = processInstanceStats;
+    public KnowledgeSessionMetricBuilder processInstanceStats(List<KnowledgeProcessInstanceMetric> stats) {
+        this.processInstanceStats = stats;
         return this;
     }
 

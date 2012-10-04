@@ -16,7 +16,7 @@ import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
  */
 public class HibernateMetricsPersistence implements MetricsPersistence {
 
-    private static final Logger logger = LoggerFactory.getLogger(HibernateMetricsPersistence.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateMetricsPersistence.class);
 
     private SessionFactory sessionFactory;
 
@@ -24,7 +24,7 @@ public class HibernateMetricsPersistence implements MetricsPersistence {
         try {
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable e) {
-            logger.error("Initial SessionFactory creation failed." + e);
+            LOGGER.error("Initial SessionFactory creation failed." + e);
             throw new ExceptionInInitializerError(e);
         }
     }

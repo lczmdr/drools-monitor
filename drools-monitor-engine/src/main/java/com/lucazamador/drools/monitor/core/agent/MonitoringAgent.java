@@ -3,28 +3,37 @@ package com.lucazamador.drools.monitor.core.agent;
 import java.util.List;
 
 import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
+import com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseInfo;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
 
 public interface MonitoringAgent {
 
-    public String getId();
+    String getId();
 
-    public void registerListener(DroolsMonitoringListener listener);
+    String getAddress();
 
-    public void start();
+    int getPort();
 
-    public void stop();
+    int getRecoveryInterval();
 
-    public boolean isConnected();
+    void registerListener(DroolsMonitoringListener listener);
 
-    public DroolsMBeanConnector getConnector();
+    void start();
 
-    public void setConnector(DroolsMBeanConnector connector);
+    void stop();
 
-    public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases();
+    boolean isConnected();
 
-    public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions();
+    DroolsMBeanConnector getConnector();
+
+    void setConnector(DroolsMBeanConnector connector);
+
+    void setMonitoringRecoveryAgent(MonitoringRecoveryAgent reconnectionAgent);
+
+    List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases();
+
+    List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions();
 
 }

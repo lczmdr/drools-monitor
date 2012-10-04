@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
@@ -11,11 +12,13 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitor.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseInfo;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
 import com.lucazamador.drools.monitor.scanner.KnowledgeBaseScanner;
 import com.lucazamador.drools.monitor.scanner.KnowledgeSessionScanner;
+import com.lucazamador.drools.monitor.scanner.MetricScanner;
 
 /**
  * Discover all the registered knowledge base and knowledge session MBeans in
@@ -26,10 +29,13 @@ import com.lucazamador.drools.monitor.scanner.KnowledgeSessionScanner;
  */
 public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
 
-    private static final Logger logger = LoggerFactory.getLogger(KnowledgeResourceDiscoverer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeResourceDiscoverer.class);
 
-    private static final String KBASE_RESOURCE_NAMESPACE = "org.drools.kbases:type=*";
-    private static final String KSESSION_RESOURCE_NAMESPACE = "org.drools.kbases:type=*,group=Sessions,sessionId=Session-*";
+    private static final String KBASE_RES_NAMESPACE = "org.drools.kbases:type=*";
+    private static final String KSESSION_KBASE_RES_NAMESPACE = "org.drools.kbases:type=*,";
+    private static final String KSESSION_KSESION_RES_NAMESPACE = "group=Sessions,sessionId=Session-*";
+// private static final String KSESSION_RES_NAMESPACE = "org.drools.kbases:type=*,group=Sessions,sessionId=Session-*";
+    private static final String KSESSION_RES_NAMESPACE = KSESSION_KBASE_RES_NAMESPACE + KSESSION_KSESION_RES_NAMESPACE;
 
     private String agentId;
 
@@ -49,9 +55,10 @@ public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
     @Override
     public void discover() throws DroolsMonitoringException {
         discover = false;
-        discoverResource(KBASE_RESOURCE_NAMESPACE, new ResourceScanner() {
+        discoverResource(KBASE_RES_NAMESPACE, new ResourceScanner() {
             public void add(ObjectName resource) {
                 String knowledgeBaseId = resource.getKeyProperty("type");
+                Map<String, MetricScanner> resourceScanners = getResourceScanners();
                 synchronized (resourceScanners) {
                     if (!resourceScanners.containsKey(knowledgeBaseId)) {
                         KnowledgeBaseInfo kbaseInfo = new KnowledgeBaseInfo();
@@ -60,26 +67,27 @@ public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
                         synchronized (knowledgeBaseInfos) {
                             knowledgeBaseInfos.add(kbaseInfo);
                         }
-                        KnowledgeBaseScanner scanner = new KnowledgeBaseScanner(agentId, resource, connector);
+                        KnowledgeBaseScanner scanner = new KnowledgeBaseScanner(agentId, resource, getConnector());
                         resourceScanners.put(knowledgeBaseId, scanner);
-                        logger.info("Drools KnowledgeBase discovered: " + resource.getCanonicalName());
+                        LOGGER.info("Drools KnowledgeBase discovered: " + resource.getCanonicalName());
                         discover = true;
                     }
                 }
             }
         });
-        discoverResource(KSESSION_RESOURCE_NAMESPACE, new ResourceScanner() {
+        discoverResource(KSESSION_RES_NAMESPACE, new ResourceScanner() {
             public void add(ObjectName resource) {
                 String knowledgeSessionId = String
                         .valueOf(resource.getKeyProperty("sessionId").replace("Session-", ""));
                 String knowledgeBaseId;
                 try {
-                    knowledgeBaseId = (String) connector.getConnection().getAttribute(resource, "KnowledgeBaseId");
+                    knowledgeBaseId = (String) getConnector().getConnection().getAttribute(resource, "KnowledgeBaseId");
                 } catch (Exception e1) {
-                    logger.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + agentId);
+                    LOGGER.error("Unable to obtain KnowledgeBaseId attribute from ksession on jvm: " + agentId);
                     return;
                 }
                 String scannerId = knowledgeBaseId.concat(knowledgeSessionId);
+                Map<String, MetricScanner> resourceScanners = getResourceScanners();
                 synchronized (resourceScanners) {
                     if (!resourceScanners.containsKey(scannerId)) {
                         KnowledgeSessionInfo ksessionInfo = new KnowledgeSessionInfo();
@@ -89,16 +97,17 @@ public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
                         synchronized (knowledgeSessionInfos) {
                             knowledgeSessionInfos.add(ksessionInfo);
                         }
+                        DroolsMBeanConnector connector = getConnector();
                         KnowledgeSessionScanner scanner = new KnowledgeSessionScanner(agentId, resource, connector);
                         resourceScanners.put(scannerId, scanner);
-                        logger.info("Drools KnowledgeSession discovered: " + resource.getCanonicalName());
+                        LOGGER.info("Drools KnowledgeSession discovered: " + resource.getCanonicalName());
                         discover = true;
                     }
                 }
             }
         });
-        if (discoveredListener != null && discover) {
-            discoveredListener.discovered(agentId);
+        if (getResourceDiscoveredListener() != null && discover) {
+            getResourceDiscoveredListener().discovered(agentId);
         }
     }
 
@@ -109,7 +118,7 @@ public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
                 scanner.add(resource);
             }
         } catch (MalformedObjectNameException e) {
-            logger.error("wrong knowledge namespace: " + resourceFilter, e);
+            LOGGER.error("wrong knowledge namespace: " + resourceFilter, e);
         } catch (IOException e) {
             throw new DroolsMonitoringException("Error on connection to JVM");
         }
@@ -140,7 +149,7 @@ public class KnowledgeResourceDiscoverer extends BaseDiscoverer {
     }
 
     private interface ResourceScanner {
-        public void add(ObjectName resource);
+        void add(ObjectName resource);
     }
 
 }

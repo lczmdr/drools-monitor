@@ -21,30 +21,33 @@ public class DroolsMonitoringPersistenceAgent extends DroolsMonitoringAgentBase 
     private MetricsPersistenceScheduler persistenceScheduler;
 
     public void start() {
-        resourceDiscoverer = new ResourceDiscoverer();
-        resourceDiscoverer.setAgentId(id);
-        resourceDiscoverer.setResourceDiscoveredListener(discoveredListener);
-        resourceDiscoverer.setConnector(connector);
+        ResourceDiscoverer resourceDiscoverer = new ResourceDiscoverer();
+        resourceDiscoverer.setAgentId(getId());
+        resourceDiscoverer.setResourceDiscoveredListener(getResourceDiscoveredListener());
+        resourceDiscoverer.setConnector(getConnector());
         resourceDiscoverer.discover();
+        setResourceDiscoverer(resourceDiscoverer);
 
-        scanner = new DroolsResourceScanner();
-        scanner.setInterval(scanInterval);
+        DroolsResourceScanner scanner = new DroolsResourceScanner();
+        scanner.setInterval(getScanInterval());
+        setScanner(scanner);
 
-        scannerTask = new DroolsMonitoringScannerTask();
+        DroolsMonitoringScannerTask scannerTask = new DroolsMonitoringScannerTask();
         scannerTask.setResourceDiscoverer(resourceDiscoverer);
         scannerTask.setScanner(scanner);
-        scannerTask.setReconnectionAgent(reconnectionAgent);
+        scannerTask.setReconnectionAgent(getReconnectionAgent());
         scannerTask.setOnConnectionLost(new ConnectionLost() {
             @Override
             public void stop() {
-                resourceDiscoverer.stop();
+                getResourceDiscoverer().stop();
                 persistenceScheduler.stop();
             }
         });
 
-        for (DroolsMonitoringListener listener : listeners) {
+        for (DroolsMonitoringListener listener : getListeners()) {
             scannerTask.registerListener(listener);
         }
+        setScannerTask(scannerTask);
         scanner.setScannerTask(scannerTask);
 
         persistenceSchedulerTask = new MetricsPersistenceSchedulerTask();
@@ -57,7 +60,7 @@ public class DroolsMonitoringPersistenceAgent extends DroolsMonitoringAgentBase 
         persistenceScheduler.start();
 
         scanner.start();
-        started = true;
+        setStarted(true);
     }
 
     public int getPersistenceInterval() {

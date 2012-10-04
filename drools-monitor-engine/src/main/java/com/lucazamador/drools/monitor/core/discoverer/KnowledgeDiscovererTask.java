@@ -2,6 +2,9 @@ package com.lucazamador.drools.monitor.core.discoverer;
 
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.lucazamador.drools.monitor.exception.DroolsMonitoringException;
 
 /**
@@ -12,6 +15,8 @@ import com.lucazamador.drools.monitor.exception.DroolsMonitoringException;
  */
 public class KnowledgeDiscovererTask extends TimerTask {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeDiscovererTask.class);
+
     private KnowledgeResourceDiscoverer discoverer;
 
     @Override
@@ -20,7 +25,7 @@ public class KnowledgeDiscovererTask extends TimerTask {
             discoverer.discover();
         } catch (DroolsMonitoringException e) {
             // TODO: handle the connection exception
-            // e.printStackTrace();
+            LOGGER.error("Error discovering knowledge...");
         }
     }
 

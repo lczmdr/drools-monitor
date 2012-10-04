@@ -1,21 +1,18 @@
 package com.lucazamador.drools.monitor.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.lucazamador.drools.monitor.cfg.MonitoringAgentConfiguration;
-import com.lucazamador.drools.monitor.cfg.MonitoringConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.lucazamador.drools.monitor.core.agent.DroolsMonitoringAgent;
-import com.lucazamador.drools.monitor.core.agent.DroolsMonitoringAgentFactory;
 import com.lucazamador.drools.monitor.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitor.exception.DroolsMonitoringException;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitor.listener.MonitoringRecoveryListener;
-import com.lucazamador.drools.monitor.listener.ResourceDiscoveredListener;
-import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
 
 /**
  * The DroolsMonitoring class is the main class used to configure and create the
@@ -27,73 +24,39 @@ import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
  */
 public class DroolsMonitoring {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DroolsMonitoring.class);
+
     private MonitoringAgentRegistry registry;
-    private MetricsPersistence persistence;
-    private MonitoringConfiguration configuration;
     private MonitoringRecoveryAgent recoveryAgent;
-    private boolean started = false;
     private List<DroolsMonitoringListener> monitoringListeners = new ArrayList<DroolsMonitoringListener>();
-    private ResourceDiscoveredListener discoveredListener;
+    private List<MonitoringAgent> monitoringAgents = new ArrayList<MonitoringAgent>();
 
-    /**
-     * Used to create the monitoring agents configured in the configuration.
-     * file
-     */
-    public void configure() {
-        for (MonitoringAgentConfiguration monitoringAgentConfiguration : configuration.getConnections()) {
-            createMonitoringAgent(monitoringAgentConfiguration);
-        }
-    }
-
-    /**
-     * Creates a monitoring agent for each drools instance configured to monitor
-     * in the configuration file. It also configures the recovery agent for each
-     * agent.
-     * 
-     * @param configuration
-     *            the jvm instance connection configuration
-     * @throws DroolsMonitoringException
-     *             asda
-     */
-    private void createMonitoringAgent(MonitoringAgentConfiguration configuration) {
-        DroolsMBeanConnector connector = null;
-        try {
-            connector = new DroolsMBeanConnector(configuration.getAddress(), configuration.getPort(),
-                    configuration.getRecoveryInterval());
-            connector.connect();
-        } catch (DroolsMonitoringException e) {
-            MonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                    connector, recoveryAgent, discoveredListener, persistence);
+    public void init() {
+        LOGGER.info("Starting " + monitoringAgents.size() + " monitoring agents...");
+        for (MonitoringAgent monitoringAgent : monitoringAgents) {
+            DroolsMBeanConnector connector = null;
+            try {
+                connector = new DroolsMBeanConnector(monitoringAgent.getAddress(), monitoringAgent.getPort(),
+                        monitoringAgent.getRecoveryInterval());
+                connector.connect();
+            } catch (DroolsMonitoringException e) {
+                registry.register(monitoringAgent.getId(), monitoringAgent);
+                for (DroolsMonitoringListener listener : monitoringListeners) {
+                    monitoringAgent.registerListener(listener);
+                }
+                monitoringAgent.setMonitoringRecoveryAgent(recoveryAgent);
+                recoveryAgent.reconnect(monitoringAgent.getId(), monitoringAgent.getAddress(),
+                        monitoringAgent.getPort());
+                return;
+            }
             registry.register(monitoringAgent.getId(), monitoringAgent);
             for (DroolsMonitoringListener listener : monitoringListeners) {
                 monitoringAgent.registerListener(listener);
             }
-            recoveryAgent.reconnect(configuration.getId(), configuration.getAddress(), configuration.getPort());
-            return;
-        }
-        MonitoringAgent monitoringAgent = DroolsMonitoringAgentFactory.newDroolsMonitoringAgent(configuration,
-                connector, recoveryAgent, discoveredListener, persistence);
-        registry.register(monitoringAgent.getId(), monitoringAgent);
-        for (DroolsMonitoringListener listener : monitoringListeners) {
-            monitoringAgent.registerListener(listener);
-        }
-        if (started) {
+            monitoringAgent.setMonitoringRecoveryAgent(recoveryAgent);
+            monitoringAgent.setConnector(connector);
             monitoringAgent.start();
         }
-    }
-
-    /**
-     * Initializes all the registered monitoring agents.
-     * 
-     * @throws DroolsMonitoringException
-     */
-    public void start() {
-        for (MonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
-            if (monitoringAgent.isConnected()) {
-                monitoringAgent.start();
-            }
-        }
-        started = true;
     }
 
     /**
@@ -103,18 +66,6 @@ public class DroolsMonitoring {
         for (MonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
             monitoringAgent.stop();
         }
-        started = false;
-    }
-
-    /**
-     * Add a manually configured jvm configuration.
-     * 
-     * @param configuration
-     *            the jvm instance connection configuration
-     * @throws DroolsMonitoringException
-     */
-    public void addMonitoringAgent(MonitoringAgentConfiguration configuration) throws DroolsMonitoringException {
-        createMonitoringAgent(configuration);
     }
 
     /**
@@ -151,37 +102,12 @@ public class DroolsMonitoring {
         }
     }
 
-    /**
-     * Obtain the monitoring configuration object used to create the monitoring
-     * agents.
-     * 
-     * @return the monitoring configuration object
-     */
-    public MonitoringConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    /**
-     * Set the monitoring configuration object used later to create the
-     * monitoring agents.
-     * 
-     * @param configuration
-     *            the monitoring configuration object
-     */
-    public void setConfiguration(MonitoringConfiguration configuration) {
-        this.configuration = configuration;
-    }
-
     public void setMonitoringAgentRegistry(MonitoringAgentRegistry registry) {
         this.registry = registry;
     }
 
     public void setRecoveryAgent(MonitoringRecoveryAgent recoveryAgent) {
         this.recoveryAgent = recoveryAgent;
-    }
-
-    public void registerPersistenceImpl(MetricsPersistence persistence) {
-        this.persistence = persistence;
     }
 
     /**
@@ -191,9 +117,8 @@ public class DroolsMonitoring {
      *            the custom metric listener
      */
     public void registerListener(DroolsMonitoringListener listener) {
-        Collection<MonitoringAgent> monitoringAgents = registry.getMonitoringAgents();
         monitoringListeners.add(listener);
-        for (MonitoringAgent monitoringAgent : monitoringAgents) {
+        for (MonitoringAgent monitoringAgent : registry.getMonitoringAgents()) {
             monitoringAgent.registerListener(listener);
         }
     }
@@ -208,23 +133,20 @@ public class DroolsMonitoring {
         recoveryAgent.registerListener(recoveryListener);
     }
 
-    /**
-     * Register a custom discovery resource listener.
-     * 
-     * @param discoveredListener
-     *            the custom discovery resource listener
-     */
-    public void registerResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
-        this.discoveredListener = discoveredListener;
+    public List<MonitoringAgent> getMonitoringAgents() {
+        return monitoringAgents;
     }
 
-    /**
-     * Returns the status of the drools monitoring instance.
-     * 
-     * @return true or false
-     */
-    public boolean isStarted() {
-        return started;
+    public void setMonitoringAgents(List<MonitoringAgent> monitoringAgents) {
+        this.monitoringAgents = monitoringAgents;
+    }
+
+    public List<DroolsMonitoringListener> getMonitoringListeners() {
+        return monitoringListeners;
+    }
+
+    public void setMonitoringListeners(List<DroolsMonitoringListener> monitoringListeners) {
+        this.monitoringListeners = monitoringListeners;
     }
 
 }

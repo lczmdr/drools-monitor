@@ -20,9 +20,6 @@ public class KnowledgeRuleMetric implements Serializable {
     private Long activationsCreated;
     private Long activationsFired;
 
-    public KnowledgeRuleMetric() {
-    }
-
     public KnowledgeRuleMetric(String name, Double firingTime, long activationsCancelled, long activationsCreated,
             long activationsFired) {
         this.name = name;
@@ -30,6 +27,13 @@ public class KnowledgeRuleMetric implements Serializable {
         this.activationsCancelled = activationsCancelled;
         this.activationsCreated = activationsCreated;
         this.activationsFired = activationsFired;
+    }
+
+    public KnowledgeRuleMetric(KnowledgeSessionMetricBuilder builder) {
+        firingTime = builder.getAverageFiringTime();
+        activationsCancelled = builder.getTotalActivationsCancelled();
+        activationsCreated = builder.getTotalActivationsCreated();
+        activationsFired = builder.getTotalActivationsFired();
     }
 
     public Long getId() {
@@ -78,13 +82,6 @@ public class KnowledgeRuleMetric implements Serializable {
 
     public void setActivationsFired(Long activationsFired) {
         this.activationsFired = activationsFired;
-    }
-
-    public KnowledgeRuleMetric(KnowledgeSessionMetricBuilder builder) {
-        firingTime = builder.getAverageFiringTime();
-        activationsCancelled = builder.getTotalActivationsCancelled();
-        activationsCreated = builder.getTotalActivationsCreated();
-        activationsFired = builder.getTotalActivationsFired();
     }
 
     @Override

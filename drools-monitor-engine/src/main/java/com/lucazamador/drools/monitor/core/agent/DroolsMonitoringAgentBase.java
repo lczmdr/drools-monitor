@@ -20,17 +20,151 @@ import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
  */
 public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
 
-    protected String id;
-    protected int scanInterval;
-    protected int recoveryInterval;
-    protected DroolsMBeanConnector connector;
-    protected DroolsResourceScanner scanner;
-    protected ResourceDiscoverer resourceDiscoverer;
-    protected DroolsMonitoringScannerTask scannerTask;
-    protected MonitoringRecoveryAgent reconnectionAgent;
-    protected ResourceDiscoveredListener discoveredListener;
-    protected List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
-    protected boolean started;
+    private String id;
+    private String address;
+    private int port;
+    private int scanInterval;
+    private int metricsBufferSize;
+    private int recoveryInterval;
+    private DroolsMBeanConnector connector;
+    private DroolsResourceScanner scanner;
+    private ResourceDiscoverer resourceDiscoverer;
+    private DroolsMonitoringScannerTask scannerTask;
+    private MonitoringRecoveryAgent reconnectionAgent;
+    private ResourceDiscoveredListener resourceDiscoveredListener;
+    private List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
+    private boolean started;
+
+    public void setMonitoringRecoveryAgent(MonitoringRecoveryAgent reconnectionAgent) {
+        this.reconnectionAgent = reconnectionAgent;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public int getScanInterval() {
+        return scanInterval;
+    }
+
+    public void setScanInterval(int scanInterval) {
+        this.scanInterval = scanInterval;
+    }
+
+    public int getMetricsBufferSize() {
+        return metricsBufferSize;
+    }
+
+    public void setMetricsBufferSize(int metricsBufferSize) {
+        this.metricsBufferSize = metricsBufferSize;
+    }
+
+    public int getRecoveryInterval() {
+        return recoveryInterval;
+    }
+
+    public void setRecoveryInterval(int recoveryInterval) {
+        this.recoveryInterval = recoveryInterval;
+    }
+
+    public DroolsMBeanConnector getConnector() {
+        return connector;
+    }
+
+    public void setConnector(DroolsMBeanConnector connector) {
+        this.connector = connector;
+    }
+
+    public DroolsResourceScanner getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(DroolsResourceScanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public ResourceDiscoverer getResourceDiscoverer() {
+        return resourceDiscoverer;
+    }
+
+    public void setResourceDiscoverer(ResourceDiscoverer resourceDiscoverer) {
+        this.resourceDiscoverer = resourceDiscoverer;
+    }
+
+    public DroolsMonitoringScannerTask getScannerTask() {
+        return scannerTask;
+    }
+
+    public void setScannerTask(DroolsMonitoringScannerTask scannerTask) {
+        this.scannerTask = scannerTask;
+    }
+
+    public MonitoringRecoveryAgent getReconnectionAgent() {
+        return reconnectionAgent;
+    }
+
+    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
+        this.reconnectionAgent = reconnectionAgent;
+    }
+
+    public ResourceDiscoveredListener getResourceDiscoveredListener() {
+        return resourceDiscoveredListener;
+    }
+
+    public void setResourceDiscoveredListener(ResourceDiscoveredListener resourceDiscoveredListener) {
+        this.resourceDiscoveredListener = resourceDiscoveredListener;
+    }
+
+    public List<DroolsMonitoringListener> getListeners() {
+        return listeners;
+    }
+
+    public void setListeners(List<DroolsMonitoringListener> listeners) {
+        this.listeners = listeners;
+    }
+
+    public void registerListener(DroolsMonitoringListener listener) {
+        listeners.add(listener);
+        if (started) {
+            scannerTask.registerListener(listener);
+        }
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases() {
+        return resourceDiscoverer.getDiscoveredKnowledgeBases();
+    }
+
+    public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions() {
+        return resourceDiscoverer.getDiscoveredKnowledgeSessions();
+    }
 
     public boolean isConnected() {
         if (connector == null) {
@@ -46,75 +180,8 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         reconnectionAgent.removeRecoveryTask(id);
     }
 
-    public DroolsMBeanConnector getConnector() {
-        return connector;
-    }
-
-    public void setConnector(DroolsMBeanConnector connector) {
-        this.connector = connector;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public int getScanInterval() {
-        return scanInterval;
-    }
-
-    public void setScanInterval(int scanInterval) {
-        this.scanInterval = scanInterval;
-    }
-
-    public int getRecoveryInterval() {
-        return recoveryInterval;
-    }
-
-    public void setRecoveryInterval(int recoveryInterval) {
-        this.recoveryInterval = recoveryInterval;
-    }
-
-    public MonitoringRecoveryAgent getReconnectionAgent() {
-        return reconnectionAgent;
-    }
-
-    public void setReconnectionAgent(MonitoringRecoveryAgent reconnectionAgent) {
-        this.reconnectionAgent = reconnectionAgent;
-    }
-
-    public void setListeners(List<DroolsMonitoringListener> listeners) {
-        this.listeners = listeners;
-    }
-
-    public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases() {
-        return resourceDiscoverer.getDiscoveredKnowledgeBases();
-    }
-
-    public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions() {
-        return resourceDiscoverer.getDiscoveredKnowledgeSessions();
-    }
-
-    public List<DroolsMonitoringListener> getListeners() {
-        return listeners;
-    }
-
-    public void registerListener(DroolsMonitoringListener listener) {
-        listeners.add(listener);
-        if (started) {
-            scannerTask.registerListener(listener);
-        }
-    }
-
-    public void setResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
-        this.discoveredListener = discoveredListener;
-    }
-
     public interface ConnectionLost {
-        public void stop();
+        void stop();
     }
 
 }

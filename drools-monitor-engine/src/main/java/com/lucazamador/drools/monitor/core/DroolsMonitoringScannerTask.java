@@ -15,7 +15,7 @@ import com.lucazamador.drools.monitor.core.agent.DroolsMonitoringAgentBase.Conne
 import com.lucazamador.drools.monitor.core.discoverer.ResourceDiscoverer;
 import com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 import com.lucazamador.drools.monitor.scanner.MetricScanner;
 
 /**
@@ -27,7 +27,7 @@ import com.lucazamador.drools.monitor.scanner.MetricScanner;
  */
 public class DroolsMonitoringScannerTask extends TimerTask {
 
-    private Logger logger = LoggerFactory.getLogger(DroolsMonitoringScannerTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DroolsMonitoringScannerTask.class);
 
     private MonitoringRecoveryAgent reconnectionAgent;
     private ResourceDiscoverer resourceDiscoverer;
@@ -41,13 +41,14 @@ public class DroolsMonitoringScannerTask extends TimerTask {
      * registered metric listeners. In case of a connection error the resource
      * discoverer is stopped and a recovery task is started.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void run() {
         Map<String, MetricScanner> resourceScanners = resourceDiscoverer.getResourceScanners();
         synchronized (resourceScanners) {
             for (MetricScanner resourceScanner : resourceScanners.values()) {
                 try {
-                    AbstractMetric metric = resourceScanner.scan();
+                    Metric metric = resourceScanner.scan();
                     if (metric != null) {
                         synchronized (scanner.getMetrics()) {
                             scanner.getMetrics().add(metric);
@@ -59,7 +60,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                         }
                     }
                 } catch (ConnectException e) {
-                    logger.error("connection lost... trying again in a few seconds");
+                    LOGGER.error("connection lost... trying again in a few seconds");
                     connectionLost.stop();
                     String agentId = resourceDiscoverer.getAgentId();
                     String address = resourceDiscoverer.getConnector().getAddress();
@@ -68,7 +69,7 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                     cancel();
                     return;
                 } catch (IOException e) {
-                    logger.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
+                    LOGGER.error("Error reading metrics " + resourceScanner.getResourceName() + ". " + e.getMessage());
                 }
             }
         }

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MetricsPersistenceScheduler {
 
-    private static final Logger logger = LoggerFactory.getLogger(MetricsPersistenceScheduler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsPersistenceScheduler.class);
     private static final long DEFAULT_PERIOD = 60000;
 
     private Timer timerScheduler;
@@ -28,7 +28,7 @@ public class MetricsPersistenceScheduler {
         if (task != null) {
             if (period <= 0) {
                 period = DEFAULT_PERIOD;
-                logger.info("Time period wasn't provided or less-equal to zero. Using default period: " + period);
+                LOGGER.info("Time period wasn't provided or less-equal to zero. Using default period: " + period);
             }
             timerScheduler.scheduleAtFixedRate(task, 0, period);
         }

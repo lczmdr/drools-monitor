@@ -11,7 +11,7 @@ import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 
 /**
  * A metric resource scanner used to store the metrics and initialize the metric
@@ -22,11 +22,13 @@ import com.lucazamador.drools.monitor.model.AbstractMetric;
  */
 public class DroolsResourceScanner {
 
-    private static final Logger logger = LoggerFactory.getLogger(DroolsResourceScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DroolsResourceScanner.class);
     private static final int DEFAULT_INTERVAL = 1000;
+    private static final int DEFAULT_BUFFER_SIZE = 1000;
 
-    private Buffer metrics = BufferUtils.synchronizedBuffer(new CircularFifoBuffer(1000));
+    private Buffer metrics;
     private int interval;
+    private int metricsBufferSize;
     private Timer scannerScheduler;
     private DroolsMonitoringScannerTask scannerTask;
 
@@ -34,12 +36,16 @@ public class DroolsResourceScanner {
      * Initialize the metric scanner
      */
     public void start() {
+        if (this.metricsBufferSize <= 100) {
+            this.metricsBufferSize = DEFAULT_BUFFER_SIZE;
+            LOGGER.error("Metrics buffer size less-equal to 100. Using default buffer size: " + DEFAULT_BUFFER_SIZE);
+        }
+        this.metrics = BufferUtils.synchronizedBuffer(new CircularFifoBuffer(this.metricsBufferSize));
         this.scannerScheduler = new Timer();
         if (scannerTask != null) {
-            if (interval <= 0) {
-                logger.error("Time interval wasn't provided or less-equal to zero. Using default scanner interval: "
-                        + DEFAULT_INTERVAL);
-                interval = DEFAULT_INTERVAL;
+            if (this.interval <= 0) {
+                this.interval = DEFAULT_INTERVAL;
+                LOGGER.error("Time interval less-equal to zero. Using default scanner interval: " + DEFAULT_INTERVAL);
             }
             scannerScheduler.scheduleAtFixedRate(scannerTask, 0, interval);
         }
@@ -49,12 +55,13 @@ public class DroolsResourceScanner {
         scannerScheduler.cancel();
     }
 
-    public List<AbstractMetric> getMetricsClone() {
-        ArrayList<AbstractMetric> metricsClone = new ArrayList<AbstractMetric>();
+    @SuppressWarnings("unchecked")
+    public List<Metric> getMetricsClone() {
+        List<Metric> metricsClone = new ArrayList<Metric>();
         synchronized (metrics) {
-            Iterator<AbstractMetric> iterator = metrics.iterator();
+            Iterator<Metric> iterator = metrics.iterator();
             while (iterator.hasNext()) {
-                AbstractMetric metric = iterator.next();
+                Metric metric = iterator.next();
                 metricsClone.add(metric);
             }
             metrics.clear();
@@ -64,6 +71,10 @@ public class DroolsResourceScanner {
 
     public void setInterval(int interval) {
         this.interval = interval;
+    }
+
+    public void setMetricsBufferSize(int metricsBufferSize) {
+        this.metricsBufferSize = metricsBufferSize;
     }
 
     public void setScannerTask(DroolsMonitoringScannerTask scannerTask) {

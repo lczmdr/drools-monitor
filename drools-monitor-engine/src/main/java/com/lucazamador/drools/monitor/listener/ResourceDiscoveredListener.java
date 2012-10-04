@@ -10,6 +10,6 @@ import java.util.EventListener;
  */
 public interface ResourceDiscoveredListener extends EventListener {
 
-    public void discovered(String agentId);
+    void discovered(String agentId);
 
 }

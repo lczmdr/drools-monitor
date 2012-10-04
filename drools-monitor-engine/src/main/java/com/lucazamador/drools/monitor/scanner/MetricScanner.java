@@ -21,28 +21,44 @@ import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
  */
 public abstract class MetricScanner implements ResourceScanner {
 
-    private static final Logger logger = LoggerFactory.getLogger(MetricScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricScanner.class);
 
-    protected ObjectName resource;
-    protected DroolsMBeanConnector connector;
+    private ObjectName resource;
+    private DroolsMBeanConnector connector;
 
     protected Object getAttribute(String attributeName) throws IOException {
         try {
             return connector.getConnection().getAttribute(resource, attributeName);
         } catch (AttributeNotFoundException e) {
-            logger.error(getResourceName() + "=Attribute not founded: " + attributeName, e);
+            LOGGER.error(getResourceName() + "=Attribute not founded: " + attributeName, e);
         } catch (InstanceNotFoundException e) {
-            logger.error(getResourceName() + "=Mbean not founded", e);
+            LOGGER.error(getResourceName() + "=Mbean not founded", e);
         } catch (MBeanException e) {
-            logger.error(getResourceName() + "=MBean error", e);
+            LOGGER.error(getResourceName() + "=MBean error", e);
         } catch (ReflectionException e) {
-            logger.error(getResourceName() + "=Invocation error when getting attribute: " + attributeName, e);
+            LOGGER.error(getResourceName() + "=Invocation error when getting attribute: " + attributeName, e);
         }
         return null;
     }
 
+    public ObjectName getResource() {
+        return resource;
+    }
+
+    public void setResource(ObjectName resource) {
+        this.resource = resource;
+    }
+
     public String getResourceName() {
         return resource.getCanonicalName();
+    }
+
+    public DroolsMBeanConnector getConnector() {
+        return connector;
+    }
+
+    public void setConnector(DroolsMBeanConnector connector) {
+        this.connector = connector;
     }
 
 }

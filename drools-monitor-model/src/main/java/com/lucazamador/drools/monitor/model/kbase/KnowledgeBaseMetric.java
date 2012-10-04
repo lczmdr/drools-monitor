@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 
 /**
  * 
  * @author Lucas Amador
  * 
  */
-public class KnowledgeBaseMetric extends AbstractMetric implements Serializable {
+public class KnowledgeBaseMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

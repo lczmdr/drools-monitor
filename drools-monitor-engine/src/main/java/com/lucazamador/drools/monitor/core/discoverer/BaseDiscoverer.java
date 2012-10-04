@@ -25,9 +25,9 @@ import com.lucazamador.drools.monitor.scanner.MetricScanner;
  */
 public abstract class BaseDiscoverer {
 
-    protected DroolsMBeanConnector connector;
-    protected ResourceDiscoveredListener discoveredListener;
-    protected Map<String, MetricScanner> resourceScanners = Collections
+    private DroolsMBeanConnector connector;
+    private ResourceDiscoveredListener discoveredListener;
+    private Map<String, MetricScanner> resourceScanners = Collections
             .synchronizedMap(new HashMap<String, MetricScanner>());
 
     protected List<ObjectName> discoverResourceType(String resourceFilter) throws MalformedObjectNameException,
@@ -43,16 +43,24 @@ public abstract class BaseDiscoverer {
         return resourceName;
     }
 
+    public DroolsMBeanConnector getConnector() {
+        return connector;
+    }
+
     public void setConnector(DroolsMBeanConnector connector) {
         this.connector = connector;
     }
 
-    public Map<String, MetricScanner> getResourceScanners() {
-        return resourceScanners;
+    public ResourceDiscoveredListener getResourceDiscoveredListener() {
+        return this.discoveredListener;
     }
 
     public void setResourceDiscoveredListener(ResourceDiscoveredListener discoveredListener) {
         this.discoveredListener = discoveredListener;
+    }
+
+    public Map<String, MetricScanner> getResourceScanners() {
+        return resourceScanners;
     }
 
     public abstract void discover() throws DroolsMonitoringException;

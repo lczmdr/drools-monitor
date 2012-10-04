@@ -1,13 +1,13 @@
 package com.lucazamador.drools.monitor.model.listener;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 
 /**
  * 
  * @author Lucas Amador
  * 
  */
-public class EventListenerValueMetric extends AbstractMetric {
+public class EventListenerValueMetric extends Metric {
 
     private String key;
     private Long value;

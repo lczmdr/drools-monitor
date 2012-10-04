@@ -2,14 +2,14 @@ package com.lucazamador.drools.monitor.model.listener;
 
 import java.util.List;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 
 /**
  * 
  * @author Lucas Amador
  *
  */
-public class EventListenerMetric extends AbstractMetric {
+public class EventListenerMetric extends Metric {
 
     private String jvmName;
     private String eventListenerId;

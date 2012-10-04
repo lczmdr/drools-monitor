@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 import com.lucazamador.drools.monitor.model.builder.KnowledgeSessionMetricBuilder;
 
 /**
@@ -12,7 +12,7 @@ import com.lucazamador.drools.monitor.model.builder.KnowledgeSessionMetricBuilde
  * @author Lucas Amador
  * 
  */
-public class KnowledgeSessionMetric extends AbstractMetric implements Serializable {
+public class KnowledgeSessionMetric extends Metric implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,22 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
     private List<KnowledgeProcessInstanceMetric> processInstancesStats;
     private List<KnowledgeRuleMetric> ruleStats;
 
-    public KnowledgeSessionMetric() {
+    public KnowledgeSessionMetric(KnowledgeSessionMetricBuilder builder) {
+        averageFiringTime = builder.getAverageFiringTime();
+        knowledgeBaseId = builder.getKnowledgeBaseId();
+        knowledgeSessionId = builder.getKnowledgeSessionId();
+        agentId = builder.getJvmName();
+        lastReset = builder.getLastReset();
+        totalActivationsCancelled = builder.getTotalActivationsCancelled();
+        totalActivationsCreated = builder.getTotalActivationsCreated();
+        totalActivationsFired = builder.getTotalActivationsFired();
+        totalFactCount = builder.getTotalFactCount();
+        totalFiringTime = builder.getTotalFiringTime();
+        totalProcessInstancesCompleted = builder.getTotalProcessInstancesCompleted();
+        totalProcessInstancesStarted = builder.getTotalProcessInstancesStarted();
+        processStats = builder.getProcessStats();
+        processInstancesStats = builder.getProcessInstanceStats();
+        ruleStats = builder.getRuleStats();
     }
 
     public String getKnowledgeBaseId() {
@@ -161,21 +176,4 @@ public class KnowledgeSessionMetric extends AbstractMetric implements Serializab
                 + " totalFactCount: " + totalFactCount + " knowledgeBaseId: " + knowledgeBaseId;
     }
 
-    public KnowledgeSessionMetric(KnowledgeSessionMetricBuilder builder) {
-        averageFiringTime = builder.getAverageFiringTime();
-        knowledgeBaseId = builder.getKnowledgeBaseId();
-        knowledgeSessionId = builder.getKnowledgeSessionId();
-        agentId = builder.getJvmName();
-        lastReset = builder.getLastReset();
-        totalActivationsCancelled = builder.getTotalActivationsCancelled();
-        totalActivationsCreated = builder.getTotalActivationsCreated();
-        totalActivationsFired = builder.getTotalActivationsFired();
-        totalFactCount = builder.getTotalFactCount();
-        totalFiringTime = builder.getTotalFiringTime();
-        totalProcessInstancesCompleted = builder.getTotalProcessInstancesCompleted();
-        totalProcessInstancesStarted = builder.getTotalProcessInstancesStarted();
-        processStats = builder.getProcessStats();
-        processInstancesStats = builder.getProcessInstanceStats();
-        ruleStats = builder.getRuleStats();
-    }
 }

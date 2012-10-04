@@ -10,8 +10,8 @@ import java.util.EventListener;
  */
 public interface MonitoringRecoveryListener extends EventListener {
 
-    public void disconnected(String agentId);
+    void disconnected(String agentId);
 
-    public void reconnected(String agentId);
+    void reconnected(String agentId);
 
 }

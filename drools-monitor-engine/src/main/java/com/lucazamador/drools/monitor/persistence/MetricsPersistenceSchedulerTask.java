@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitor.core.DroolsResourceScanner;
-import com.lucazamador.drools.monitor.model.AbstractMetric;
+import com.lucazamador.drools.monitor.model.Metric;
 import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
 
 /**
@@ -18,7 +18,7 @@ import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
  */
 public class MetricsPersistenceSchedulerTask extends TimerTask {
 
-    private static final Logger logger = LoggerFactory.getLogger(MetricsPersistenceSchedulerTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsPersistenceSchedulerTask.class);
 
     private MetricsPersistence persistence;
     private DroolsResourceScanner scanner;
@@ -33,21 +33,21 @@ public class MetricsPersistenceSchedulerTask extends TimerTask {
 
     public void run() {
         if (persistence == null) {
-            logger.error("MetricsPersistence must be provided");
+            LOGGER.error("MetricsPersistence must be provided");
             return;
         }
         if (scanner == null) {
-            logger.error("DroolsMBeanScanner must be provided");
+            LOGGER.error("DroolsMBeanScanner must be provided");
             return;
         }
-        List<AbstractMetric> metrics = scanner.getMetricsClone();
-        logger.info("Starting metrics persistence task");
+        List<Metric> metrics = scanner.getMetricsClone();
+        LOGGER.info("Starting metrics persistence task");
         long startTime = System.currentTimeMillis();
-        for (AbstractMetric metric : metrics) {
+        for (Metric metric : metrics) {
             persistence.save(metric);
         }
         long endTime = System.currentTimeMillis();
-        logger.info("Metrics persistence task done. Elapsed time: " + (endTime - startTime) + " ms.");
+        LOGGER.info("Metrics persistence task done. Elapsed time: " + (endTime - startTime) + " ms.");
     }
 
     public void stop() {
