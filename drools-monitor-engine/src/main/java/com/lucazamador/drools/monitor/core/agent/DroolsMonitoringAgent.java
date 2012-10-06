@@ -34,6 +34,7 @@ public class DroolsMonitoringAgent extends DroolsMonitoringAgentBase {
             @Override
             public void stop() {
                 getResourceDiscoverer().stop();
+                getConnector().disconnected();
             }
         });
         for (DroolsMonitoringListener listener : getListeners()) {

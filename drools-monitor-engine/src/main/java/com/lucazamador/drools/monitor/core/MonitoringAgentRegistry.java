@@ -41,10 +41,7 @@ public class MonitoringAgentRegistry {
     }
 
     public MonitoringAgent getMonitoringAgent(String id) {
-        if (agents.get(id) != null) {
-            return agents.get(id);
-        }
-        return null;
+        return agents.get(id);
     }
 
     public Collection<MonitoringAgent> getMonitoringAgents() {

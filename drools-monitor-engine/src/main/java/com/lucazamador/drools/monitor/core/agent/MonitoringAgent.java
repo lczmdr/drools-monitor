@@ -16,6 +16,8 @@ public interface MonitoringAgent {
 
     int getPort();
 
+    int getScanInterval();
+
     int getRecoveryInterval();
 
     void registerListener(DroolsMonitoringListener listener);

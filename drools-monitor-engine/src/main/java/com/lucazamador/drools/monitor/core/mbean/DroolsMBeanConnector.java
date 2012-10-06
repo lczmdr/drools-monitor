@@ -121,4 +121,8 @@ public class DroolsMBeanConnector {
         return connected;
     }
 
+    public void disconnected() {
+        this.connected = false;
+    }
+
 }

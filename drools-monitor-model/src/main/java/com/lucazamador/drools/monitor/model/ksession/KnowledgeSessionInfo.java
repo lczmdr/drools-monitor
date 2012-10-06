@@ -1,15 +1,7 @@
 package com.lucazamador.drools.monitor.model.ksession;
 
-import java.io.Serializable;
 
-/**
- * 
- * @author Lucas Amador
- * 
- */
-public class KnowledgeSessionInfo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class KnowledgeSessionInfo {
 
     private Long id;
     private String agentId;
