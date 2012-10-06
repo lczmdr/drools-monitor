@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="monitoringAgentRegistry" class="com.lucazamador.drools.monitor.core.MonitoringAgentRegistry" />
+
+  <bean id="monitoringRecoveryAgent" class="com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent">
+    <property name="monitoringAgentRegistry" ref="monitoringAgentRegistry" />
+  </bean>
+
+  <bean id="droolsMonitoring" class="com.lucazamador.drools.monitor.core.DroolsMonitoring" init-method="init">
+    <property name="monitoringAgentRegistry" ref="monitoringAgentRegistry" />
+    <property name="recoveryAgent" ref="monitoringRecoveryAgent" />
+    <property name="monitoringAgents">
+      <list>
+        <ref bean="medicalAgent" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="medicalAgent" class="com.lucazamador.drools.monitor.core.agent.DroolsMonitoringAgent">
+    <property name="id" value="medical-agent" />
+    <property name="address" value="127.0.0.1" />
+    <property name="port" value="9003" />
+    <property name="scanInterval" value="10000" />
+    <property name="recoveryInterval" value="10000" />
+    <property name="metricsBufferSize" value="1000" />
+  </bean>
+
+</beans>
