@@ -1,9 +1,9 @@
-package com.lucazamador.drools.monitor.console.model;
+package com.lucazamador.drools.monitor.console.model.kbase;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "knowledge-base")
+@XmlRootElement(name = "knowledgeBase")
 public class KnowledgeBaseData {
 
     private Long id;

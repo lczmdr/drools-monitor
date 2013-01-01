@@ -22,8 +22,8 @@
     <property name="id" value="medical-agent" />
     <property name="address" value="127.0.0.1" />
     <property name="port" value="9003" />
-    <property name="scanInterval" value="10000" />
-    <property name="recoveryInterval" value="10000" />
+    <property name="scanInterval" value="1000" />
+    <property name="recoveryInterval" value="5000" />
     <property name="metricsBufferSize" value="1000" />
   </bean>
 

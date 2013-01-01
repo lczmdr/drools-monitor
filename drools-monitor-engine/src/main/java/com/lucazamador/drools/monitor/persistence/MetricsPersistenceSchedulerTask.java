@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lucazamador.drools.monitor.core.DroolsResourceScanner;
-import com.lucazamador.drools.monitor.model.Metric;
+import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
 import com.lucazamador.drools.monitor.persistence.api.MetricsPersistence;
 
 /**
@@ -40,10 +40,10 @@ public class MetricsPersistenceSchedulerTask extends TimerTask {
             LOGGER.error("DroolsMBeanScanner must be provided");
             return;
         }
-        List<Metric> metrics = scanner.getMetricsClone();
+        List<KnowledgeSessionMetric> metrics = scanner.getKnowledgeSessionMetricsClone();
         LOGGER.info("Starting metrics persistence task");
         long startTime = System.currentTimeMillis();
-        for (Metric metric : metrics) {
+        for (KnowledgeSessionMetric metric : metrics) {
             persistence.save(metric);
         }
         long endTime = System.currentTimeMillis();

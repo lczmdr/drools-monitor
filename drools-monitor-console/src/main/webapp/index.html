@@ -34,9 +34,6 @@ body {
           <span class="icon-bar"></span> <span class="icon-bar"></span>
         </a> <a class="brand" href="#">Drools Monitor Console</a>
         <div class="nav-collapse collapse">
-          <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-          </ul>
           <p class="navbar-text pull-right">
             <a data-toggle="modal" href="#aboutModal" id="aboutLink">About</a>
           </p>
@@ -54,74 +51,146 @@ body {
             <!-- monitoring agents listing -->
           </ul>
         </div>
+        <div class="row-fluid">
+          <div id="configurationPanel" class="well well-small">
+            <div align="center">
+              <button id="knowledgeBaseDetailsButton" class="btn btn-primary btn-info">Knowledge base details</button> 
+            </div>
+          </div>
+          <div id="configurationPanel" class="well well-small">
+            <button id="closeConfigurationPanel" class="close">&times;</button>
+            <form>
+              <span class="help-block">Configuration</span>
+              <label class="checkbox">
+                <input id="showRuleStatistics" type="checkbox" checked="checked"> Rule Statistics
+              </label>
+              <label class="checkbox">
+                <input id="showGraphics" type="checkbox" checked="checked"> Graphics
+              </label>
+              <label class="checkbox">
+                <input id="showProcessStatistics" type="checkbox" disabled="disabled"> Process Statistics
+              </label>
+              <label class="checkbox">
+                <input id="showProcessInstancesStatistics" type="checkbox" disabled="disabled"> Process Instances Statistics
+              </label>
+              <label>Refresh rate</label>
+              <select>
+                <option>1 second</option>
+                <option>5 seconds</option>
+                <option>10 seconds</option>
+                <option>30 seconds</option>
+                <option>60 seconds</option>
+              </select>
+            </form>
+          </div>
+        </div>
       </div>
       <div id="content" class="span9" style="display:none;">
         <ul id="knowledgeBaseNav" class="nav nav-tabs">
           <!-- knowledge bases for the selected monitoring agent -->
         </ul>
         <div id="knowledgeBaseContent" class="tab-content">
-          <div class="tab-pane active" id="medical-kbase">medical info</div>
-          <div class="tab-pane" id="process-kbase">process kbase</div>
+            <!-- knowledge base information panel -->
         </div>
-
-        <!-- <button class="btn btn-primary btn-large">Details</button> -->
-        <div class="row-fluid">
-          <div class="span12">
-            <div class="navbar">
-              <div class="navbar-inner">
-                <ul id="knowledgeSessionNav" class="nav">
-                  <!-- knowledge sessions for the selected knowledge base -->
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="span11">
-            <div class="accordion" id="accordion2">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                    Rule Statistics</a>
+        <div id="knowledgeSessionSection">
+          <div id="informationTemplate" class="row-fluid" style="display:none;">
+            <div class="span12">
+              <div class="navbar">
+                <div class="navbar-inner">
+                  <ul id="knowledgeSessionNav" class="nav">
+                    <!-- knowledge sessions for the selected knowledge base -->
+                  </ul>
                 </div>
-                <div id="collapseOne" class="accordion-body collapse in">
-                  <div class="accordion-inner">
-                    <table class="table table-condensed">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Activations Created</th>
-                          <th>Activations Cancelled</th>
-                          <th>Activations Fired</th>
-                          <th>Firing Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>medical record input</td>
-                          <td>2</td>
-                          <td>0</td>
-                          <td>2</td>
-                          <td>0.1</td>
-                        </tr>
-                        <tr>
-                          <td>medical record monitor</td>
-                          <td>47</td>
-                          <td>0</td>
-                          <td>47</td>
-                          <td>6.0</td>
-                        </tr>
-                      </tbody>
-                    </table>
+              </div>
+              <!-- <ul class="nav nav-pills">
+                <li class="active">
+                  <a href="#">ksession-0</a>
+                </li>
+                <li><a href="#">ksession-1</a></li>
+                <li><a href="#">ksession-2</a></li>
+              </ul> -->
+            </div>
+            <div id="knowledgeSessionInfo" class="span11">
+              <div id="knowledgeSessionInfoAccordion" class="accordion" id="accordion2" style="display:none;">
+                <div id="ruleStatisticsGroup" class="accordion-group">
+                  <div class="accordion-heading">
+                    <a id="accordionHeader1" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#ruleStatistics">
+                      Rule Statistics</a>
+                  </div>
+                  <div id="ruleStatistics" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                      <table id="ksessionStatistics" class="table table-condensed table-hover">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Activations Created</th>
+                            <th>Activations Cancelled</th>
+                            <th>Activations Fired</th>
+                            <th>Firing Time</th>
+                          </tr>
+                        </thead>
+                        <tbody id="ksessionStatisticsBody">
+                          <!-- knowledge rules statistics -->
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                    Graphics</a>
+                <div id="graphicsGroup" class="accordion-group">
+                  <div class="accordion-heading">
+                    <a id="accordionHeader2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#graphics">
+                      Graphics</a>
+                  </div>
+                  <div id="graphics" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <img src="resources/img/chart.png" class="img-rounded">
+                    </div>
+                  </div>
                 </div>
-                <div id="collapseTwo" class="accordion-body collapse">
-                  <div class="accordion-inner">
-                    <img src="resources/img/chart.png" class="img-rounded">
+                <div id="processGroup" class="accordion-group" style="display:none;">
+                  <div class="accordion-heading">
+                    <a id="accordionHeader2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#process">
+                      Process</a>
+                  </div>
+                  <div id="process" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <table id="processStatistics" class="table table-condensed table-hover">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Process Started</th>
+                            <th>Process Completed</th>
+                            <th>Process Node Triggered</th>
+                          </tr>
+                        </thead>
+                        <tbody id="processStatisticsBody">
+                          <!-- process statistics -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div id="processInstancesGroup" class="accordion-group" style="display:none;">
+                  <div class="accordion-heading">
+                    <a id="accordionHeader2" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#processInstances">
+                      Process Instances</a>
+                  </div>
+                  <div id="processInstances" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <table id="processInstancesStatistics" class="table table-condensed table-hover">
+                        <thead>
+                          <tr>
+                            <th>Process Instance ID</th>
+                            <th>Process Started</th>
+                            <th>Process Completed</th>
+                            <th>Process Node Triggered</th>
+                          </tr>
+                        </thead>
+                        <tbody id="processInstancesStatisticsBody">
+                          <!-- process statistics -->
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -132,6 +201,43 @@ body {
     </div>
   </div>
 
+  <div class="modal hide" id="knowledgeBaseDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="knowledgeBaseDetailsModalLabel">Knowledge Base details</h3>
+    </div>
+    <div class="modal-body">
+      <div class="row-fluid">
+        <div id="kbaseTimestamp" class="span10"></div>
+        <div id="kbaseSessionCount" class="span10"></div>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>Rules packages</th>
+            </tr>
+          </thead>
+          <tbody id="packagesTable">
+            <!-- rules packages names -->
+          </tbody>
+        </table>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>Global name</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody id="globalsTable">
+            <!-- kbase globals -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+
   <div class="modal hide fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -139,7 +245,7 @@ body {
     </div>
     <div class="modal-body">
       <p>
-        A simple tool to monitor JBoss Drools knowledge sessions.
+        A simple tool to monitor JBoss Drools knowledge bases/sessions.
       </p>
       <p>
         Source code available at 
@@ -151,17 +257,25 @@ body {
     </div>
   </div>
 
-  <div id="errorMessage" class="row" style="display:none;">
+  <div id="warningAlert" class="row" style="display:none;">
     <div class="span6 offset3">
       <div class="alert">
         <p><strong>Doh!</strong> Something isn't working here.</p>
-        <p>Please check the monitoring agents configuration. And also don't forget to enable the jmx support and enable jmx connections in your jvm.</p>
+        <p>Please check the monitoring agents configuration. The engine is up and running but no agents information could be obtained. And also don't forget to enable the jmx support and enable jmx connections in your jvm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorAlertTemplate" class="row" style="display:none;">
+    <div id="errorAlertMessageSpan" class="span6 offset3" align="center">
+      <div id="errorAlertMessage" class="alert alert-error">
       </div>
     </div>
   </div>
 
   <script type="application/javascript" src="resources/js/jquery-1.7.2.min.js"></script>
   <script type="application/javascript" src="resources/js/bootstrap.js"></script>
+  <script type="application/javascript" src="resources/js/console-config.js"></script>
   <script type="application/javascript" src="resources/js/console.js"></script>
 
 </body>

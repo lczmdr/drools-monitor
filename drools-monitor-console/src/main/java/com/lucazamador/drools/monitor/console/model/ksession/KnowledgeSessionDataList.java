@@ -1,11 +1,12 @@
-package com.lucazamador.drools.monitor.console.model;
+package com.lucazamador.drools.monitor.console.model.ksession;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "knowledge-sessions")
+
+@XmlRootElement(name = "knowledgeSessions")
 public class KnowledgeSessionDataList {
 
     private List<KnowledgeSessionData> knowledgeSessions;
@@ -17,7 +18,7 @@ public class KnowledgeSessionDataList {
         this.knowledgeSessions = knowledgeSessions;
     }
 
-    @XmlElement(name = "knowledge-session")
+    @XmlElement(name = "knowledgeSession")
     public List<KnowledgeSessionData> getKnowledgeSession() {
         return knowledgeSessions;
     }

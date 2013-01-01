@@ -6,15 +6,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.lucazamador.drools.monitor.console.model.KnowledgeBaseData;
-import com.lucazamador.drools.monitor.console.model.KnowledgeBaseDataList;
-import com.lucazamador.drools.monitor.console.model.KnowledgeSessionData;
-import com.lucazamador.drools.monitor.console.model.KnowledgeSessionDataList;
 import com.lucazamador.drools.monitor.console.model.MonitoringAgentData;
 import com.lucazamador.drools.monitor.console.model.MonitoringAgentDataList;
+import com.lucazamador.drools.monitor.console.model.kbase.KnowledgeBaseData;
+import com.lucazamador.drools.monitor.console.model.kbase.KnowledgeBaseDataList;
+import com.lucazamador.drools.monitor.console.model.kbase.metric.KnowledgeBaseMetricData;
+import com.lucazamador.drools.monitor.console.model.ksession.KnowledgeSessionData;
+import com.lucazamador.drools.monitor.console.model.ksession.KnowledgeSessionDataList;
 import com.lucazamador.drools.monitor.core.DroolsMonitoring;
 import com.lucazamador.drools.monitor.core.agent.MonitoringAgent;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseInfo;
+import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
 
 @Component
@@ -59,7 +61,19 @@ public class DroolsMonitoringServiceImpl implements DroolsMonitoringService {
             knowledgeBases.add(data);
         }
         return new KnowledgeBaseDataList(knowledgeBases);
+    }
 
+    @Override
+    public KnowledgeBaseMetricData getKnowledgeBaseMetric(String monitoringAgentId, String knowledgeBaseId) {
+        MonitoringAgent monitoringAgent = droolsMonitoring.getMonitoringAgent(monitoringAgentId);
+        if (monitoringAgent == null) {
+            return null;
+        }
+        KnowledgeBaseMetric knowledgeBaseMetric = monitoringAgent.getKnowledgeBaseMetric(knowledgeBaseId);
+        if (knowledgeBaseMetric == null) {
+            return null;
+        }
+        return new KnowledgeBaseMetricData(knowledgeBaseMetric);
     }
 
     @Override

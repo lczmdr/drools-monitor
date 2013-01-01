@@ -1,12 +1,3 @@
-$.console = $.console || {
-     domain : 'http://127.0.0.1:8080/',
-     appName : 'drools-monitor-console/',
-     restService : 'rest/kservice/'
-//    domain : 'http://127.0.0.1',
-//    appName : '',
-//    restService : '/resources/json/'
-};
-
 function MonitorinAgent(id, address, port, connected, scanInterval, recoveryInterval) {
     this.id = id;
     this.address = address;
@@ -16,9 +7,46 @@ function MonitorinAgent(id, address, port, connected, scanInterval, recoveryInte
     this.recoveryInterval = recoveryInterval;
 }
 
+var selectedKnowledgeBase = undefined;
+var selectedKnowledgeSession = undefined;
+
 $(document).ready(function() {
     renderMonitoringAgents();
+    bindConfigurationButtons();
+    bindKnowledgeBaseDetailsButton();
 });
+
+function bindKnowledgeBaseDetailsButton() {
+    $('#knowledgeBaseDetailsButton').click(function(e) {
+        var detailsModal = $('#knowledgeBaseDetailsModal');
+        $('#knowledgeBaseDetailsModalLabel').text(selectedKnowledgeBase.knowledgeBaseId.$ + ' details');
+        var serviceUri = selectedKnowledgeBase.agentId.$ + '/kbase/' + selectedKnowledgeSession.knowledgeBaseId.$ + '/metrics';
+        serviceCall(serviceUri, function(response) {
+            var knowledgeBaseMetric = $.parseJSON(JSON.stringify(response, undefined, 2));
+            $.each(knowledgeBaseMetric, function(index, metric) {
+                $('#kbaseTimestamp').text('Timestamp: ' + metric.timestamp.$);
+                $('#kbaseSessionCount').text('Knowledge Session count: ' + metric.sessionCount.$);
+                var packagesTable = $('#packagesTable');
+                var packages = metric.packages.$.split(';');
+                for (i=0; i < packages.length; i++) {
+                    var packageRow = $(document.createElement('tr'));
+                    packageRow.append($(document.createElement('td')).text(packages[i]));
+                    packagesTable.append(packageRow);
+                }
+                var globalsTable = $('#globalsTable');
+                $.each(metric.globals, function(index, global) {
+                    var globalRow = $(document.createElement('tr'));
+                    globalRow.append($(document.createElement('td')).text(global.name.$));
+                    globalRow.append($(document.createElement('td')).text(global.classType.$));
+                    globalsTable.append(globalRow);
+                });
+            });
+        }, function (e) {
+            alert('errorr');
+        });
+        detailsModal.modal();
+    });
+}
 
 function renderMonitoringAgents(){
     var monitoringAgentList = $('#monitoringAgentList');
@@ -57,10 +85,28 @@ function renderMonitoringAgents(){
         }
         else {
             $('#layout').empty();
-            $('#errorMessage').show();
+            $('#warningAlert').show();
         }
+        dismissErrorMessages();
+    }, function() {
+        showErrorMessage('layout', createErrroMessageElement('Monitoring agents information not available'))
     });
 }
+
+function createErrroMessageElement(message) {
+    $('#errorAlertMessage').text(message);
+    var errorAlert = $('#errorAlertTemplate').clone();
+    errorAlert.attr('id', 'errorAlert');
+    errorAlert.show();
+    return errorAlert;
+}
+
+function showErrorMessage(parentElementName, errroMessageElement) {
+    var parentElement = $('#' + parentElementName);
+    parentElement.hide();
+    parentElement.append(errroMessageElement);
+    parentElement.show();
+}   
 
 function activateCurrentNavListElement(menuElement) {
     $('li[id=menuElement]').removeClass();
@@ -70,34 +116,53 @@ function activateCurrentNavListElement(menuElement) {
 function renderKnowledgeBases(monitoringAgent) {
     var knowledgeBaseNav = $('#knowledgeBaseNav');
     knowledgeBaseNav.empty();
+    $('#knowledgeBaseContent').empty();
     serviceCall(monitoringAgent.id + '/kbases', function(response) {
         var knowledgeBasesData = $.parseJSON(JSON.stringify(response, undefined, 2));
-        var selectedKnowledgeBase = null;
         $.each(knowledgeBasesData, function(array, item) {
                 $.each(item, function(index, knowledgeBases) {
-                    $.each(knowledgeBases, function(index, knowledgeBaseData) {
-                        var navElement = $(document.createElement('li'));
-                        if (index==0) {
-                            navElement.addClass('active');
-                            selectedKnowledgeBase = knowledgeBaseData;
-                        }
-                        var knowledgeBaseId = knowledgeBaseData.knowledgeBaseId.$;
-                        var navElementLink = $(document.createElement('a')).attr('href', '#' + knowledgeBaseId).attr('data-toggle', 'tab').text(knowledgeBaseId);
-                        navElement.append(navElementLink);
-                        knowledgeBaseNav.append(navElement);
-                    });
+                    if ($.isArray(knowledgeBases)) {
+                        $.each(knowledgeBases, function(index, knowledgeBase) {
+                            createKnowledgeBaseTab(index, knowledgeBase, knowledgeBaseNav);
+                        });
+                    }
+                    else {
+                        createKnowledgeBaseTab(0, knowledgeBases, knowledgeBaseNav);
+                    }
                 });
             }
         );
-        if (selectedKnowledgeBase != null) renderKnowledgeSessions(monitoringAgent.id, selectedKnowledgeBase.knowledgeBaseId.$);
+        if (selectedKnowledgeBase != undefined) renderKnowledgeSessions(monitoringAgent.id, selectedKnowledgeBase.knowledgeBaseId.$);
+        dismissErrorMessages();
+    }, function(e) {
+        showErrorMessage('content', createErrroMessageElement(e.responseText));
     });
 }
 
-var selectedKnowledgeSession = null;
+function createKnowledgeBaseTab(index, knowledgeBaseData, knowledgeBaseNav) {
+    var navElement = $(document.createElement('li'));
+    if (index==0) {
+        navElement.addClass('active');
+        selectedKnowledgeBase = knowledgeBaseData;
+    }
+    var knowledgeBaseId = knowledgeBaseData.knowledgeBaseId.$;
+    var navElementLink = $(document.createElement('a')).attr('href', '#' + knowledgeBaseId).attr('data-toggle', 'tab').text(knowledgeBaseId);
+    navElement.append(navElementLink);
+    knowledgeBaseNav.append(navElement);
+
+    var knowledgeBasePanel = $(document.createElement('div')).attr('id', knowledgeBaseId);
+    if (index==0)
+        knowledgeBasePanel.addClass('tab-pane active');
+    else
+        knowledgeBasePanel.addClass('tab-pane');
+    $('#knowledgeBaseContent').append(knowledgeBasePanel);
+    knowledgeBasePanel.append($('#informationTemplate').clone().show());
+}
 
 function renderKnowledgeSessions(monitoringAgentId, knowledgeBaseId) {
     var knowledgeSessionNav = $('#knowledgeSessionNav');
     knowledgeSessionNav.empty();
+
     serviceCall(monitoringAgentId + '/kbase/' + knowledgeBaseId + '/ksessions', function(response) {
         var knowledgeSessionData = $.parseJSON(JSON.stringify(response, undefined, 2));
         $.each(knowledgeSessionData, function(array, item) {
@@ -107,11 +172,15 @@ function renderKnowledgeSessions(monitoringAgentId, knowledgeBaseId) {
                             createKnowledgeSessionNavs(index, knowledgeSession, knowledgeSessionNav);
                         });
                     }
-                    else {
+                    else
                         createKnowledgeSessionNavs(0, knowledgeSessions, knowledgeSessionNav);
-                    }
                 });
         });
+        $('#knowledgeBaseContent').show();
+        dismissErrorMessages();
+    }, function(e) {
+        $('#knowledgeBaseContent').hide();
+        showErrorMessage('knowledgeSessionSection', createErrroMessageElement(e.responseText));
     });
 }
 
@@ -119,16 +188,105 @@ function createKnowledgeSessionNavs(index, knowledgeSession, knowledgeSessionNav
     var navElement = $(document.createElement('li'));
     if (index==0) {
         navElement.addClass('active');
-        selectedKnowledgeBase = knowledgeSession;
+        selectedKnowledgeSession = knowledgeSession;
     }
-    var navElementLink = $(document.createElement('a')).attr('href', '#').text('ksession-' + knowledgeSession.knowledgeSessionId.$);
+    var navElementLink = $(document.createElement('a')).attr('href', '').text('ksession-' + knowledgeSession.knowledgeSessionId.$);
+    navElementLink.click(function(e) {
+        selectedKnowledgeSession = knowledgeSession;
+        showKnowledgeSessionInformation(navElement);
+        e.preventDefault();
+    });
     navElement.append(navElementLink);
     knowledgeSessionNav.append(navElement);
+    if (index==0)
+        showKnowledgeSessionInformation(navElement);
 };
 
-function serviceCall(serviceName, serviceCallback) {
+function showKnowledgeSessionInformation(navElement) {
+    $('#knowledgeSessionNav > li').removeClass();
+    navElement.addClass('active');
+    var knowledgeSessionInfoDiv = $('#knowledgeSessionInfo');
+    knowledgeSessionInfoDiv.empty();
+    knowledgeSessionInfoDiv.append($('#knowledgeSessionInfoAccordion').clone().show());
+
+    var serviceUri = selectedKnowledgeBase.agentId.$ + '/kbase/' + selectedKnowledgeSession.knowledgeBaseId.$ + '/ksession/' + 
+        selectedKnowledgeSession.knowledgeSessionId.$ + '/metrics/1';
+
+    var statistics = $('#ksessionStatisticsBody');
+    statistics.empty();
+
+    serviceCall(serviceUri, function(response) {
+        var metricsData = $.parseJSON(JSON.stringify(response, undefined, 2));
+        $.each(metricsData, function(array, item) {
+            $.each(item, function(index, metric) {
+                if ($.isArray(metric.ruleStats.ruleMetric)) {
+                    $.each(metric.ruleStats.ruleMetric, function(index, ruleMetric) {
+                        renderRuleStatistic(statistics, ruleMetric);
+                    });
+                }
+                else {
+                    if (metric.ruleStats.ruleMetric != undefined) {
+                        renderRuleStatistic(statistics, metric.ruleStats.ruleMetric);
+                    }
+                    else {
+                        var metricRow = $(document.createElement('tr'));
+                        metricRow.append(createMetricField('no information available').attr('colspan', '5'));
+                        statistics.append(metricRow);
+                    }
+                }
+            });
+        });
+        dismissErrorMessages();
+    }, function(e) {
+        var errorMessageRow = $(document.createElement('tr'));
+        var errorMessageField = $(document.createElement('td')).attr('colspan', '5');
+        var errorMessageElement = createErrroMessageElement(e.responseText);
+        errorMessageElement.children().removeClass();
+        errorMessageElement.children().addClass('offset1');
+        errorMessageField.append(errorMessageElement);
+        errorMessageRow.append(errorMessageField);
+        showErrorMessage('ksessionStatisticsBody', errorMessageRow);
+    });
+}
+
+function renderRuleStatistic(statistics, ruleMetric) {
+    var metricRow = $(document.createElement('tr'));
+    metricRow.append(createMetricField(ruleMetric.name.$));
+    metricRow.append(createMetricField(ruleMetric.activationsCreated.$));
+    metricRow.append(createMetricField(ruleMetric.activationsCancelled.$));
+    metricRow.append(createMetricField(ruleMetric.activationsFired.$));
+    metricRow.append(createMetricField(ruleMetric.firingTime.$));
+    statistics.append(metricRow);
+}
+
+function createMetricField(value) {
+    return $(document.createElement('td')).text(value);
+}
+
+function dismissErrorMessages() {
+    $('#errorAlert').remove();
+}
+
+function bindConfigurationButtons() {
+    bindConfigurationCheckButton('showRuleStatistics', 'ruleStatisticsGroup');
+    bindConfigurationCheckButton('showGraphics', 'graphicsGroup');
+    bindConfigurationCheckButton('showProcessStatistics', 'processGroup');
+    bindConfigurationCheckButton('showProcessInstancesStatistics', 'processInstancesGroup');
+}
+
+function bindConfigurationCheckButton(buttonName, groupName) {
+    $('#' + buttonName).click(function (e) {
+        if ($("#" + buttonName).is(":checked"))
+            $("#" + groupName).show();
+        else
+            $("#" + groupName).hide();
+    });
+}
+
+
+function serviceCall(serviceName, serviceCallback, errorServiceCallback) {
     var serviceEndpoint = getServicesUrl() + serviceName;
-    $.get(serviceEndpoint, serviceCallback, 'json');
+    $.get(serviceEndpoint, serviceCallback, 'json').error(errorServiceCallback);
 }
 
 function getServicesUrl() {

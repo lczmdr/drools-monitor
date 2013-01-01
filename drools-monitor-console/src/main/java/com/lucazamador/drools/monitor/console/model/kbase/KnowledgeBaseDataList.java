@@ -1,27 +1,29 @@
-package com.lucazamador.drools.monitor.console.model;
+package com.lucazamador.drools.monitor.console.model.kbase;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "knowledge-bases")
-public class KnowledgeBaseDataList extends GenericDataList<KnowledgeBaseData> {
+@XmlRootElement(name = "knowledgeBases")
+public class KnowledgeBaseDataList {
+
+    private List<KnowledgeBaseData> knowledgeBases;
 
     public KnowledgeBaseDataList() {
     }
 
     public KnowledgeBaseDataList(List<KnowledgeBaseData> knowledgeBases) {
-        this.setList(knowledgeBases);
+        this.knowledgeBases = knowledgeBases;
     }
 
-    @XmlElement(name = "knowledge-base")
+    @XmlElement(name = "knowledgeBase")
     public List<KnowledgeBaseData> getKnowledgeBase() {
-        return this.getList();
+        return this.knowledgeBases;
     }
 
     public void setKnowledgeBase(List<KnowledgeBaseData> knowledgeBases) {
-        this.setList(knowledgeBases);
+        this.knowledgeBases = knowledgeBases;
     }
 
 }

@@ -11,7 +11,9 @@ import com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitor.listener.ResourceDiscoveredListener;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseInfo;
+import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
+import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
 
 /**
  * 
@@ -35,10 +37,12 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
     private List<DroolsMonitoringListener> listeners = new ArrayList<DroolsMonitoringListener>();
     private boolean started;
 
+    @Override
     public void setMonitoringRecoveryAgent(MonitoringRecoveryAgent reconnectionAgent) {
         this.reconnectionAgent = reconnectionAgent;
     }
 
+    @Override
     public String getId() {
         return id;
     }
@@ -47,6 +51,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.id = id;
     }
 
+    @Override
     public String getAddress() {
         return address;
     }
@@ -55,6 +60,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.address = address;
     }
 
+    @Override
     public int getPort() {
         return port;
     }
@@ -63,6 +69,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.port = port;
     }
 
+    @Override
     public int getScanInterval() {
         return scanInterval;
     }
@@ -79,6 +86,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.metricsBufferSize = metricsBufferSize;
     }
 
+    @Override
     public int getRecoveryInterval() {
         return recoveryInterval;
     }
@@ -87,10 +95,12 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.recoveryInterval = recoveryInterval;
     }
 
+    @Override
     public DroolsMBeanConnector getConnector() {
         return connector;
     }
 
+    @Override
     public void setConnector(DroolsMBeanConnector connector) {
         this.connector = connector;
     }
@@ -143,6 +153,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.listeners = listeners;
     }
 
+    @Override
     public void registerListener(DroolsMonitoringListener listener) {
         listeners.add(listener);
         if (started) {
@@ -158,14 +169,33 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         this.started = started;
     }
 
+    @Override
     public List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases() {
         return resourceDiscoverer.getDiscoveredKnowledgeBases();
     }
 
+    @Override
     public List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions() {
         return resourceDiscoverer.getDiscoveredKnowledgeSessions();
     }
 
+    @Override
+    public List<KnowledgeBaseMetric> getKnowledgeBaseMetric() {
+        return scanner.getKnowledgeBaseMetric();
+    }
+
+    @Override
+    public KnowledgeBaseMetric getKnowledgeBaseMetric(String knowledgeBaseId) {
+        return scanner.getKnowledgeBaseMetric(knowledgeBaseId);
+    }
+
+    @Override
+    public List<KnowledgeSessionMetric> getKnowledgeSessionMetrics(String knowledgeBaseId, int knowledgeSessionId,
+            int size) {
+        return scanner.getKnowledgeSessionMetric(knowledgeBaseId, knowledgeSessionId, size);
+    }
+
+    @Override
     public boolean isConnected() {
         if (connector == null) {
             return false;
@@ -173,6 +203,7 @@ public abstract class DroolsMonitoringAgentBase implements MonitoringAgent {
         return connector.isConnected();
     }
 
+    @Override
     public synchronized void stop() {
         if (scanner != null) {
             scanner.stop();

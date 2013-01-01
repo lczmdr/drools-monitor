@@ -1,11 +1,11 @@
-package com.lucazamador.drools.monitor.console.model;
+package com.lucazamador.drools.monitor.console.model.ksession;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "knowledge-session")
+@XmlRootElement(name = "knowledgeSession")
 public class KnowledgeSessionData implements Serializable {
 
     private static final long serialVersionUID = 1L;

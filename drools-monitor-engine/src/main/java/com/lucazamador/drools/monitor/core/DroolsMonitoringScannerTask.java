@@ -41,7 +41,6 @@ public class DroolsMonitoringScannerTask extends TimerTask {
      * registered metric listeners. In case of a connection error the resource
      * discoverer is stopped and a recovery task is started.
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void run() {
         Map<String, MetricScanner> resourceScanners = resourceDiscoverer.getResourceScanners();
@@ -50,14 +49,16 @@ public class DroolsMonitoringScannerTask extends TimerTask {
                 try {
                     Metric metric = resourceScanner.scan();
                     if (metric != null) {
-                        synchronized (scanner.getMetrics()) {
-                            scanner.getMetrics().add(metric);
-                        }
+                        scanner.addKnowledgeMetric(metric);
+//                        synchronized (scanner.getKnowledgeSessionMetrics()) {
+//                            scanner.getKnowledgeSessionMetrics().add(metric);
+//                        }
                         synchronized (listeners) {
                             for (DroolsMonitoringListener listener : listeners) {
                                 listener.newMetric(metric);
                             }
                         }
+
                     }
                 } catch (ConnectException e) {
                     LOGGER.error("connection lost... trying again in a few seconds");

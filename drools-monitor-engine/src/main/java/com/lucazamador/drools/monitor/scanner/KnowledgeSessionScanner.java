@@ -79,6 +79,7 @@ public class KnowledgeSessionScanner extends MetricScanner {
         List<KnowledgeProcessMetric> processMetrics = new ArrayList<KnowledgeProcessMetric>();
         for (String processId : processStats.keySet()) {
             String status = processStats.get(processId);
+            System.out.println(processId);
             processMetrics.add(new KnowledgeProcessMetric(processId, processParser.getProcessCompleted(status),
                     processParser.getProcessCompleted(status), processParser.getProcessNodeTriggered(status)));
         }

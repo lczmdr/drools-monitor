@@ -6,7 +6,9 @@ import com.lucazamador.drools.monitor.core.mbean.DroolsMBeanConnector;
 import com.lucazamador.drools.monitor.core.recovery.MonitoringRecoveryAgent;
 import com.lucazamador.drools.monitor.listener.DroolsMonitoringListener;
 import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseInfo;
+import com.lucazamador.drools.monitor.model.kbase.KnowledgeBaseMetric;
 import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionInfo;
+import com.lucazamador.drools.monitor.model.ksession.KnowledgeSessionMetric;
 
 public interface MonitoringAgent {
 
@@ -37,5 +39,11 @@ public interface MonitoringAgent {
     List<KnowledgeBaseInfo> getDiscoveredKnowledgeBases();
 
     List<KnowledgeSessionInfo> getDiscoveredKnowledgeSessions();
+
+    List<KnowledgeBaseMetric> getKnowledgeBaseMetric();
+
+    KnowledgeBaseMetric getKnowledgeBaseMetric(String knowledgeBaseId);
+
+    List<KnowledgeSessionMetric> getKnowledgeSessionMetrics(String knowledgeBaseId, int knowledgeSessionId, int size);
 
 }

@@ -2,13 +2,10 @@ package com.lucazamador.drools.monitor.console.model;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-
 public abstract class GenericDataList<T> {
 
     private List<T> list;
 
-    @XmlElement(required = false)
     public List<T> getList() {
         return list;
     }
